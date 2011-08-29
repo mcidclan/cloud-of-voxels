@@ -7,7 +7,7 @@
 #include "./headers/Core.h"
 #include "./headers/voxelmodels.h"
 
-extern Voxel monkey[MON_SIZE];
+extern Voxel monkey[MESH_SIZE];
 
 
 /*
@@ -40,12 +40,12 @@ void Core::init()
 	this->camera = new Camera();
 
 	this->partition = new Partition();
-	this->partition->create(600, 600, 600);
+	this->partition->create(300, 300, 300);
 	this->partition->setMaxDepth(68);
 
 	this->space = new Space();
 	this->space->setPartition(this->partition);
-	this->space->addVoxels(monkey, MON_SIZE);
+	this->space->addVoxels(monkey, MESH_SIZE);
 
 	this->viewplane = new Viewplane();
 	this->viewplane->create(SRC_WIDTH, SRC_HEIGHT);
