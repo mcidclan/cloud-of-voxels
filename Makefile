@@ -9,7 +9,7 @@ OBJS := $(addprefix $(BIN), $(OBJS))
 DATA := $(addprefix $(BIN), $(DATA))
 
 CFLAGS = -W -Wall -pedantic -O0 -g2
-LDFLAGS = -lglut
+LDFLAGS = -lglut -lstdc++
 
 
 all: $(BIN)$(EXEC)
