@@ -26,8 +26,8 @@ Partition::Partition()
 Partition::~Partition()// à verifier
 {
 	unsigned i = 0,
-				j = 0,
-				k = 0;
+			 j = 0,
+			 k = 0;
 
 	while(i < this->spacewidth)
 	{
@@ -59,11 +59,11 @@ void Partition::create(const UI spacewidth, const UI spaceheight,
 const UI spacedepth)
 {
 	unsigned i = 0,
-				j = 0,
-				k = 0;
+			 j = 0,
+			 k = 0;
 
 	this->spacewidth	= spacewidth;
-	this->spaceheight = spaceheight;
+	this->spaceheight	= spaceheight;
 	this->spacedepth	= spacedepth;
 
 	this->bits = new Voxel***[this->spacewidth];
@@ -100,9 +100,9 @@ const UI spacedepth)
  */
 void Partition::setBit(Voxel *voxel)
 {
-	const UI x = /*ceilf(*/voxel->x+this->center.x/*)*/;
-	const UI y = /*ceilf(*/voxel->y+this->center.y/*)*/;
-	const UI z = /*ceilf(*/voxel->z+this->center.z/*)*/;
+	const short UI x = voxel->x+this->center.x;
+	const short UI y = voxel->y+this->center.y;
+	const short UI z = voxel->z+this->center.z;
 
 	if(x > this->spacewidth || y > this->spaceheight || z > this->spacedepth)
 	{
@@ -124,18 +124,9 @@ void Partition::setCurrentVoxel()
  */
 void Partition::setCenter()
 {
-	this->center.x = ((float)spacewidth)/2.0f;
-	this->center.y = ((float)spaceheight)/2.0f;
-	this->center.z = ((float)spacedepth)/2.0f;
-}
-
-
-/*
- * setCenter
- */
-Vec3f Partition::getCenter()
-{
-	return this->center;
+	this->center.x = spacewidth/2;
+	this->center.y = spaceheight/2;
+	this->center.z = spacedepth/2;
 }
 
 

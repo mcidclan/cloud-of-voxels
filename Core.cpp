@@ -7,7 +7,7 @@
 #include "./headers/Core.h"
 #include "./headers/voxelmodels.h"
 
-extern Voxel monkey[MESH_SIZE];
+extern Voxel monkey[MESH_SIZE] __attribute__((aligned(8)));
 
 
 /*

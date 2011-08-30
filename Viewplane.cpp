@@ -87,7 +87,8 @@ bool Viewplane::horizontalScan()
 	{
 		if(this->firsthscan == true)
 		{
-			this->ivectors[this->hid] = math::vecxscl(this->basis.i, (float)this->hscan);
+			this->ivectors[this->hid] =
+			math::vecxscl(this->basis.i, (float)this->hscan);
 		}
 
 		this->ivector = this->ivectors[this->hid];

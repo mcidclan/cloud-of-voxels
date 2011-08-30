@@ -70,12 +70,6 @@
 			 */
 			void depthScan();
 
-			
-			/*
-			 * setCenter
-			 */
-			Vec3f getCenter();
-
 
 			/*
 			 * getColorDepth
@@ -99,7 +93,7 @@
 
 		private:
 			/*
-			 * getCenter
+			 * setCenter
 			 */
 			void setCenter();
 

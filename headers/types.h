@@ -10,14 +10,11 @@
 	#include <stdio.h>
 	#define UI unsigned int
 
-	/*
-	 * Voxel
-	 */
+
 	typedef struct
 	{
-		/*UI*/
-		unsigned char color;
-		float x, y, z;
+		short UI color;
+		short int x, y, z;
 	} Voxel;
 
 
