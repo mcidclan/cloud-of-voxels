@@ -50,7 +50,7 @@ void Core::init()
 	this->viewplane = new Viewplane();
 	this->viewplane->create(SRC_WIDTH, SRC_HEIGHT);
 
-	scanpos = &this->partition->scanpos;//provisoire
+	scanpos = &this->partition->scanpos;
 
 	printf("Core initialized\n"); 
 }
@@ -59,25 +59,18 @@ void Core::init()
 /*
  * transform
  */
-
-
-//const float rua = (M_PI/180.0f);
 float yangle = 0.0f;
-
 void Core::transform()
 {
 	this->camera->resetTransformation();
 
-	Vec3f xaxis = {1.0f, 0.0f, 0.0f};
-	this->camera->rotate(xaxis, M_PI);
-
 	Vec3f yaxis = {0.0f, 1.0f, 0.0f};
-	this->camera->rotate(yaxis, /*rua**/yangle);
+	this->camera->rotate(yaxis, yangle);
 
 	Vec3f translate =  {0.0f, 0.0f, -68.0f};
 	this->camera->translate(translate);
 
-	yangle+=0.03;/*2.0f;*/
+	yangle+=0.03;
 }
 
 
