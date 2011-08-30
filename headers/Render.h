@@ -1,6 +1,6 @@
 /*
  * Cloud of voxels (COV) project
- * Author: by mcidclan. m.cid.clan@gmail.com
+ * Author: mcidclan, m.cid.clan@gmail.com
  * Date: 2011
  */
 
@@ -11,8 +11,8 @@
 	#include <string.h>
 	#include "./types.h"
 
-	#define SRC_WIDTH 134
-	#define SRC_HEIGHT 134
+	#define SRC_WIDTH 128
+	#define SRC_HEIGHT 128
 
 
 	class Render
@@ -33,19 +33,19 @@
 			/*
 			 * timer
 			 */
-			//static void timer(int value);
-
-
-			/*
-			 * init
-			 */
-			void initGl();
+			static void timer(int value);
 
 
 			/*
 			 * init
 			 */
 			void init(int argc, char *argv[]);
+
+
+			/*
+			 * initBoard
+			 */
+			void initBoard();
 
 
 			/*
@@ -67,19 +67,19 @@
 
 
 			/*
-			 * resetDraw
+			 * Reset pixel position at the begining of the drawing board
 			 */
 			void resetDraw();
 
 
 			/*
-			 * setPixel
+			 * Set the current pixel on the drawing board.
 			 */
 			void setPixel(unsigned char color);
 
 
 			/*
-			 * nextPixel
+			 * Jump to next pixel
 			 */
 			void nextPixel();
 
@@ -87,9 +87,11 @@
 			private:
 				void *core;
 
-//				UI curpix;
 				UI curpixi;
 				UI curpixj;
+
+				GLuint tid[2];
+				GLuint dwplane;
 	};
 
 

@@ -1,6 +1,6 @@
 /*
  * Cloud of voxels (COV) project
- * Author: by mcidclan. m.cid.clan@gmail.com
+ * Author: mcidclan, m.cid.clan@gmail.com
  * Date: 2011
  */
 
@@ -11,6 +11,9 @@
 static Render *render = NULL;
 
 
+/*
+ * 
+ */
 Render::Render()
 {
 	this->core = NULL;
@@ -18,48 +21,96 @@ Render::Render()
 }
 
 
+/*
+ * 
+ */
 Render::~Render()
 {
-	
+	glDeleteLists(dwplane, 1);
+	glDeleteTextures(2, tid);
 }
 
 
-/*void Render::timer(int value)
+/*
+ * 
+ */
+void Render::timer(int value)
 {
 	glutPostRedisplay();
 	glutTimerFunc(16, Render::timer, value);
-}*/
+}
 
 
-void Render::initGl()
+/*
+ * 
+ */
+void Render::initBoard()
 {
-	glViewport(0, 0, SRC_WIDTH, SRC_HEIGHT);
-
-	glShadeModel(GL_FLAT);
-	//glEnable(GL_POINT_SMOOTH);
 	glDisable(GL_DEPTH_TEST);
+	glDisable(GL_LIGHTING);
+
+	glViewport(0, 0, SRC_WIDTH, SRC_HEIGHT);
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	glOrtho(0, SRC_WIDTH, SRC_HEIGHT, 0, 0, 1);
+
+
+	glGenTextures(2, tid);
+
+	glBindTexture(GL_TEXTURE_2D, this->tid[0]);
+	glTexImage2D(GL_TEXTURE_2D, 0, 1, SRC_WIDTH, SRC_HEIGHT, 0, GL_LUMINANCE,
+	GL_UNSIGNED_BYTE, NULL);
+
+	glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, SRC_WIDTH, SRC_HEIGHT, 0);
+
+
+	glBindTexture(GL_TEXTURE_2D, this->tid[1]);
+	glTexImage2D(GL_TEXTURE_2D, 0, 1, SRC_WIDTH, SRC_HEIGHT, 0, GL_LUMINANCE,
+	GL_UNSIGNED_BYTE, NULL);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+
+	dwplane = glGenLists(1);
+
+	glNewList(dwplane, GL_COMPILE);
+		glBegin(GL_QUADS);
+			glTexCoord2i(0,0);
+			glVertex2i(0,SRC_HEIGHT);
+			glTexCoord2i(0,1);
+			glVertex2i(0,0);
+			glTexCoord2i(1,1);
+			glVertex2i(SRC_WIDTH,0);
+			glTexCoord2i(1,0);
+			glVertex2i(SRC_WIDTH,SRC_HEIGHT);
+		glEnd();
+	glEndList();
+
+	glEnable(GL_TEXTURE_2D);
 }
 
 
+/*
+ * 
+ */
 void Render::init(int argc, char *argv[])
 {
 	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE);
+	glutInitDisplayMode(GLUT_RGBA | GLUT_SINGLE/*| GLUT_DOUBLE*/);
 	glutInitWindowSize(SRC_WIDTH, SRC_HEIGHT);
+
 	glutInitWindowPosition(10, 10);
-	glutCreateWindow("2DPix<-DVVC Project");
+	glutCreateWindow("cov");
 
 	glutDisplayFunc(Render::display);
-	glutIdleFunc(Render::display);
 
-	this->initGl();
+	this->initBoard();
 
-	printf("Render initialized\n");
-	//Render::timer(0);
+	printf("Renderer initialized\n");
+
+	Render::timer(0);
 	glutMainLoop();
 }
 
@@ -73,55 +124,61 @@ void Render::setCore(void *core)
 }
 
 
+/*
+ * 
+ */
 void Render::display()
 {
 	render->draw();
 }
 
 
+/*
+ * 
+ */
 void Render::draw()
 {
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	glBegin(GL_POINTS);
-		if(core != NULL)
-		{
-			((Core*)core)->process(this);
-		}
-	glEnd();
+	glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, SRC_WIDTH,SRC_HEIGHT);
+
+
+	if(core != NULL)
+	{
+		((Core*)core)->process(this);
+	}
+
+	glCallList(dwplane);
 
 	glutSwapBuffers();
 }
 
 
 /*
- * resetDraw
+ * Reset pixel position at the begining of the drawing board
  */
 void Render::resetDraw()
 {
-	//this->curpix = 0;
 	this->curpixi =
 	this->curpixj = 0;
 }
 
 
 /*
- * setPixel
+ * Set the current pixel on the drawing board.
  */
-void Render::setPixel(unsigned char color)
+void Render::setPixel(const unsigned char color)
 {
-	glColor3ub(color, color, color);
-	glVertex2f(this->curpixi, this->curpixj);
+	glTexSubImage2D(GL_TEXTURE_2D, 0, this->curpixi, this->curpixj, 1, 1,
+	GL_LUMINANCE, GL_UNSIGNED_BYTE, &color);
 }
 
 
 /*
- * nextPixel
+ * Jump to next pixel
  */
 void Render::nextPixel()
 {
-	//this->curpix++;
-
 	this->curpixi++;
 	if(this->curpixi >= SRC_WIDTH)
 	{
@@ -129,6 +186,5 @@ void Render::nextPixel()
 		this->curpixj++;
 	}
 }
-
 
 
