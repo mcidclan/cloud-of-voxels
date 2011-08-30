@@ -76,7 +76,7 @@
 			Vec2i hlimit;
 			Vec2i vlimit;
 
-			UI hid;
+			short UI hid;
 
 			Vec3f *ivectors;
 	};

@@ -8,7 +8,7 @@ OBJS = Core.o Space.o Partition.o Viewplane.o Camera.o math.o Render.o
 OBJS := $(addprefix $(BIN), $(OBJS))
 DATA := $(addprefix $(BIN), $(DATA))
 
-CFLAGS = -W -Wall -pedantic -O0 -g2
+CFLAGS = -W -Wall -Wpadded -Wpacked -pedantic -O0 -g2
 LDFLAGS = -lglut -lstdc++
 
 
