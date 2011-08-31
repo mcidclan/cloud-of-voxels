@@ -11,8 +11,19 @@
 	#include <string.h>
 	#include "./types.h"
 
-	#define SRC_WIDTH 128
-	#define SRC_HEIGHT 128
+
+	/*
+	 * SCREEN RENDER SIZE
+	 */
+	const short UI SCR_WIDTH = 256;
+	const short UI SCR_HEIGHT = 256;
+
+
+	/*
+	 * VIEWPLANE RENDER SIZE
+	 */
+	const short UI VIEW_WIDTH = 128;
+	const short UI VIEW_HEIGHT = 128;
 
 
 	class Render

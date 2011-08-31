@@ -48,7 +48,7 @@ void Core::init()
 	this->space->addVoxels(monkey, MESH_SIZE);
 
 	this->viewplane = new Viewplane();
-	this->viewplane->create(SRC_WIDTH, SRC_HEIGHT);
+	this->viewplane->create(VIEW_WIDTH, VIEW_HEIGHT);
 
 	scanpos = &this->partition->scanpos;
 
@@ -70,7 +70,7 @@ void Core::transform()
 	Vec3f translate =  {0.0f, 0.0f, -68.0f};
 	this->camera->translate(translate);
 
-	yangle+=0.03;
+	yangle+=0.02;
 }
 
 

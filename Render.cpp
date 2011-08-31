@@ -49,42 +49,46 @@ void Render::initBoard()
 	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_LIGHTING);
 
-	glViewport(0, 0, SRC_WIDTH, SRC_HEIGHT);
+	glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glOrtho(0, SRC_WIDTH, SRC_HEIGHT, 0, 0, 1);
+	glOrtho(0, SCR_WIDTH, SCR_HEIGHT, 0, 0, 1);
 
 
 	glGenTextures(2, tid);
 
 	glBindTexture(GL_TEXTURE_2D, this->tid[0]);
-	glTexImage2D(GL_TEXTURE_2D, 0, 1, SRC_WIDTH, SRC_HEIGHT, 0, GL_LUMINANCE,
+	glTexImage2D(GL_TEXTURE_2D, 0, 1, VIEW_WIDTH, VIEW_HEIGHT, 0, GL_LUMINANCE,
 	GL_UNSIGNED_BYTE, NULL);
+	
+	glPixelStorei(GL_PACK_ALIGNMENT, 1);
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-	glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, SRC_WIDTH, SRC_HEIGHT, 0);
+	glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, VIEW_WIDTH, VIEW_HEIGHT, 0);
 
 
 	glBindTexture(GL_TEXTURE_2D, this->tid[1]);
-	glTexImage2D(GL_TEXTURE_2D, 0, 1, SRC_WIDTH, SRC_HEIGHT, 0, GL_LUMINANCE,
+	glTexImage2D(GL_TEXTURE_2D, 0, 1, VIEW_WIDTH, VIEW_HEIGHT, 0, GL_LUMINANCE,
 	GL_UNSIGNED_BYTE, NULL);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
+	glPixelStorei(GL_PACK_ALIGNMENT, 1);
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
 	dwplane = glGenLists(1);
 
 	glNewList(dwplane, GL_COMPILE);
 		glBegin(GL_QUADS);
 			glTexCoord2i(0,0);
-			glVertex2i(0,SRC_HEIGHT);
+			glVertex2i(0,SCR_HEIGHT);
 			glTexCoord2i(0,1);
 			glVertex2i(0,0);
 			glTexCoord2i(1,1);
-			glVertex2i(SRC_WIDTH,0);
+			glVertex2i(SCR_WIDTH,0);
 			glTexCoord2i(1,0);
-			glVertex2i(SRC_WIDTH,SRC_HEIGHT);
+			glVertex2i(SCR_WIDTH,SCR_HEIGHT);
 		glEnd();
 	glEndList();
 
@@ -99,7 +103,7 @@ void Render::init(int argc, char *argv[])
 {
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_RGBA | GLUT_SINGLE/*| GLUT_DOUBLE*/);
-	glutInitWindowSize(SRC_WIDTH, SRC_HEIGHT);
+	glutInitWindowSize(SCR_WIDTH, SCR_HEIGHT);
 
 	glutInitWindowPosition(10, 10);
 	glutCreateWindow("cov");
@@ -140,7 +144,7 @@ void Render::draw()
 {
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, SRC_WIDTH,SRC_HEIGHT);
+	glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, VIEW_WIDTH, VIEW_HEIGHT);
 
 
 	if(core != NULL)
@@ -180,7 +184,7 @@ void Render::setPixel(const unsigned char color)
 void Render::nextPixel()
 {
 	this->curpixi++;
-	if(this->curpixi >= SRC_WIDTH)
+	if(this->curpixi >= VIEW_WIDTH)
 	{
 		this->curpixi = 0;
 		this->curpixj++;
