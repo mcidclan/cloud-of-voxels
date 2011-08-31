@@ -1,3 +1,4 @@
+CC = gcc
 BIN = ./bin/
 EXEC = cov
 
