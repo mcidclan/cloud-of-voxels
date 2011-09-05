@@ -1,6 +1,6 @@
 /*
  * Cloud of voxels (COV) project
- * Author: by mcidclan. m.cid.clan@gmail.com
+ * Author: mcidclan. m.cid.clan@gmail.com
  * Date: 2011
  */
 
@@ -9,7 +9,7 @@
 
 	#include <stdio.h>
 	#define UI unsigned int
-
+	#define UC unsigned char
 
 	typedef struct
 	{
