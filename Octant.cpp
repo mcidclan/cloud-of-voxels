@@ -26,96 +26,19 @@ Octant::Octant()
  */
 Octant::~Octant()
 {
-	unsigned char
-	i = 0,
-	j = 0;
 
-	while(i < 2)
-	{
-		j = 0;
-		while(j < 2)
-		{
-			delete [] this->children[i][j];
-			j++;
-		}
-		delete [] this->children[i];
-		i++;
-	}
-
-	delete [] this->children;
-}
-
-
-void Octant::setDimensions(short UI rootsize, short UI maxdepth)//static
-{
-	Octant::maxdepth = maxdepth;
-	Octant::rootsize = rootsize;
-}
-
-
-/*
- *
- */
-void Octant::initChild(Octant *parent, const UC i, const UC j, const UC k)//static
-{
-	short UI level;
-	const Vec3uc locpos = {i, j, k};
-
-	Octant *child = &parent[i][j][k];
-
-	child->depth = parent->depth - 1;
-	level = child->maxdepth - child->depth;
-	child->size = Octant::rootsize / (2 * level);
-	child->pos = vecxscl(locpos, child->size);
-	child->cscoef = 1.0f/((float)child->size);
+	Octree::del(this);
 }
 
 
 /*
  * get the local position in the current octant
  */
-void Octant::getLocalPosition(Vec3f dot)
+void Octant::updateLocalPosition(Vec3f dot)
 {
 	vecsub(this->parent->pos, &dot);
 	vecxscl(&dot, this->cscoef);
-	Octant::curpos = (Vec3sui)dot;
-}
-
-
-/*
- * Add children to the current octant
- */
-void Octant::addChildren()
-{
-	UC
-	i = 0,
-	j = 0;
-
-	this->children = new Octant**[2];
-
-	while(i < 2)
-	{
-		this->children[i] = new Octant*[2];
-		j = 0;
-		while(j < 2)
-		{
-			this->children[i][j] = new Octant[2];
-			Octant::initChild(this, i, j, 0);
-			Octant::initChild(this, i, j, 1);
-			j++;
-		}
-		i++;
-	}
-}
-
-
-/*
- * Set bit space
- */
-void Octant::setBit(Vec4 *voxel, Octant *octant)//static
-{
-	Vec3sui &curpos = Octant::curpos;
-	octant->children[curpos.x][curpos.y][curpos.z] = voxel.w;
+	Octree::locpos = (Vec3sui)dot;
 }
 
 
@@ -124,7 +47,7 @@ void Octant::setBit(Vec4 *voxel, Octant *octant)//static
  */
 void Octant::setBit(Vec4 *voxel)
 {
-	Vec3f dotlocpos = getLocalPosition(*dot);
+	updateLocalPosition(*dot);
 
 	if(this->depth == 1)
 	{
@@ -136,7 +59,8 @@ void Octant::setBit(Vec4 *voxel)
 			this->addChildren();
 		}
 
-		...
+		Vec3sui &olpos = Octree::locpos;
+		this->childreen[olpos.x][olpos.y][olpos.z]->setBit(voxel);
 	}
 }
 
@@ -144,7 +68,7 @@ void Octant::setBit(Vec4 *voxel)
 /*
  *
  */
-Voxel* getBit(const vec3f raypos)//vec3f *raypos
+Voxel* Octant::getBit(const vec3f raypos)
 {
 	
 	if(this->isparent == true)
