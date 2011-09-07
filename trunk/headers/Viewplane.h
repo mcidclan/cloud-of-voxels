@@ -1,6 +1,6 @@
 /*
  * Cloud of voxels (COV) project
- * Author: by mcidclan. m.cid.clan@gmail.com
+ * Author: mcidclan, m.cid.clan@gmail.com
  * Date: 2011
  */
 
@@ -14,8 +14,8 @@
 		public:
 			Mat3f basis;
 
-			Vec3f ivector;
-			Vec3f jvector;
+			Vec3<float> ivector;
+			Vec3<float> jvector;
 
 
 		public:
@@ -64,7 +64,7 @@
 			/*
 			 * scan
 			 */
-			void getScanPosition(Vec3f *scanpos);
+			void getScanPosition(Vec3<float> *scanpos);
 
 
 		private:
@@ -73,12 +73,12 @@
 
 			int vscan;
 			int hscan;
-			Vec2i hlimit;
-			Vec2i vlimit;
+			Vec2<int> hlimit;
+			Vec2<int> vlimit;
 
 			short UI hid;
 
-			Vec3f *ivectors;
+			Vec3<float> *ivectors;
 	};
 
 

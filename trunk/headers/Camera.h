@@ -1,6 +1,6 @@
 /*
  * Cloud of voxels (COV) project
- * Author: by mcidclan. m.cid.clan@gmail.com
+ * Author: mcidclan, m.cid.clan@gmail.com
  * Date: 2011
  */
 
@@ -13,7 +13,7 @@
 	class Camera
 	{
 		public:
-			Vec3f nearcenter;
+			Vec3<float> nearcenter;
 
 
 		public:
@@ -70,13 +70,13 @@
 			/*
 			 * rotate
 			 */
-			void rotate(const Vec3f axis, float angle);
+			void rotate(const Vec3<float> axis, float angle);
 
 
 			/*
 			 * translate
 			 */
-			void translate(const Vec3f v);
+			void translate(const Vec3<float> v);
 
 
 			/*
