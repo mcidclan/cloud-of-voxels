@@ -65,7 +65,8 @@ void Render::initBoard()
 	glPixelStorei(GL_PACK_ALIGNMENT, 1);
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-	glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, VIEW_WIDTH, VIEW_HEIGHT, 0);
+	glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, VIEW_WIDTH, VIEW_HEIGHT,
+	0);
 
 
 	glBindTexture(GL_TEXTURE_2D, this->tid[1]);

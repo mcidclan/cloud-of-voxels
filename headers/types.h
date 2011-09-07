@@ -1,6 +1,6 @@
 /*
  * Cloud of voxels (COV) project
- * Author: mcidclan. m.cid.clan@gmail.com
+ * Author: mcidclan, m.cid.clan@gmail.com
  * Date: 2011
  */
 
@@ -8,41 +8,32 @@
 #define ADDITIONAL_TYPE_H
 
 	#include <stdio.h>
-	#define UI unsigned int
+
 	#define UC unsigned char
 
-	typedef struct
-	{
-		short UI color;
-		short int x, y, z;
-	} Voxel;
+	#define SI short int
+	#define UI unsigned int
+	#define SUI short unsigned int
 
 
 	/*
-	 * Vec2i
+	 * Vec2
 	 */
-	typedef struct
+	template <typename T>
+	struct Vec2
 	{
-		int x, y;
-	} Vec2i;
+		T x, y;
+	};
 
 
 	/*
-	 * Vec2ui
+	 * Vec3
 	 */
-	typedef struct
+	template <typename T>
+	struct Vec3
 	{
-		UI x, y;
-	} Vec2ui;
-
-
-	/*
-	 * Vec3f
-	 */
-	typedef struct
-	{
-		float x, y, z;
-	} Vec3f;
+		T x, y, z;
+	};
 
 
 	/*
@@ -50,8 +41,18 @@
 	 */
 	typedef struct
 	{
-		Vec3f i, j, k;
+		Vec3<float> i, j, k;
 	} Mat3f;
+
+
+	/*
+	 * Voxel
+	 */
+	typedef struct
+	{
+		SUI color;
+		Vec3<SI> coordinates;
+	} Voxel;
 
 
 #endif

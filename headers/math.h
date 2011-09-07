@@ -1,6 +1,6 @@
 /*
  * Cloud of voxels (COV) project
- * Author: mcidclan. m.cid.clan@gmail.com
+ * Author: mcidclan, m.cid.clan@gmail.com
  * Date: 2011
  */
 
@@ -9,6 +9,7 @@
 
 	#include <math.h>
 	#include "./types.h"
+
 
 	namespace math
 	{
@@ -57,30 +58,39 @@
 
 
 		/*
-		 * vecsub
+		 * vecxscl
 		 */
-		/*template<typename T1, typename T2, typename T3>
-		T3 vecsub(const T1 v1, const T2 v2)
+		template <typename T>
+		T vecxscl(T v, const float s)
 		{
-			T3 v3 =
-			{
-				(T3)(v2->x - v1.x);
-				(T3)(v2->y - v1.y);
-				(T3)(v2->z - v1.z);
-			}
-		}*/
+			v.x *= s;
+			v.y *= s;
+			v.z *= s;
+			return v;
+		}
 
 
 		/*
 		 * vecxscl
 		 */
-		Vec3f vecxscl(Vec3f v, const float s);
-
+		template <typename T1, typename T2>
+		void cpvec(const T1 v1, T2 *v2)
+		{
+			v2->x = v1.x;
+			v2->y = v1.y;
+			v2->z = v1.z;
+		}
 
 		/*
 		 * vecxscl
 		 */
-		void vecxscl(Vec3f *v, const float s);
+		template <typename T>
+		void vecxscl(T *v, const float s)
+		{
+			v->x *= s;
+			v->y *= s;
+			v->z *= s;
+		}
 
 
 		/*
@@ -92,25 +102,25 @@
 		/*
 		 * getnorm
 		 */
-		float getnorm(Vec3f *v);
+		float getnorm(Vec3<float> *v);
 
 
 		/*
 		 * normalize
 		 */
-		void normalize(Vec3f *v);
+		void normalize(Vec3<float> *v);
 
 
 		/*
 		 * eulerorientation
 		 */
-		void eulerorientation(Vec3f axis, const float angle, float *m);
+		void eulerorientation(Vec3<float> axis, const float angle, float *m);
 
 
 		/*
 		 * translate
 		 */
-		void translate(const Vec3f v, float *m);
+		void translate(const Vec3<float> v, float *m);
 
 
 	}

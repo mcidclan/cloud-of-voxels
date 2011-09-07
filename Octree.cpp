@@ -7,10 +7,16 @@
 #include "./headers/Octree.h"
 
 
+SUI Octree::depth;
+SUI Octree::maxdepth;
+SUI Octree::rootsize;
+
+Vec3<SUI> Octree::locpos;
+
 /*
- *
+ * Delete childreen
  */
-void Octree::del(Octant *octant)
+void Octree::delChildreen(Octant *octant)
 {
 	UI
 	i = 0,
@@ -34,27 +40,31 @@ void Octree::del(Octant *octant)
 /*
  *
  */
-void Octree::setDimensions(short UI rootsize, short UI maxdepth)
+void Octree::initRoot(SUI rootsize, SUI maxdepth, SUI curdepth, Octant *root)
 {
+	root->depth = curdepth;
+	//Octree::root = root;
 	Octree::maxdepth = maxdepth;
-	Octree::rootsize = rootsize;
+	Octree::rootsize = rootsize;	
 }
 
 
 /*
  *
  */
-void Octree::initChild(Octant *parent, const UC i, const UC j, const UC k)
+void Octree::initChild(const UC i, const UC j, const UC k, Octant *parent)
 {
-	short UI level;
-	const Vec3uc locpos = {i, j, k};
+	SUI level;
+	const Vec3<SUI> locpos = {i, j, k};
 
-	Octant *child = &parent[i][j][k];
+	Octant *child = &(parent->children[i][j][k]);
 
+	child->parent = parent;
 	child->depth = parent->depth - 1;
-	level = child->maxdepth - child->depth;
-	child->size = Octant::rootsize / (2 * level);
-	child->pos = vecxscl(locpos, child->size);
+
+	level = Octree::maxdepth - child->depth;
+	child->size = Octree::rootsize / (2 * level);
+	child->pos = math::vecxscl(locpos, child->size);
 	child->cscoef = 1.0f/((float)child->size);
 }
 
@@ -77,8 +87,9 @@ void Octree::addChildren(Octant *octant)
 		while(j < 2)
 		{
 			octant->children[i][j] = new Octant[2];
-			Octant::initChild(octant, i, j, 0);
-			Octant::initChild(octant, i, j, 1);
+			Octree::initChild(i, j, 0, octant);
+			Octree::initChild(i, j, 1, octant);
+			octant->isparent = true;
 			j++;
 		}
 		i++;
@@ -89,10 +100,23 @@ void Octree::addChildren(Octant *octant)
 /*
  * Set bit space
  */
-void Octree::setBit(Vec4 *voxel, Octant *octant)
+void Octree::setBit(Voxel *voxel, Octant *octant)
 {
-	Vec3sui &curpos = Octant::curpos;
-	octant->children[curpos.x][curpos.y][curpos.z] = voxel.w;
+	octant->children[Octree::locpos.x][Octree::locpos.y][Octree::locpos.z]
+	.voxel = voxel;
+}
+
+
+/*
+ * Update locpos from the current octant's local position
+ */
+void Octree::updateLocalPosition(Vec3<SI> v, Octant *octant)
+{
+	const Vec3<SUI> locpos = {0, 0, 0};
+
+	math::vecsub(octant->parent->pos, &v);
+	math::vecxscl(&v, octant->cscoef);
+	math::cpvec(v, &Octree::locpos);
 }
 
 

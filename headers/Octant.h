@@ -7,13 +7,24 @@
 #ifndef OCTANT_H
 #define OCTANT_H
 
-	#include ""
+	#include "./math.h"
 
 
 	class Octant
 	{
 		public:
-			static Vec3sui curpos;
+			SUI size;
+			SUI depth;
+			Vec3<SUI> pos;
+
+			float cscoef;
+
+			bool isparent;
+
+			Voxel *voxel;
+			Octant *parent;
+			Octant ***children;
+
 
 		public:
 			/*
@@ -29,25 +40,18 @@
 
 
 			/*
-			 * get the local position in the current octant
-			 */
-			void getLocalPosition(Vec3f dot);
-
-
-			/*
 			 * Set bit space, corresponding to the current voxel
 			 */
-			void setBit(Vec4 *voxel);
+			void setBit(Voxel *voxel);
 
 
 			/*
 			 *
 			 */
-			Voxel* getBit(const vec3f raypos);
+			//Voxel* getBit(const vec3f raypos);
 
 
 		private:
-			Octant ***children;
 
 
 	};

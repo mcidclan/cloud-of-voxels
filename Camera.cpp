@@ -1,13 +1,18 @@
 /*
  * Cloud of voxels (COV) project
- * Author: by mcidclan. m.cid.clan@gmail.com
+ * Author: mcidclan, m.cid.clan@gmail.com
  * Date: 2011
  */
 
 #include <string.h>
 #include "./headers/Camera.h"
 
+
+/*
+ * extern midentity
+ */
 extern float midentity[16];
+
 
 /*
  * projection matrix
@@ -66,9 +71,10 @@ const float znear, const float zfar)
 void Camera::setFrustum(const float left, const float right, const float bottom,
 const float top, const float znear, const float zfar)
 {
-	float	width = right - left,
-			height = top - bottom,
-			depth = zfar - znear;
+	float
+	width = right - left,
+	height = top - bottom,
+	depth = zfar - znear;
 
 	this->znear = znear;
 
@@ -92,9 +98,9 @@ const float top, const float znear, const float zfar)
  */
 void Camera::updateNearInfo(float *m)
 {
-	memcpy(&(this->basis.i), &m[0], sizeof(Vec3f));
-	memcpy(&(this->basis.j), &m[4], sizeof(Vec3f));
-	memcpy(&(this->basis.k), &m[8], sizeof(Vec3f));
+	memcpy(&(this->basis.i), &m[0], sizeof(Vec3<float>));
+	memcpy(&(this->basis.j), &m[4], sizeof(Vec3<float>));
+	memcpy(&(this->basis.k), &m[8], sizeof(Vec3<float>));
 
 	math::normalize(&(this->basis.i));
 	math::normalize(&(this->basis.j));
@@ -152,7 +158,7 @@ void Camera::resetTransformation()
 /*
  * rotate
  */
-void Camera::rotate(const Vec3f axis, float angle)
+void Camera::rotate(const Vec3<float> axis, float angle)
 {	
 	math::eulerorientation(axis, angle, mattmp_1);
 	math::mat4xmat4(matrot, mattmp_1, mattmp_2);
@@ -165,7 +171,7 @@ void Camera::rotate(const Vec3f axis, float angle)
 /*
  * translate
  */
-void Camera::translate(const Vec3f v)
+void Camera::translate(const Vec3<float> v)
 {
 	math::translate(v, matrot);
 	this->nearcenter.x = matrot[12];

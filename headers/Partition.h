@@ -1,6 +1,6 @@
 /*
  * Cloud of voxels (COV) project
- * Author: by mcidclan. m.cid.clan@gmail.com
+ * Author: mcidclan, m.cid.clan@gmail.com
  * Date: 2011
  */
 
@@ -13,7 +13,7 @@
 	{
 		public:
 			Voxel *curvoxel;
-			Vec3f scanpos;
+			Vec3<float> scanpos;
 			UI curdepth;
 
 		public:
@@ -51,7 +51,7 @@
 			/*
 			 * setTranslator
 			 */
-			void setTranslator(const Vec3f translator);
+			void setTranslator(const Vec3<float> translator);
 
 			/*
 			 * setMaxDepth
@@ -62,7 +62,7 @@
 			/*
 			 * resetDepthScan
 			 */
-			void resetDepthScan(const Vec3f *kbase);
+			void resetDepthScan(const Vec3<float> *kbase);
 
 
 			/*
@@ -79,9 +79,9 @@
 
 		private:
 			Voxel ****bits;
-			const Vec3f *kbase;
+			const Vec3<float> *kbase;
 
-			Vec3f center;
+			Vec3<float> center;
 
 			UI spacewidth;
 			UI spaceheight;

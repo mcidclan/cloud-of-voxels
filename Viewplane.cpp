@@ -1,6 +1,6 @@
 /*
  * Cloud of voxels (COV) project
- * Author: by mcidclan. m.cid.clan@gmail.com
+ * Author: mcidclan, m.cid.clan@gmail.com
  * Date: 2011
  */
 
@@ -29,7 +29,7 @@ Viewplane::~Viewplane()
  */
 void Viewplane::create(const UI hsize, const UI vsize)
 {
-	Vec2ui localcenter =
+	Vec2<UI> localcenter =
 	{
 		hsize/2,
 		vsize/2
@@ -41,7 +41,7 @@ void Viewplane::create(const UI hsize, const UI vsize)
 	this->vlimit.x = -localcenter.y;
 	this->vlimit.y = localcenter.y;
 
-	this->ivectors = new Vec3f[hsize];
+	this->ivectors = new Vec3<float>[hsize];
 }
 
 
@@ -123,7 +123,7 @@ bool Viewplane::scan()
 }
 
 
-void Viewplane::getScanPosition(Vec3f *scanpos)
+void Viewplane::getScanPosition(Vec3<float> *scanpos)
 {
 	math::vecadd(this->ivector, this->jvector, scanpos);
 }

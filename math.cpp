@@ -1,14 +1,16 @@
 /*
  * Cloud of voxels (COV) project
- * Author: by mcidclan. m.cid.clan@gmail.com
+ * Author: mcidclan, m.cid.clan@gmail.com
  * Date: 2011
  */
 
 #include "./headers/math.h"
 
 
-//static 
-float midentity[16] /*__aligned()*/ =
+/*
+ * midentity
+ */
+float midentity[16] __attribute__ ((aligned (64))) =
 {
 	1.0f, 0.0f, 0.0f, 0.0f,
 	0.0f, 1.0f, 0.0f, 0.0f,
@@ -31,44 +33,28 @@ namespace math
 
 
 	/*
-	 * vecxscl
-	 */
-	Vec3f vecxscl(Vec3f v, const float s)
-	{
-		v.x *= s;
-		v.y *= s;
-		v.z *= s;
-		return v;
-	}
-
-
-	/*
-	 * vecxscl
-	 */
-	void vecxscl(Vec3f *v, const float s)
-	{
-		v->x *= s;
-		v->y *= s;
-		v->z *= s;
-	}
-
-
-	/*
 	 * mat4xmat4
 	 */
 	void mat4xmat4(float *m1, float *m2, float *m3)
 	{
-		unsigned char i = 0, j = 0, k = 0;
-		float *row = NULL, *col = NULL;
+		unsigned char
+		i = 0,
+		j = 0,
+		k = 0;
+
+		float
+		*rw = NULL,
+		*cl = NULL;
  
+
 		for(i = 0; i < 16; i += 4)
 		{
-			row = &(m1[i]);
+			rw = &(m1[i]);
 
 			for(j = 0; j < 4; j++)
 			{
-				col = &(m2[j]);
-				m3[k] = col[0]*row[0] + col[4]*row[1] + col[8]*row[2] + col[12]*row[3];
+				cl = &(m2[j]);
+				m3[k] = cl[0]*rw[0] + cl[4]*rw[1] + cl[8]*rw[2] + cl[12]*rw[3];
 				k++;
 			}
 		}
@@ -78,7 +64,7 @@ namespace math
 	/*
 	 * getnorm
 	 */
-	float getnorm(Vec3f *v)
+	float getnorm(Vec3<float> *v)
 	{
 		return sqrtf((v->x * v->x) + (v->y * v->y) + (v->z * v->z));
 	}
@@ -87,7 +73,7 @@ namespace math
 	/*
 	 * normalize
 	 */
-	void normalize(Vec3f *v)
+	void normalize(Vec3<float> *v)
 	{
 		const float norm = getnorm(v);
 
@@ -103,7 +89,7 @@ namespace math
 	/*
 	 * eulerorientation
 	 */
-	void eulerorientation(Vec3f axis, const float angle, float *m)
+	void eulerorientation(Vec3<float> axis, const float angle, float *m)
 	{
 		float
 		h = sinf(angle),
@@ -134,7 +120,7 @@ namespace math
 	/*
 	 * translate
 	 */
-	void translate(const Vec3f v, float *m)
+	void translate(const Vec3<float> v, float *m)
 	{
 		m[12] = m[0] * v.x + m[4] * v.y + m[8] * v.z + m[12];
 		m[13] = m[1] * v.x + m[5] * v.y + m[9] * v.z + m[13];

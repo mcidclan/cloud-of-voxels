@@ -7,29 +7,39 @@
 #ifndef OCTREE_H
 #define OCTREE_H
 
-	#include "octant.h"
+	#include "./Octant.h"
 
 
 	class Octree
 	{
+
+		public:
+			static SUI depth;
+			static SUI maxdepth;
+			static SUI rootsize;
+
+			static Vec3<SUI> locpos;
+
+
 		public:
 			/*
-			 *
+			 * Delete childreen
 			 */
-			static void del(Octant *octant);
+			static void delChildreen(Octant *octant);
 
 
 			/*
-			 *
+			 * Init root information
 			 */
-			static void setDimensions(short UI rootsize, short UI maxdepth);
+			static void initRoot(SUI rootsize, SUI maxdepth, SUI curdepth,
+			Octant *root);
 
 
 			/*
-			 *
+			 * Init child
 			 */
-			static void initChild(Octant *parent, const UC i, const UC j,
-			const UC k);
+			static void initChild(const UC i, const UC j, const UC k,
+			Octant *parent);
 
 
 			/*
@@ -41,7 +51,15 @@
 			/*
 			 * Set bit space
 			 */
-			static void setBit(Vec4 *voxel, Octant *octant);
+			static void setBit(Voxel *voxel, Octant *octant);
+
+
+			/*
+			 * Update locpos from the current octant's local position
+			 */
+			static void updateLocalPosition(Vec3<SI> v, Octant *octant);
+
+
 	};
 
 #endif

@@ -1,6 +1,6 @@
 /*
  * Cloud of voxels (COV) project
- * Author: by mcidclan. m.cid.clan@gmail.com
+ * Author: mcidclan, m.cid.clan@gmail.com
  * Date: 2011
  */
 
@@ -25,9 +25,10 @@ Partition::Partition()
  */
 Partition::~Partition()// à verifier
 {
-	unsigned i = 0,
-			 j = 0,
-			 k = 0;
+	unsigned
+	i = 0,
+	j = 0,
+	k = 0;
 
 	while(i < this->spacewidth)
 	{
@@ -58,13 +59,14 @@ Partition::~Partition()// à verifier
 void Partition::create(const UI spacewidth, const UI spaceheight,
 const UI spacedepth)
 {
-	unsigned i = 0,
-			 j = 0,
-			 k = 0;
+	unsigned
+	i = 0,
+	j = 0,
+	k = 0;
 
-	this->spacewidth	= spacewidth;
-	this->spaceheight	= spaceheight;
-	this->spacedepth	= spacedepth;
+	this->spacewidth = spacewidth;
+	this->spaceheight = spaceheight;
+	this->spacedepth = spacedepth;
 
 	this->bits = new Voxel***[this->spacewidth];
 
@@ -100,9 +102,9 @@ const UI spacedepth)
  */
 void Partition::setBit(Voxel *voxel)
 {
-	const short UI x = voxel->x+this->center.x;
-	const short UI y = voxel->y+this->center.y;
-	const short UI z = voxel->z+this->center.z;
+	const short UI x = voxel->coordinates.x+this->center.x;
+	const short UI y = voxel->coordinates.y+this->center.y;
+	const short UI z = voxel->coordinates.z+this->center.z;
 
 	if(x > this->spacewidth || y > this->spaceheight || z > this->spacedepth)
 	{
@@ -143,7 +145,7 @@ void Partition::setMaxDepth(const UI maxdepth)
 /*
  * resetDepthScan
  */
-void Partition::resetDepthScan(const Vec3f *kbase)
+void Partition::resetDepthScan(const Vec3<float> *kbase)
 {
 	this->curdepth = 0;
 	this->kbase = kbase;
