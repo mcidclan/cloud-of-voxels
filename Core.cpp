@@ -1,6 +1,6 @@
 /*
  * Cloud of voxels (COV) project
- * Author: by mcidclan. m.cid.clan@gmail.com
+ * Author: mcidclan, m.cid.clan@gmail.com
  * Date: 2011
  */
 
@@ -33,7 +33,7 @@ Core::~Core()
 /*
  * init
  */
-Vec3f *scanpos = NULL;
+Vec3<float> *scanpos = NULL;
 
 void Core::init()
 {
@@ -64,10 +64,10 @@ void Core::transform()
 {
 	this->camera->resetTransformation();
 
-	Vec3f yaxis = {0.0f, 1.0f, 0.0f};
+	Vec3<float> yaxis = {0.0f, 1.0f, 0.0f};
 	this->camera->rotate(yaxis, yangle);
 
-	Vec3f translate =  {0.0f, 0.0f, -68.0f};
+	Vec3<float> translate =  {0.0f, 0.0f, -68.0f};
 	this->camera->translate(translate);
 
 	yangle+=0.02;
@@ -82,7 +82,7 @@ void Core::process(Render *render)
 	this->transform();
 
 	this->camera->getBasis(&(this->viewplane->basis));
-	const Vec3f kbase = this->viewplane->basis.k;
+	const Vec3<float> kbase = this->viewplane->basis.k;
 
 	this->viewplane->resetScan();
 	render->resetDraw();

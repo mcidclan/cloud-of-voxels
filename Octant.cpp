@@ -5,7 +5,7 @@
  */
 
 #include "./headers/Octant.h"
-
+#include "./headers/Octree.h"
 
 /*
  * Constructor
@@ -16,8 +16,13 @@ Octant::Octant()
 	this->pos.y =
 	this->pos.z = 0;
 
+	this->depth = 1;
+
 	this->voxel = NULL;
-	this->childreen = NULL;
+	this->parent = NULL;
+	this->children = NULL;
+
+	this->isparent = false;
 }
 
 
@@ -26,41 +31,29 @@ Octant::Octant()
  */
 Octant::~Octant()
 {
-
-	Octree::del(this);
+	Octree::delChildreen(this);
+	this->isparent = false;
 }
 
 
 /*
- * get the local position in the current octant
+ * Set the bit space corresponding to the current voxel
  */
-void Octant::updateLocalPosition(Vec3f dot)
+void Octant::setBit(Voxel *voxel)
 {
-	vecsub(this->parent->pos, &dot);
-	vecxscl(&dot, this->cscoef);
-	Octree::locpos = (Vec3sui)dot;
-}
-
-
-/*
- * Set bit space, corresponding to the current voxel
- */
-void Octant::setBit(Vec4 *voxel)
-{
-	updateLocalPosition(*dot);
-
 	if(this->depth == 1)
 	{
-		setBit(this, voxel);
+		Octree::setBit(voxel, this);
 	} else
 	{
 		if(this->isparent == false)
 		{
-			this->addChildren();
+			Octree::addChildren(this);
 		}
 
-		Vec3sui &olpos = Octree::locpos;
-		this->childreen[olpos.x][olpos.y][olpos.z]->setBit(voxel);
+		Octree::updateLocalPosition(voxel->coordinates, this);
+		this->children[Octree::locpos.x][Octree::locpos.y][Octree::locpos.z]
+		.setBit(voxel);
 	}
 }
 
@@ -68,7 +61,7 @@ void Octant::setBit(Vec4 *voxel)
 /*
  *
  */
-Voxel* Octant::getBit(const vec3f raypos)
+/*Voxel* Octant::getBit(const vec3f raypos)
 {
 	
 	if(this->isparent == true)
@@ -81,6 +74,6 @@ Voxel* Octant::getBit(const vec3f raypos)
 	}
 
 	return this->voxel;
-}
+}*/
 
 
