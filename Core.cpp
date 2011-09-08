@@ -110,13 +110,22 @@ void Core::process(Render *render)
  * main
  */
 int main(int argc, char *argv[])
-{
+{/*
 	Core *core = new Core();
 	core->init();
 
 	Render *render = new Render();
 	render->setCore(core);
-	render->init(argc, argv);
+	render->init(argc, argv);*/
+
+
+	Vec3<float> vray =
+	{
+		100.0f, 100.0f, 100.0f
+	};
+
+	Octant *root = new Octant();
+	Octree::initRoot(400, 3, math::getnorm(&vray), root);
 
 	return 1;
 }

@@ -73,17 +73,6 @@
 		/*
 		 * vecxscl
 		 */
-		template <typename T1, typename T2>
-		void cpvec(const T1 v1, T2 *v2)
-		{
-			v2->x = v1.x;
-			v2->y = v1.y;
-			v2->z = v1.z;
-		}
-
-		/*
-		 * vecxscl
-		 */
 		template <typename T>
 		void vecxscl(T *v, const float s)
 		{
@@ -94,9 +83,31 @@
 
 
 		/*
+		 * cpvec
+		 */
+		template <typename T1, typename T2>
+		void cpvec(const T1 v1, T2 *v2)
+		{
+			v2->x = v1.x;
+			v2->y = v1.y;
+			v2->z = v1.z;
+		}
+
+
+		/*
 		 * mat4xmat4
 		 */
 		void mat4xmat4(float *m1, float *m2, float *m3);
+
+
+		/*
+		 * getnorm
+		 */
+		/*template<typename T>
+		float getnorm(T *v1, T *v2, T *v3)
+		{
+			return sqrtf((float)((v1 * v1) + (v2 * v2) + (v3 * v3)));
+		}*/
 
 
 		/*

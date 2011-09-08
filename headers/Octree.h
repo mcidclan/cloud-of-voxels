@@ -18,7 +18,11 @@
 			static SUI maxdepth;
 			static SUI rootsize;
 
+			static Vec3<SUI> center;
 			static Vec3<SUI> locpos;
+
+			static float depthray;
+			static float raylength;
 
 
 		public:
@@ -31,7 +35,7 @@
 			/*
 			 * Init root information
 			 */
-			static void initRoot(SUI rootsize, SUI maxdepth, SUI curdepth,
+			static void initRoot(SUI rootsize, SUI maxdepth, float raylength,
 			Octant *root);
 
 
