@@ -52,28 +52,27 @@ void Octant::setBit(Voxel *voxel)
 		}
 
 		Octree::updateLocalPosition(voxel->coordinates, this);
-		this->children[Octree::locpos.x][Octree::locpos.y][Octree::locpos.z]
-		.setBit(voxel);
+		this->children[Octree::locpos.x][Octree::locpos.y]
+		[Octree::locpos.z].setBit(voxel);
 	}
 }
 
 
 /*
- *
+ * get the bit space corresponding to the current coordinates
  */
-/*Voxel* Octant::getBit(const vec3f raypos)
+void Octant::getBit(Vec3<float> *coordinates)//not yet implemented
 {
-	
-	if(this->isparent == true)
+	if(this->children == NULL)
 	{
-		vecsub(raypos, this->pos, &Octant::curpos);
-		vecxscl(&Octant::curpos, posfac);
-
-		this->children[Octant::curpos.x][Octant::curpos.y][Octant::curpos.z]
-		->getBit(raypos);
+		Octree::curoctant = this;
+		return;
+	} else
+	{
+		Octree::updateLocalPosition(coordinates, this);
+		this->children[Octree::locpos.x][Octree::locpos.y]
+		[Octree::locpos.z].getBit(coordinates);
 	}
-
-	return this->voxel;
-}*/
+}
 
 

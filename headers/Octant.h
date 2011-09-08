@@ -17,6 +17,7 @@
 			SUI depth;
 			Vec3<SUI> pos;
 
+			float dsize;
 			float cscoef;
 
 			bool isparent;
