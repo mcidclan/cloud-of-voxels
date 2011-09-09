@@ -47,9 +47,9 @@
 
 
 			/*
-			 *
+			 * get the bit space corresponding to the current coordinates
 			 */
-			//Voxel* getBit(const vec3f raypos);
+			void getBit(Vec3<float> *coordinates);
 
 
 		private:
