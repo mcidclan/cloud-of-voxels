@@ -20,9 +20,15 @@
 
 			static Vec3<SUI> center;
 			static Vec3<SUI> locpos;
+			static Vec3<float> raypos;
+			static Vec3<float> raybit;
+			static Vec3<float> *kbase;
 
 			static float depthray;
 			static float raylength;
+
+			static Octant *curbit;
+			static Octant *root;
 
 
 		public:
@@ -33,14 +39,14 @@
 
 
 			/*
-			 * Init root information
+			 *
 			 */
-			static void initRoot(SUI rootsize, SUI maxdepth, float raylength,
-			Octant *root);
+			static void initRoot(SUI rootsize, SUI maxdepth,
+			const float raylength, Octant *root);
 
 
 			/*
-			 * Init child
+			 *
 			 */
 			static void initChild(const UC i, const UC j, const UC k,
 			Octant *parent);
@@ -59,9 +65,31 @@
 
 
 			/*
-			 * Update locpos from the current octant's local position
+			 * Update locpos after findind the corresponding relative
+			 * position of v in the current octant.
 			 */
-			static void updateLocalPosition(Vec3<SI> v, Octant *octant);
+			template <typename T>
+			static void updateLocalPosition(Vec3<T> v, Octant *octant)
+			{
+				if(octant->parent != NULL)
+				{
+					math::vecsub(octant->parent->pos, &v);
+				}
+				math::vecxscl(&v, octant->cscoef);
+				math::cpvec(v, &Octree::locpos);
+			}
+
+
+			/*
+			 * resetRayCast //kbase must be normalized
+			 */
+			static void resetRayCast(Vec3<float> *kbase);
+
+
+			/*
+			 * rayCast
+			 */
+			static void rayCast();
 
 
 	};

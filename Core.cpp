@@ -118,14 +118,31 @@ int main(int argc, char *argv[])
 	render->setCore(core);
 	render->init(argc, argv);*/
 
+	//
+
+	Voxel voxel =
+	{
+		0xFF,
+		{-1, 0, 0}
+	};
 
 	Vec3<float> vray =
 	{
 		100.0f, 100.0f, 100.0f
 	};
 
+	Vec3<float> kbase =
+	{
+		0.0f, 0.0f, 1.0f
+	};
+
 	Octant *root = new Octant();
 	Octree::initRoot(400, 3, math::getnorm(&vray), root);
+
+	root->setBit(&voxel);
+
+	//Octree::resetRayCast(&kbase);
+	//Octree::rayCast();
 
 	return 1;
 }

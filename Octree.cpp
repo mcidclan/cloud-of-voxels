@@ -13,9 +13,16 @@ SUI Octree::rootsize;
 
 Vec3<SUI> Octree::center;
 Vec3<SUI> Octree::locpos;
+Vec3<float> Octree::raypos;
+Vec3<float> Octree::raybit;
+Vec3<float> *Octree::kbase;
 
 float Octree::depthray;
 float Octree::raylength;
+
+Octant *Octree::curbit;
+Octant *Octree::root;
+
 
 
 /*
@@ -48,8 +55,9 @@ void Octree::delChildreen(Octant *octant)
 void Octree::initRoot(SUI rootsize, SUI maxdepth, const float raylength,
 Octant *root)
 {
+	Octree::root = root;
+
 	root->depth = maxdepth;
-	//Octree::root = root;
 	Octree::maxdepth = maxdepth;
 	Octree::rootsize = rootsize;
 
@@ -115,54 +123,40 @@ void Octree::addChildren(Octant *octant)
  */
 void Octree::setBit(Voxel *voxel, Octant *octant)
 {
-	octant->children[Octree::locpos.x][Octree::locpos.y][Octree::locpos.z]
-	.voxel = voxel;
+	octant->voxel = voxel;
 }
 
 
 /*
- * Update locpos from the current octant's local position
+ * resetRayCast //kbase must be normalized
  */
-void Octree::updateLocalPosition(Vec3<SI> v, Octant *octant)//???//functional?
+void Octree::resetRayCast(Vec3<float> *kbase)
 {
-	//const Vec3<SUI> locpos = {0, 0, 0};
-	math::vecsub(octant->parent->pos, &v);
-	math::vecxscl(&v, octant->cscoef);
-	math::cpvec(v, &Octree::locpos);//
-	math::vecadd(Octree::center, &Octree::locpos);//
-}
-
-
-/*
- * resetRayCast //resetDepthScan
- */
-void Partition::resetRayCast(const Vec3<float> *kbase)//kbase must be normalized
-{
-	Octree::depthray = 0;
+	Octree::depthray = 0.0f;//Reset the depth ray
 	Octree::kbase = kbase;
+	Octree::curbit = root;//Back to the root
+
+	//Move the ray to its relative position in the octree
 	math::vecadd(Octree::center, &Octree::raypos);
 }
 
 
 /*
- * rayCast //depthScan
+ * rayCast
  */
-void Octree::rayCast()//not yet implemented
+void Octree::rayCast()
 {
-	float raybit;
+	Octree::curbit->getBit(&Octree::raypos);
 
-	getBit(&Octree::raypos);
-
-	if((Octree::curoctant->depth == 1) || (Octree::depthray >= Octree::raylength))
+	if((Octree::curbit->depth == 1) || (Octree::depthray >= Octree::raylength))
 	{
 		return;
 	}
 
-	raybit = math::vecxscl(*(Octree::kbase), Octree::curoctant->size);
-	math::vecadd(raybit, &Octree::raypos);
+	Octree::raybit = math::vecxscl(*(Octree::kbase), Octree::curbit->size);
+	math::vecadd(Octree::raybit, &Octree::raypos);
 
-	Octree::depthray += Octree::curoctant->size;
-
+	Octree::depthray += Octree::curbit->size;
 
 	Octree::rayCast();
 }

@@ -49,9 +49,14 @@ void Octant::setBit(Voxel *voxel)
 		if(this->isparent == false)
 		{
 			Octree::addChildren(this);
+			printf("child added\n");
 		}
 
-		Octree::updateLocalPosition(voxel->coordinates, this);
+		Vec3<SI> coordinates;
+		math::vecadd(voxel->coordinates, Octree::center, &coordinates);
+
+		Octree::updateLocalPosition(coordinates, this);
+
 		this->children[Octree::locpos.x][Octree::locpos.y]
 		[Octree::locpos.z].setBit(voxel);
 	}
@@ -61,15 +66,15 @@ void Octant::setBit(Voxel *voxel)
 /*
  * get the bit space corresponding to the current coordinates
  */
-void Octant::getBit(Vec3<float> *coordinates)//not yet implemented
+void Octant::getBit(Vec3<float> *coordinates)
 {
 	if(this->children == NULL)
 	{
-		Octree::curoctant = this;
+		Octree::curbit = this;
 		return;
 	} else
 	{
-		Octree::updateLocalPosition(coordinates, this);
+		Octree::updateLocalPosition(*coordinates, this);
 		this->children[Octree::locpos.x][Octree::locpos.y]
 		[Octree::locpos.z].getBit(coordinates);
 	}
