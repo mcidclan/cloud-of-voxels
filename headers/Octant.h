@@ -15,15 +15,15 @@
 		public:
 			SUI size;
 			SUI depth;
-			Vec3<SUI> pos;
+			Vec3<SI> pos;
 
-			float dsize;
-			float cscoef;
+			//float dsize;
+			float scoef;
 
 			bool isparent;
 
 			Voxel *voxel;
-			Octant *parent;
+			//Octant *parent;
 			Octant ***children;
 
 

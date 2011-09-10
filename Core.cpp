@@ -123,26 +123,31 @@ int main(int argc, char *argv[])
 	Voxel voxel =
 	{
 		0xFF,
-		{-1, 0, 0}
+		{0, 0, 2}
 	};
 
-	Vec3<float> vray =
+	/*Vec3<float> vray =
 	{
 		100.0f, 100.0f, 100.0f
-	};
+	};*/
 
 	Vec3<float> kbase =
 	{
 		0.0f, 0.0f, 1.0f
 	};
 
+	SUI level = 4;
+	SUI osize = pow(2, (level-1) );
+	printf("octant size %i\n\n", osize);
+
 	Octant *root = new Octant();
-	Octree::initRoot(400, 3, math::getnorm(&vray), root);
+	Octree::initRoot(osize, level, /*math::getnorm(&vray)*/osize/2, root);
 
 	root->setBit(&voxel);
 
-	//Octree::resetRayCast(&kbase);
-	//Octree::rayCast();
+
+//	Octree::resetRayCast(&kbase);
+//	Octree::rayCast();
 
 	return 1;
 }

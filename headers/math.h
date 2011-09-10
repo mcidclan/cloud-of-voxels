@@ -61,7 +61,7 @@
 		 * vecxscl
 		 */
 		template <typename T>
-		T vecxscl(T v, const float s)
+		Vec3<T> vecxscl(Vec3<T> v, const float s)
 		{
 			v.x *= s;
 			v.y *= s;
@@ -73,8 +73,8 @@
 		/*
 		 * vecxscl
 		 */
-		template <typename T>
-		void vecxscl(T *v, const float s)
+		template <typename T1, typename T2>
+		void vecxscl(Vec3<T1> *v, const T2 s)
 		{
 			v->x *= s;
 			v->y *= s;
