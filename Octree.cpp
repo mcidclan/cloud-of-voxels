@@ -58,12 +58,16 @@ Octant *root)
 	Octree::root = root;
 
 	root->depth = maxdepth;
+
 	Octree::maxdepth = maxdepth;
 	Octree::rootsize = rootsize;
 
 	Octree::center.x =
 	Octree::center.y =
 	Octree::center.z = rootsize/2;
+
+//	math::cpvec(Octree::center, &root->pos);
+//	math::vecxscl(&root->pos, -1);
 
 	Octree::raylength = raylength;
 }
@@ -75,18 +79,20 @@ Octant *root)
 void Octree::initChild(const UC i, const UC j, const UC k, Octant *parent)
 {
 	SUI level;
-	const Vec3<SUI> locpos = {i, j, k};
+	Vec3<SI> pos = {i, j, k};
 
 	Octant *child = &(parent->children[i][j][k]);
+//	child->parent = parent;
 
-	child->parent = parent;
 	child->depth = parent->depth - 1;
 
 	level = Octree::maxdepth - child->depth;
 	child->size = Octree::rootsize / (2 * level);
 
-	child->pos = math::vecxscl(locpos, child->size);
-	child->cscoef = 1.0f/((float)child->size);
+	child->pos = math::vecxscl(pos, child->size);
+	math::vecadd(parent->pos, &child->pos);
+
+	child->scoef = 1.0f/((float)child->size);
 }
 
 
@@ -135,6 +141,7 @@ void Octree::resetRayCast(Vec3<float> *kbase)
 	Octree::depthray = 0.0f;//Reset the depth ray
 	Octree::kbase = kbase;
 	Octree::curbit = root;//Back to the root
+	printf("root depth %i\n", root->depth);//debug
 
 	//Move the ray to its relative position in the octree
 	math::vecadd(Octree::center, &Octree::raypos);
@@ -146,10 +153,14 @@ void Octree::resetRayCast(Vec3<float> *kbase)
  */
 void Octree::rayCast()
 {
+	printf("depth ray %f\n", Octree::depthray);//debug
+
 	Octree::curbit->getBit(&Octree::raypos);
 
 	if((Octree::curbit->depth == 1) || (Octree::depthray >= Octree::raylength))
 	{
+		printf("depth octant %i\n", curbit->depth);//debug
+		printf("depth ray %f\n", Octree::depthray);//debug
 		return;
 	}
 

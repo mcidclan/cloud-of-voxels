@@ -19,7 +19,7 @@ Octant::Octant()
 	this->depth = 1;
 
 	this->voxel = NULL;
-	this->parent = NULL;
+	//this->parent = NULL;
 	this->children = NULL;
 
 	this->isparent = false;
@@ -44,12 +44,13 @@ void Octant::setBit(Voxel *voxel)
 	if(this->depth == 1)
 	{
 		Octree::setBit(voxel, this);
+		printf("Voxel added at: %i %i %i\n", this->pos.x, this->pos.y, this->pos.z);
 	} else
 	{
 		if(this->isparent == false)
 		{
 			Octree::addChildren(this);
-			printf("child added\n");
+			printf("children added in %i\n", depth);
 		}
 
 		Vec3<SI> coordinates;
