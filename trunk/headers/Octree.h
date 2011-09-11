@@ -25,6 +25,7 @@
 
 			static float depthray;
 			static float raylength;
+			static float colordepthstep;
 
 			static Octant *curbit;
 			static Octant *root;
@@ -86,6 +87,18 @@
 			 * rayCast
 			 */
 			static void rayCast();
+
+
+			/*
+			 * rayCast
+			 */
+			static void addVoxels(Voxel *voxels, const UI nvoxel);
+
+
+			/*
+			 * setColorDepth
+			 */
+			static unsigned char getColorDepth();
 
 
 	};

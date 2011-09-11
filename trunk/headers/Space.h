@@ -8,7 +8,6 @@
 #define SPACE_H
 
 	#include "./Partition.h"
-	#include "./Octree.h"
 
 	class Space
 	{
