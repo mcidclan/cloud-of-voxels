@@ -4,7 +4,7 @@ EXEC = cov
 
 
 DATA = voxelmodels.o
-OBJS = Core.o Space.o Partition.o Viewplane.o Camera.o math.o Render.o \
+OBJS = Core.o Viewplane.o Camera.o math.o Render.o \
 	Octree.o Octant.o
 
 OBJS := $(addprefix $(BIN), $(OBJS))

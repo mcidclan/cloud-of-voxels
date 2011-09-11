@@ -23,9 +23,7 @@ Core::Core()
  */
 Core::~Core()
 {
-	delete this->space;
 	delete this->camera;
-	delete this->partition;
 	delete this->viewplane;
 }
 
@@ -39,18 +37,17 @@ void Core::init()
 {
 	this->camera = new Camera();
 
-	this->partition = new Partition();
-	this->partition->create(300, 300, 300);
-	this->partition->setMaxDepth(68);
+	SUI level = 10;
+	SUI osize = pow(2, (level-1));
+	printf("octree size %i\n", osize);
 
-	this->space = new Space();
-	this->space->setPartition(this->partition);
-	this->space->addVoxels(monkey, MESH_SIZE);
+	Octree::initRoot(osize, level, 128, new Octant());
+	Octree::addVoxels(monkey, MESH_SIZE);
 
 	this->viewplane = new Viewplane();
 	this->viewplane->create(VIEW_WIDTH, VIEW_HEIGHT);
 
-	scanpos = &this->partition->scanpos;
+	scanpos = &Octree::raypos;
 
 	printf("Core initialized\n"); 
 }
@@ -82,7 +79,7 @@ void Core::process(Render *render)
 	this->transform();
 
 	this->camera->getBasis(&(this->viewplane->basis));
-	const Vec3<float> kbase = this->viewplane->basis.k;
+	Vec3<float> kbase = this->viewplane->basis.k;
 
 	this->viewplane->resetScan();
 	render->resetDraw();
@@ -92,12 +89,12 @@ void Core::process(Render *render)
 		this->viewplane->getScanPosition(scanpos);
 		math::vecadd(this->camera->nearcenter, scanpos);
 
-		this->partition->resetDepthScan(&kbase);
-		this->partition->depthScan();
+		Octree::resetRayCast(&kbase);
+		Octree::rayCast();
 
-		if(this->partition->curvoxel != NULL)
+		if(Octree::curbit->voxel != NULL)
 		{
-			render->setPixel(this->partition->getColorDepth());
+			render->setPixel(Octree::getColorDepth());
 		}
 
 		render->nextPixel();
@@ -110,39 +107,13 @@ void Core::process(Render *render)
  * main
  */
 int main(int argc, char *argv[])
-{/*
+{
 	Core *core = new Core();
 	core->init();
 
 	Render *render = new Render();
 	render->setCore(core);
-	render->init(argc, argv);*/
-
-	//
-
-	Voxel voxel =
-	{
-		0xFF,
-		{0, 0, 16383}
-	};
-
-	Vec3<float> kbase =
-	{
-		0.0f, 0.0f, 1.0f
-	};
-
-	SUI level = 16;//max
-	SUI osize = pow(2, (level-1) );
-	printf("octant size %i\n\n", osize);
-
-	Octant *root = new Octant();
-	Octree::initRoot(osize, level, osize/2, root);
-
-	root->setBit(&voxel);
-
-	printf("\nRayCasting started\n");
-	Octree::resetRayCast(&kbase);
-	Octree::rayCast();
+	render->init(argc, argv);
 
 	return 1;
 }

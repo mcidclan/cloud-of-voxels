@@ -9,7 +9,7 @@
 
 	#include "./Camera.h"
 	#include "./Viewplane.h"
-	#include "./Space.h"
+	#include "./Octree.h"
 	#include "./Render.h"
 
 
@@ -30,21 +30,19 @@
 
 
 			/*
-			 * initSpace
+			 * init core
 			 */
 			void init();
 
 
 			/*
-			 * initSpace
+			 * process
 			 */
 			void process(Render *render);
 
 
 		private:
-			Space *space;
 			Camera *camera;
-			Partition *partition;
 			Viewplane *viewplane;
 
 

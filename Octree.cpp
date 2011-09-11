@@ -17,6 +17,7 @@ Vec3<float> *Octree::kbase;
 
 float Octree::depthray;
 float Octree::raylength;
+float Octree::colordepthstep;
 
 Octant *Octree::curbit;
 Octant *Octree::root;
@@ -63,6 +64,8 @@ Octant *root)
 	Octree::center.z = root->size/2;
 
 	Octree::raylength = raylength;
+
+	Octree::colordepthstep = (255.0f/(float)raylength);
 }
 
 
@@ -142,16 +145,17 @@ void Octree::resetRayCast(Vec3<float> *kbase)
  */
 void Octree::rayCast()
 {
-	printf("depth ray %f\n", Octree::depthray);//debug
+	//printf("depth ray %f\n", Octree::depthray);//debug
 
-	Octree::curbit = Octree::curbit->parent;
+	//Octree::curbit = Octree::curbit->parent;
+	Octree::curbit = root;///Back to the root, not good :/
 	Octree::curbit->getBit(&Octree::raypos);
 
 	if((Octree::curbit->depth == 1) || (Octree::depthray >= Octree::raylength))
 	{
-		printf("\ndepth octant %i\n", curbit->depth);//debug
-		printf("Voxel found at: %f %f %f\n", Octree::raypos.x, Octree::raypos.y,
-		Octree::raypos.z);
+		//printf("\ndepth octant %i\n", curbit->depth);//debug
+		//printf("Voxel found at: %f %f %f\n", Octree::raypos.x, Octree::raypos.y,
+		//Octree::raypos.z);
 		return;
 	}
 
@@ -160,6 +164,36 @@ void Octree::rayCast()
 
 	Octree::depthray += Octree::curbit->size;
 	Octree::rayCast();
+}
+
+
+/*
+ * addVoxels
+ */
+void Octree::addVoxels(Voxel *voxels, const UI nvoxel)
+{
+	UI i = 0;
+	while(i < nvoxel)
+	{
+		Octree::root->setBit(&voxels[i]);
+		i++;
+	}
+}
+
+
+/*
+ * setColorDepth
+ */
+unsigned char Octree::getColorDepth()
+{
+	const int c = 0xFF - (int)(Octree::depthray*Octree::colordepthstep);
+
+	if(c <= 0)
+	{
+		return 0;
+	}
+
+	return c;
 }
 
 
