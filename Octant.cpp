@@ -19,7 +19,7 @@ Octant::Octant()
 	this->depth = 1;
 
 	this->voxel = NULL;
-	//this->parent = NULL;
+	this->parent = this;//NULL;
 	this->children = NULL;
 
 	this->isparent = false;
@@ -44,7 +44,7 @@ void Octant::setBit(Voxel *voxel)
 	if(this->depth == 1)
 	{
 		Octree::setBit(voxel, this);
-		printf("Voxel added at: %i %i %i\n", this->pos.x, this->pos.y, this->pos.z);
+		printf("Add voxel at: %i %i %i\n", this->pos.x,this->pos.y,this->pos.z);
 	} else
 	{
 		if(this->isparent == false)

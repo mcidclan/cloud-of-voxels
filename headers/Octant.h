@@ -23,7 +23,7 @@
 			bool isparent;
 
 			Voxel *voxel;
-			//Octant *parent;
+			Octant *parent;//
 			Octant ***children;
 
 

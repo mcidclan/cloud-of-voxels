@@ -126,11 +126,6 @@ int main(int argc, char *argv[])
 		{0, 0, 2}
 	};
 
-	/*Vec3<float> vray =
-	{
-		100.0f, 100.0f, 100.0f
-	};*/
-
 	Vec3<float> kbase =
 	{
 		0.0f, 0.0f, 1.0f
@@ -141,13 +136,13 @@ int main(int argc, char *argv[])
 	printf("octant size %i\n\n", osize);
 
 	Octant *root = new Octant();
-	Octree::initRoot(osize, level, /*math::getnorm(&vray)*/osize/2, root);
+	Octree::initRoot(osize, level, osize/2, root);
 
 	root->setBit(&voxel);
 
-
-//	Octree::resetRayCast(&kbase);
-//	Octree::rayCast();
+	printf("\nRayCasting started\n");
+	Octree::resetRayCast(&kbase);
+	Octree::rayCast();
 
 	return 1;
 }

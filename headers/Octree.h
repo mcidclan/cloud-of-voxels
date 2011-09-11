@@ -71,12 +71,6 @@
 			template <typename T>
 			static void updateLocalPosition(Vec3<T> v, Octant *parent)
 			{
-				/*if(octant->parent != NULL)
-				{
-					printf("-- %i %i %i\n", octant->parent->pos.x, octant->parent->pos.y, octant->parent->pos.z);
-					math::vecsub(octant->parent->pos, &v);
-				}*/
-
 				math::vecsub(parent->pos, &v);
 				math::vecxscl(&v, parent->children[0][0][0].scoef);
 				math::cpvec(v, &Octree::locpos);
