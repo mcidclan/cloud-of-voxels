@@ -8,8 +8,6 @@
 
 
 SUI Octree::depth;
-SUI Octree::maxdepth;
-SUI Octree::rootsize;
 
 Vec3<SUI> Octree::center;
 Vec3<SUI> Octree::locpos;
@@ -58,16 +56,11 @@ Octant *root)
 	Octree::root = root;
 
 	root->depth = maxdepth;
-
-	Octree::maxdepth = maxdepth;
-	Octree::rootsize = rootsize;
+	root->size = rootsize;
 
 	Octree::center.x =
 	Octree::center.y =
-	Octree::center.z = rootsize/2;
-
-//	math::cpvec(Octree::center, &root->pos);
-//	math::vecxscl(&root->pos, -1);
+	Octree::center.z = root->size/2;
 
 	Octree::raylength = raylength;
 }
@@ -78,15 +71,13 @@ Octant *root)
  */
 void Octree::initChild(const UC i, const UC j, const UC k, Octant *parent)
 {
-	SUI level;
 	Vec3<SI> pos = {i, j, k};
 
 	Octant *child = &(parent->children[i][j][k]);
 	child->parent = parent;
 	child->depth = parent->depth - 1;
 
-	level = Octree::maxdepth - child->depth;
-	child->size = Octree::rootsize / (2 * level);
+	child->size = parent->size / 2;
 
 	child->pos = math::vecxscl(pos, child->size);
 	math::vecadd(parent->pos, &child->pos);
