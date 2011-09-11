@@ -19,7 +19,7 @@ Octant::Octant()
 	this->depth = 1;
 
 	this->voxel = NULL;
-	this->parent = this;//NULL;
+	this->parent = this;
 	this->children = NULL;
 
 	this->isparent = false;
@@ -57,7 +57,6 @@ void Octant::setBit(Voxel *voxel)
 		math::vecadd(voxel->coordinates, Octree::center, &coordinates);
 
 		Octree::updateLocalPosition(coordinates, this);
-
 		this->children[Octree::locpos.x][Octree::locpos.y]
 		[Octree::locpos.z].setBit(voxel);
 	}

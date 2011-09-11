@@ -15,8 +15,7 @@
 
 		public:
 			static SUI depth;
-			static SUI maxdepth;
-			static SUI rootsize;
+			//static SUI maxdepth;
 
 			static Vec3<SUI> center;
 			static Vec3<SUI> locpos;
