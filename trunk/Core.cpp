@@ -123,7 +123,7 @@ int main(int argc, char *argv[])
 	Voxel voxel =
 	{
 		0xFF,
-		{0, 0, 2}
+		{0, 0, 16383}
 	};
 
 	Vec3<float> kbase =
@@ -131,7 +131,7 @@ int main(int argc, char *argv[])
 		0.0f, 0.0f, 1.0f
 	};
 
-	SUI level = 4;
+	SUI level = 16;//max
 	SUI osize = pow(2, (level-1) );
 	printf("octant size %i\n\n", osize);
 
