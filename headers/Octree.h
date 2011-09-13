@@ -20,6 +20,8 @@
 			static Vec3<SUI> center;
 			static Vec3<SUI> locpos;
 			static Vec3<float> raypos;
+			static Vec3<float> lastraypos;
+
 			static Vec3<float> raybit;
 			static Vec3<float> *kbase;
 
@@ -87,6 +89,12 @@
 			 * rayCast
 			 */
 			static void rayCast();
+
+
+			/*
+			 * getEntryDot
+			 */
+			static void getEntryDot(Octant* octant, Vec3<float> *coordinates);
 
 
 			/*

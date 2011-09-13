@@ -11,7 +11,10 @@ SUI Octree::depth;
 
 Vec3<SUI> Octree::center;
 Vec3<SUI> Octree::locpos;
+
 Vec3<float> Octree::raypos;
+Vec3<float> Octree::lastraypos;
+
 Vec3<float> Octree::raybit;
 Vec3<float> *Octree::kbase;
 
@@ -63,6 +66,8 @@ Octant *root)
 	Octree::center.y =
 	Octree::center.z = root->size/2;
 
+	math::cpvec(Octree::center, &root->center);
+
 	Octree::raylength = raylength;
 
 	Octree::colordepthstep = (255.0f/(float)raylength);
@@ -74,9 +79,13 @@ Octant *root)
  */
 void Octree::initChild(const UC i, const UC j, const UC k, Octant *parent)
 {
+	//Vec3<float> center;
 	Vec3<SI> pos = {i, j, k};
 
-	Octant *child = &(parent->children[i][j][k]);
+
+	Octant *child = &(parent->children[i][j][k]);///
+
+
 	child->parent = parent;
 	child->depth = parent->depth - 1;
 
@@ -84,6 +93,14 @@ void Octree::initChild(const UC i, const UC j, const UC k, Octant *parent)
 
 	child->pos = math::vecxscl(pos, child->size);
 	math::vecadd(parent->pos, &child->pos);
+
+
+	math::cpvec(child->pos, &child->center);
+	const float half = ((float)child->size)/2.0f;
+	child->center.x += half;
+	child->center.y += half;
+	child->center.z += half;
+
 
 	child->scoef = 1.0f/((float)child->size);
 }
@@ -103,6 +120,7 @@ void Octree::addChildren(Octant *octant)
 	while(i < 2)
 	{
 		octant->children[i] = new Octant*[2];
+
 		j = 0;
 		while(j < 2)
 		{
@@ -137,33 +155,54 @@ void Octree::resetRayCast(Vec3<float> *kbase)
 
 	//Move the ray to its relative position in the octree
 	math::vecadd(Octree::center, &Octree::raypos);
+
+	math::cpvec(Octree::raypos, &Octree::lastraypos);
 }
 
 
 /*
  * rayCast
  */
-void Octree::rayCast()
+void Octree::rayCast()//Must be reimplemented
 {
-	//printf("depth ray %f\n", Octree::depthray);//debug
+	Octree::curbit = root;
+	Octree::curbit->getBit(&Octree::lastraypos);
 
-	//Octree::curbit = Octree::curbit->parent;
-	Octree::curbit = root;///Back to the root, not good :/
-	Octree::curbit->getBit(&Octree::raypos);
+	math::cpvec(Octree::raypos, &Octree::lastraypos);
 
-	if((Octree::curbit->depth == 1) || (Octree::depthray >= Octree::raylength))
+	Octree::raybit = math::vecxscl(*(Octree::kbase), (float)Octree::curbit->size);
+	math::vecadd(Octree::raybit, &Octree::raypos);
+
+	Octree::depthray += ((float)Octree::curbit->size);
+
+
+	if(Octree::curbit->voxel != NULL || (Octree::depthray > Octree::raylength))
 	{
-		//printf("\ndepth octant %i\n", curbit->depth);//debug
-		//printf("Voxel found at: %f %f %f\n", Octree::raypos.x, Octree::raypos.y,
-		//Octree::raypos.z);
+		/*if(Octree::curbit->voxel != NULL)
+		{
+			printf("found at: %i %i %i\n", Octree::curbit->pos.x,
+			Octree::curbit->pos.y, Octree::curbit->pos.z);
+		}*/
 		return;
 	}
 
-	Octree::raybit = math::vecxscl(*(Octree::kbase), Octree::curbit->size);
-	math::vecadd(Octree::raybit, &Octree::raypos);
-
-	Octree::depthray += Octree::curbit->size;
 	Octree::rayCast();
+}
+
+
+/*
+ * getEntryDot
+ */
+static float coef;
+static Vec3<float> r;
+void Octree::getEntryDot(Octant* octant, Vec3<float> *coordinates)
+{
+	math::vecsub(*coordinates, octant->center, &r);
+	math::normalize(&r);
+
+	coef = 1.0f/math::getmaxcomponent(r);
+	math::vecxscl(&r, coef*octant->size);
+	math::vecadd(octant->center, &r);
 }
 
 

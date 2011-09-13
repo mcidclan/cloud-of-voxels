@@ -16,14 +16,14 @@
 			SUI size;
 			SUI depth;
 			Vec3<SI> pos;
+			Vec3<float> center;
 
-			//float dsize;
 			float scoef;
 
 			bool isparent;
 
 			Voxel *voxel;
-			Octant *parent;//
+			Octant *parent;
 			Octant ***children;
 
 
@@ -50,6 +50,12 @@
 			 * get the bit space corresponding to the current coordinates
 			 */
 			void getBit(Vec3<float> *coordinates);
+
+
+			/*
+			 * getChildAt
+			 */
+			Octant* getChildAt(Vec3<float> *coordinates);
 
 
 		private:

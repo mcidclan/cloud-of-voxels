@@ -16,7 +16,7 @@ Octant::Octant()
 	this->pos.y =
 	this->pos.z = 0;
 
-	this->depth = 1;
+	this->depth = 0;
 
 	this->voxel = NULL;
 	this->parent = this;
@@ -53,18 +53,16 @@ void Octant::setBit(Voxel *voxel)
 			printf("children added in %i\n", depth);
 		}
 
-		Vec3<SI> coordinates;
+		Vec3<float> coordinates;
 		math::vecadd(voxel->coordinates, Octree::center, &coordinates);
 
-		Octree::updateLocalPosition(coordinates, this);
-		this->children[Octree::locpos.x][Octree::locpos.y]
-		[Octree::locpos.z].setBit(voxel);
+		this->getChildAt(&coordinates)->setBit(voxel);
 	}
 }
 
 
 /*
- * get the bit space corresponding to the current coordinates
+ * getBit
  */
 void Octant::getBit(Vec3<float> *coordinates)
 {
@@ -74,10 +72,26 @@ void Octant::getBit(Vec3<float> *coordinates)
 		return;
 	} else
 	{
-		Octree::updateLocalPosition(*coordinates, this);
-		this->children[Octree::locpos.x][Octree::locpos.y]
-		[Octree::locpos.z].getBit(coordinates);
+		this->getChildAt(coordinates)->getBit(coordinates);
 	}
+}
+
+
+/*
+ * getChildAt
+ */
+static Vec3<float> r;
+Octant* Octant::getChildAt(Vec3<float> *coordinates)
+{
+	math::vecsub(*coordinates, this->center, &r);
+	math::normalize(&r);
+	math::vecxscl(&r, 0.5f);
+		
+	r.x = r.x+1.0f;
+	r.y = r.y+1.0f;
+	r.z = r.z+1.0f;
+
+	return &this->children[(int)r.x][(int)r.y][(int)r.z];
 }
 
 

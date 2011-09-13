@@ -46,7 +46,19 @@
 
 
 		/*
-		 * vecadd
+		 * vecsub
+		 */
+		template<typename T1, typename T2, typename T3>
+		void vecsub(const T1 v1, const T2 v2, T3 *v3)
+		{
+			v3->x = v1.x - v2.x;
+			v3->y = v1.y - v2.y;
+			v3->z = v1.z - v2.z;	
+		}
+
+
+		/*
+		 * vecsub
 		 */
 		template<typename T1, typename T2>
 		void vecsub(const T1 v1, T2 *v2)
@@ -91,6 +103,18 @@
 			v2->x = v1.x;
 			v2->y = v1.y;
 			v2->z = v1.z;
+		}
+
+
+		/*
+		 * getMax
+		 */
+		template<typename T>
+		T getmaxcomponent(Vec3<T> v)
+		{
+			if(fabs(v.x) < fabs(v.y)) v.x = v.y;
+			if(fabs(v.x) < fabs(v.z)) v.x = v.z;
+			return v.x;
 		}
 
 
