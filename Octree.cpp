@@ -106,7 +106,7 @@ void Octree::setFacesCenter(Octant *octant, const float half)
  */
 void Octree::keepAffectedFaces()
 {//Must be re-implemented
-	if(Octree::kbase->x < 0.0f) affectedfaces[0] = 0;
+	/*if(Octree::kbase->x < 0.0f) affectedfaces[0] = 0;
 	else if(Octree::kbase->x > 0.0f) affectedfaces[0] = 1;
 	else affectedfaces[0] = 6;
 
@@ -116,12 +116,11 @@ void Octree::keepAffectedFaces()
 	
 	if(Octree::kbase->z < 0.0f) affectedfaces[2] = 4;
 	else if(Octree::kbase->z > 0.0f) affectedfaces[2] = 5;
-	else affectedfaces[2] = 6;
+	else affectedfaces[2] = 6;*/
 
-	/*affectedfaces[0] = Octree::kbase->x < 0.0f ? '\0' : '\1';
-	affectedfaces[1] = Octree::kbase->y < 0.0f ? '\2' : '\3';
-	affectedfaces[2] = Octree::kbase->z < 0.0f ? '\4' : '\5';*/
-
+	affectedfaces[0] = Octree::kbase->x < 0.0f ? 0 : 1;
+	affectedfaces[1] = Octree::kbase->y < 0.0f ? 2 : 3;
+	affectedfaces[2] = Octree::kbase->z < 0.0f ? 4 : 5;
 }
 
 
@@ -196,7 +195,7 @@ void Octree::setBit(Voxel *voxel, Octant *octant)
 void Octree::initRayCast(Vec3<float> *kbase)
 {//Must be re-implemented
 	Octree::kbase = kbase;
-	Octree::kbase2 = math::vecxscl(*Octree::kbase, 0.5f);
+	Octree::kbase2 = math::vecxscl(*Octree::kbase, 0.9f);
 	Octree::keepAffectedFaces();
 }
 
@@ -246,11 +245,13 @@ void Octree::getNearestFace(Octant* octant, Vec3<float> *coordinates, UC *lid)
 	maxdp = 0.0f;
 
 	UC i = 0;
+	*lid = affectedfaces[0];
+
 	while(i < 3)
 	{
 		UC &fid = affectedfaces[i];
 
-		if(fid == 6) goto next;
+		//if(fid == 6) goto next;
 
 		math::vecsub(octant->facescenter[fid], *coordinates, &vvalue);
 		dp = math::dotproduct(&vvalue, Octree::kbase);
@@ -261,7 +262,7 @@ void Octree::getNearestFace(Octant* octant, Vec3<float> *coordinates, UC *lid)
 			*lid = fid;
 		}
 
-		next:
+		//next:
 		i++;
 	}
 }
@@ -277,17 +278,17 @@ void Octree::getNextEntryDot(Octant* octant, Vec3<float> *coordinates)
 
 	if(fid == 0 || fid == 1)
 	{
-		fvalue = abs(octant->facescenter[fid].x - coordinates->x);
+		fvalue = fabs(octant->facescenter[fid].x - coordinates->x);
 	}
 
 	if(fid == 2 || fid == 3)
 	{
-		fvalue = abs(octant->facescenter[fid].y - coordinates->y);
+		fvalue = fabs(octant->facescenter[fid].y - coordinates->y);
 	}
 
 	if(fid == 4 || fid == 5)
 	{
-		fvalue = abs(octant->facescenter[fid].z - coordinates->z);
+		fvalue = fabs(octant->facescenter[fid].z - coordinates->z);
 	}
 
 	vvalue = math::vecxscl(*Octree::kbase, fvalue);
