@@ -80,18 +80,13 @@ void Octant::getBit(Vec3<float> *coordinates)
 /*
  * getChildAt
  */
-static Vec3<float> r;
+static Vec3<UC> r;
 Octant* Octant::getChildAt(Vec3<float> *coordinates)
 {
-	math::vecsub(*coordinates, this->center, &r);
-	math::normalize(&r);
-	math::vecxscl(&r, 0.5f);
-		
-	r.x = r.x+1.0f;
-	r.y = r.y+1.0f;
-	r.z = r.z+1.0f;
-
-	return &this->children[(int)r.x][(int)r.y][(int)r.z];
+	r.x = coordinates->x - this->center.x < 0.0f ? 0 : 1;
+	r.y = coordinates->y - this->center.y < 0.0f ? 0 : 1;
+	r.z = coordinates->z - this->center.z < 0.0f ? 0 : 1;
+	return &this->children[r.x][r.y][r.z];
 }
 
 

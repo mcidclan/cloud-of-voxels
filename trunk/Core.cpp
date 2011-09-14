@@ -37,7 +37,7 @@ void Core::init()
 {
 	this->camera = new Camera();
 
-	SUI level = 10;
+	SUI level = 9;
 	SUI osize = pow(2, (level-1));
 	printf("octree size %i\n", osize);
 
@@ -49,7 +49,7 @@ void Core::init()
 
 	scanpos = &Octree::raypos;
 
-	printf("Core initialized\n"); 
+	printf("Core initialized\n");
 }
 
 
@@ -67,7 +67,7 @@ void Core::transform()
 	Vec3<float> translate =  {0.0f, 0.0f, -68.0f};
 	this->camera->translate(translate);
 
-	yangle += 0;//0.005;
+	yangle += 0.02f;//174532925f;
 }
 
 
@@ -79,7 +79,8 @@ void Core::process(Render *render)
 	this->transform();
 
 	this->camera->getBasis(&(this->viewplane->basis));
-	Vec3<float> kbase = this->viewplane->basis.k;//
+
+	Octree::initRayCast(&this->viewplane->basis.k);
 
 	this->viewplane->resetScan();
 	render->resetDraw();
@@ -89,12 +90,12 @@ void Core::process(Render *render)
 		this->viewplane->getScanPosition(scanpos);
 		math::vecadd(this->camera->nearcenter, scanpos);
 
-		Octree::resetRayCast(&kbase);//
+		Octree::resetRayCast();
 		Octree::rayCast();
 
 		if(Octree::curbit->voxel != NULL)
 		{
-			render->setPixel(0xFF/*Octree::getColorDepth()*/);
+			render->setPixel(Octree::getColorDepth());
 		}
 
 		render->nextPixel();
@@ -114,7 +115,6 @@ int main(int argc, char *argv[])
 	Render *render = new Render();
 	render->setCore(core);
 	render->init(argc, argv);
-
 	return 1;
 }
 
