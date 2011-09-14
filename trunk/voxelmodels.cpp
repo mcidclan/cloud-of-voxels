@@ -1,7 +1,7 @@
 #include "./headers/voxelmodels.h"
 
-
-/*Voxel monkey[MESH_SIZE] __attribute__((aligned(8))) =
+/*
+Voxel monkey[MESH_SIZE] __attribute__((aligned(8))) =
 {
 	{0xFF,{-30,-30,-30}},
 	{0xFF,{30,-30,-30}},
@@ -12,7 +12,7 @@
 	{0xFF,{30,-30,30}},
 	{0xFF,{-30,30,30}},
 	{0xFF,{30,30,30}}
-};*/	
+};*/
 
 
 Voxel monkey[MESH_SIZE] __attribute__((aligned(8))) =
