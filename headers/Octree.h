@@ -15,15 +15,15 @@
 
 		public:
 			static SUI depth;
-			//static SUI maxdepth;
 
 			static Vec3<SUI> center;
 			static Vec3<SUI> locpos;
 			static Vec3<float> raypos;
-			static Vec3<float> lastraypos;
+			static Vec3<float> raysrc;
 
-			static Vec3<float> raybit;
 			static Vec3<float> *kbase;
+
+			static Vec3<float> kbase2;//
 
 			static float depthray;
 			static float raylength;
@@ -50,6 +50,18 @@
 			/*
 			 *
 			 */
+			static void setFacesCenter(Octant *octant, const float half);
+
+
+			/*
+			 * keepAffectedFaces()
+			 */
+			static void keepAffectedFaces();
+
+
+			/*
+			 *
+			 */
 			static void initChild(const UC i, const UC j, const UC k,
 			Octant *parent);
 
@@ -67,22 +79,15 @@
 
 
 			/*
-			 * Update locpos after findind the corresponding relative
-			 * position of v in the current octant.
+			 * initRayCast
 			 */
-			template <typename T>
-			static void updateLocalPosition(Vec3<T> v, Octant *parent)
-			{
-				math::vecsub(parent->pos, &v);
-				math::vecxscl(&v, parent->children[0][0][0].scoef);
-				math::cpvec(v, &Octree::locpos);
-			}
+			static void initRayCast(Vec3<float> *kbase);
 
 
 			/*
-			 * resetRayCast //kbase must be normalized
+			 * resetRayCast
 			 */
-			static void resetRayCast(Vec3<float> *kbase);
+			static void resetRayCast();
 
 
 			/*
@@ -92,13 +97,21 @@
 
 
 			/*
-			 * getEntryDot
+			 * getNearestFace
 			 */
-			static void getEntryDot(Octant* octant, Vec3<float> *coordinates);
+			static void getNearestFace(Octant* octant, Vec3<float> *coordinates,
+			UC *lid);
 
 
 			/*
-			 * rayCast
+			 * getEntryDot
+			 */
+			static void getNextEntryDot(Octant* octant,
+			Vec3<float> *coordinates);
+
+
+			/*
+			 * addVoxels
 			 */
 			static void addVoxels(Voxel *voxels, const UI nvoxel);
 
@@ -110,6 +123,7 @@
 
 
 	};
+
 
 #endif
 

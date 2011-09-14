@@ -15,15 +15,15 @@
 	/*
 	 * SCREEN RENDER SIZE
 	 */
-	const short UI SCR_WIDTH = 256;
-	const short UI SCR_HEIGHT = 256;
+	const short UI SCR_WIDTH = 512;
+	const short UI SCR_HEIGHT = 512;
 
 
 	/*
 	 * VIEWPLANE RENDER SIZE
 	 */
-	const short UI VIEW_WIDTH = 128;
-	const short UI VIEW_HEIGHT = 128;
+	const short UI VIEW_WIDTH = 256;
+	const short UI VIEW_HEIGHT = 256;
 
 
 	class Render
