@@ -67,7 +67,7 @@ void Core::transform()
 	Vec3<float> translate =  {0.0f, 0.0f, -68.0f};
 	this->camera->translate(translate);
 
-	yangle += 0.02f;//174532925f;
+	yangle += 0.02f;
 }
 
 
@@ -95,7 +95,7 @@ void Core::process(Render *render)
 
 		if(Octree::curbit->voxel != NULL)
 		{
-			render->setPixel(Octree::getColorDepth());
+			render->setPixel(Octree::getColorDepth()/*0xFF*/);
 		}
 
 		render->nextPixel();
