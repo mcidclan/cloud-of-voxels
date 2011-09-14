@@ -17,8 +17,9 @@
 			SUI depth;
 			Vec3<SI> pos;
 			Vec3<float> center;
+			Vec3<float> *facescenter;
 
-			float scoef;
+			float half;
 
 			bool isparent;
 

@@ -77,7 +77,7 @@ namespace math
 	{
 		const float norm = getnorm(v);
 
-		if(norm != 0.0f)
+		if(norm > 0.0f)
 		{
 			v->x /= norm;
 			v->y /= norm;
@@ -126,6 +126,12 @@ namespace math
 		m[13] = m[1] * v.x + m[5] * v.y + m[9] * v.z + m[13];
 		m[14] = m[2] * v.x + m[6] * v.y + m[10] * v.z + m[14];
 		m[15] = m[3] * v.x + m[7] * v.y + m[11] * v.z + m[15];
+	}
+
+
+	float dotproduct(Vec3<float> *v1, Vec3<float> *v2)
+	{
+		return (v1->x * v2->x) + (v1->y * v2->y) + (v1->z * v2->z);
 	}
 
 

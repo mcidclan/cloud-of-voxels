@@ -25,6 +25,19 @@
 		 * vecadd
 		 */
 		template<typename T1, typename T2, typename T3>
+		void vecadd(const T1 x, const T1 y, const T1 z,
+		const Vec3<T2> v2, Vec3<T3> *v3)
+		{
+			v3->x = x + v2.x;
+			v3->y = y + v2.y;
+			v3->z = z + v2.z;
+		}
+
+
+		/*
+		 * vecadd
+		 */
+		template<typename T1, typename T2, typename T3>
 		void vecadd(const T1 v1, const T2 v2, T3 *v3)
 		{
 			v3->x = v1.x + v2.x;
@@ -109,29 +122,19 @@
 		/*
 		 * getMax
 		 */
-		template<typename T>
-		T getmaxcomponent(Vec3<T> v)
+		/*template<typename T>
+		T getwidest(Vec3<T> v)
 		{
 			if(fabs(v.x) < fabs(v.y)) v.x = v.y;
 			if(fabs(v.x) < fabs(v.z)) v.x = v.z;
 			return v.x;
-		}
+		}*/
 
 
 		/*
 		 * mat4xmat4
 		 */
 		void mat4xmat4(float *m1, float *m2, float *m3);
-
-
-		/*
-		 * getnorm
-		 */
-		/*template<typename T>
-		float getnorm(T *v1, T *v2, T *v3)
-		{
-			return sqrtf((float)((v1 * v1) + (v2 * v2) + (v3 * v3)));
-		}*/
 
 
 		/*
@@ -156,6 +159,9 @@
 		 * translate
 		 */
 		void translate(const Vec3<float> v, float *m);
+
+
+		float dotproduct(Vec3<float> *v1, Vec3<float> *v2);
 
 
 	}
