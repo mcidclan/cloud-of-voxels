@@ -15,8 +15,8 @@
 	/*
 	 * SCREEN RENDER SIZE
 	 */
-	const short UI SCR_WIDTH = 512;
-	const short UI SCR_HEIGHT = 512;
+	const short UI SCR_WIDTH = 256;//512;
+	const short UI SCR_HEIGHT = 256;//512;
 
 
 	/*
