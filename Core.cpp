@@ -37,7 +37,7 @@ void Core::init()
 {
 	this->camera = new Camera();
 
-	SUI level = 9;
+	SUI level = 9;//16max
 	SUI osize = pow(2, (level-1));
 	printf("octree size %i\n", osize);
 
@@ -56,18 +56,27 @@ void Core::init()
 /*
  * transform
  */
-float yangle = 0.0f;
+static float yangle = 0.0f;
+static float xtrans = -128.0f;
+static float ytrans = -128.0f;
+static float xsens = 2.0f;
+
 void Core::transform()
 {
 	this->camera->resetTransformation();
 
-	Vec3<float> yaxis = {0.0f, 1.0f, 0.0f};
+	static const Vec3<float> yaxis = {0.0f, 1.0f, 0.0f};
 	this->camera->rotate(yaxis, yangle);
 
-	Vec3<float> translate =  {0.0f, 0.0f, -68.0f};
+	Vec3<float> translate =  {xtrans, ytrans, -68.0f};
 	this->camera->translate(translate);
 
-	yangle += 0.02f;
+	if(xtrans > 128.0f) xsens = -2.0f;
+	if(xtrans < -128.0f) xsens = 2.0f;
+	xtrans += xsens;
+	ytrans += xsens;
+
+	yangle += 0.0349f * xsens;//2°
 }
 
 
@@ -95,7 +104,7 @@ void Core::process(Render *render)
 
 		if(Octree::curbit->voxel != NULL)
 		{
-			render->setPixel(Octree::getColorDepth()/*0xFF*/);
+			render->setPixel(Octree::getColorDepth());
 		}
 
 		render->nextPixel();

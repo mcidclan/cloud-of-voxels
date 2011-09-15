@@ -15,7 +15,9 @@
 		public:
 			SUI size;
 			SUI depth;
+
 			Vec3<SI> pos;
+
 			Vec3<float> center;
 			Vec3<float> *facescenter;
 
@@ -24,7 +26,6 @@
 			bool isparent;
 
 			Voxel *voxel;
-			Octant *parent;
 			Octant ***children;
 
 

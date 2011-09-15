@@ -3,34 +3,25 @@
  * Author: mcidclan, m.cid.clan@gmail.com
  * Date: 2011
  */
-//Must be re-implemented
+
 #include "./headers/Octree.h"
 
 
-SUI Octree::depth;
+UC Octree::lfid;
+UC Octree::affectedfaces[3];
 
-Vec3<SUI> Octree::center;
 Vec3<SUI> Octree::locpos;
 
-Vec3<float> Octree::raypos;
-Vec3<float> Octree::raysrc;
 Vec3<float> *Octree::kbase;
+Vec3<float> Octree::raypos;
 
-Vec3<float> Octree::kbase2;
-static UC affectedfaces[3];
-
-
+float Octree::raystep;
 float Octree::depthray;
 float Octree::raylength;
 float Octree::colordepthstep;
 
-Octant *Octree::curbit;
 Octant *Octree::root;
-
-
-//Variables working with temporaries values
-static float fvalue;
-static Vec3<float> vvalue;
+Octant *Octree::curbit;
 
 
 /*
@@ -58,37 +49,32 @@ void Octree::delChildreen(Octant *octant)
 
 
 /*
- *
+ * initRoot
  */
 void Octree::initRoot(SUI rootsize, SUI maxdepth, const float raylength,
 Octant *root)
 {
-	Octree::root = root;
-
 	root->depth = maxdepth;
 	root->size = rootsize;
 
 	root->half = root->size/2;
 
-	Octree::center.x =
-	Octree::center.y =
-	Octree::center.z = root->half;
+	root->center.x =
+	root->center.y =
+	root->center.z = root->half;
 
-	math::cpvec(Octree::center, &root->center);
-
+	Octree::root = root;
 	Octree::raylength = raylength;
 	Octree::colordepthstep = (255.0f/(float)raylength);
-
 	Octree::setFacesCenter(root, root->half);
 }
 
 
 /*
- *
+ * setFacesCenter
  */
 void Octree::setFacesCenter(Octant *octant, const float half)
-{//Must be re-implemented
-	//printf("setFacecenter\n");
+{
 	octant->facescenter = new Vec3<float>[6];
 	math::vecadd(-half, 0.0f, 0.0f, octant->center, &octant->facescenter[0]);
 	math::vecadd(half, 0.0f, 0.0f, octant->center, &octant->facescenter[1]);
@@ -102,43 +88,39 @@ void Octree::setFacesCenter(Octant *octant, const float half)
 
 
 /*
- * keepAffectedFaces()
+ * keepAffectedFaces
  */
 void Octree::keepAffectedFaces()
-{//Must be re-implemented
-	/*if(Octree::kbase->x < 0.0f) affectedfaces[0] = 0;
-	else if(Octree::kbase->x > 0.0f) affectedfaces[0] = 1;
-	else affectedfaces[0] = 6;
+{
+	if(Octree::kbase->x < 0.0f) Octree::affectedfaces[0] = 0;
+	else if(Octree::kbase->x > 0.0f) Octree::affectedfaces[0] = 1;
+	else Octree::affectedfaces[0] = 6;
 
-	if(Octree::kbase->y < 0.0f) affectedfaces[1] = 2;
-	else if(Octree::kbase->y > 0.0f) affectedfaces[1] = 3;
-	else affectedfaces[1] = 6;
+	if(Octree::kbase->y < 0.0f) Octree::affectedfaces[1] = 2;
+	else if(Octree::kbase->y > 0.0f) Octree::affectedfaces[1] = 3;
+	else Octree::affectedfaces[1] = 6;
 	
-	if(Octree::kbase->z < 0.0f) affectedfaces[2] = 4;
-	else if(Octree::kbase->z > 0.0f) affectedfaces[2] = 5;
-	else affectedfaces[2] = 6;*/
-
-	affectedfaces[0] = Octree::kbase->x < 0.0f ? 0 : 1;
-	affectedfaces[1] = Octree::kbase->y < 0.0f ? 2 : 3;
-	affectedfaces[2] = Octree::kbase->z < 0.0f ? 4 : 5;
+	if(Octree::kbase->z < 0.0f) Octree::affectedfaces[2] = 4;
+	else if(Octree::kbase->z > 0.0f) Octree::affectedfaces[2] = 5;
+	else Octree::affectedfaces[2] = 6;
 }
 
 
 /*
- *
+ * initChild
  */
 void Octree::initChild(const UC i, const UC j, const UC k, Octant *parent)
-{//Must be re-implemented
-	Vec3<SI> pos = {i, j, k};
-
+{
 	Octant *child = &(parent->children[i][j][k]);
 
-	child->parent = parent;
 	child->depth = parent->depth - 1;
 	child->size = parent->size / 2;
 
-	child->pos = math::vecxscl(pos, child->size);
-	math::vecadd(parent->pos, &child->pos);
+	math::cpvec(parent->pos, &child->pos);
+
+	child->pos.x += i * child->size;
+	child->pos.y += j * child->size;
+	child->pos.z += k * child->size;
 
 	math::cpvec(child->pos, &child->center);
 
@@ -193,9 +175,8 @@ void Octree::setBit(Voxel *voxel, Octant *octant)
  * initRayCast
  */
 void Octree::initRayCast(Vec3<float> *kbase)
-{//Must be re-implemented
+{
 	Octree::kbase = kbase;
-	Octree::kbase2 = math::vecxscl(*Octree::kbase, 0.9f);
 	Octree::keepAffectedFaces();
 }
 
@@ -204,32 +185,26 @@ void Octree::initRayCast(Vec3<float> *kbase)
  * resetRayCast
  */
 void Octree::resetRayCast()
-{//Must be re-implemented
+{
 	//Move the ray to its relative position in the octree
-	math::vecadd(Octree::center, &Octree::raypos);
-	math::cpvec(Octree::raypos, &Octree::raysrc);
+	Octree::depthray = 0.0f;
+	math::vecadd(Octree::root->center, &Octree::raypos);
 }
 
 
 /*
  * rayCast
  */
-#include <stdlib.h>
-void Octree::rayCast()//Must be reimplemented
-{//Must be re-implemented
-	Octree::curbit = root;//not a good thing
+void Octree::rayCast()
+{
+	Octree::curbit = Octree::root;
 	Octree::curbit->getBit(&Octree::raypos);
-	Octree::getNextEntryDot(Octree::curbit, &Octree::raypos);//
+	Octree::getNextEntryDot(Octree::curbit, &Octree::raypos);
 
-	math::vecsub(Octree::raysrc, Octree::raypos, &vvalue);
-	Octree::depthray = math::getnorm(&vvalue);
+	Octree::depthray += Octree::raystep;
 
-	math::vecadd(Octree::kbase2, &Octree::raypos);
-
-	if(Octree::curbit->voxel != NULL || (Octree::depthray > Octree::raylength))
-	{
-		return;
-	}
+	if(Octree::curbit->voxel != NULL ||
+	(Octree::depthray > Octree::raylength)) return;
 
 	Octree::rayCast();
 }
@@ -238,32 +213,31 @@ void Octree::rayCast()//Must be reimplemented
 /*
  * getNearestFace
  */
-void Octree::getNearestFace(Octant* octant, Vec3<float> *coordinates, UC *lid)
-{//Must be re-implemented
-	float
-	dp = 0.0f,
-	maxdp = 0.0f;
 
-	UC i = 0;
-	*lid = affectedfaces[0];
+//Must be re-implemented
+static UC gnf_fid;
+static Vec3<float> vvalue;
+static float gnf_dp, gnf_maxdp;
 
-	while(i < 3)
+void Octree::getNearestFace(Octant* octant, Vec3<float> *coordinates)
+{
+	gnf_maxdp = -((float)Octree::root->size);
+
+	for(UC i = 0; i < 3; i++)
 	{
-		UC &fid = affectedfaces[i];
+		gnf_fid = Octree::affectedfaces[i];
 
-		//if(fid == 6) goto next;
-
-		math::vecsub(octant->facescenter[fid], *coordinates, &vvalue);
-		dp = math::dotproduct(&vvalue, Octree::kbase);
-
-		if(dp > maxdp)
+		if(gnf_fid != 6)
 		{
-			maxdp = dp;
-			*lid = fid;
-		}
+			math::vecsub(&octant->facescenter[gnf_fid], coordinates, &vvalue);
+			gnf_dp = math::dotproduct(&vvalue, Octree::kbase);
 
-		//next:
-		i++;
+			if(gnf_dp > gnf_maxdp)
+			{
+				gnf_maxdp = gnf_dp;
+				Octree::lfid = gnf_fid;
+			}
+		}
 	}
 }
 
@@ -272,27 +246,30 @@ void Octree::getNearestFace(Octant* octant, Vec3<float> *coordinates, UC *lid)
  * getNextEntryDot
  */
 void Octree::getNextEntryDot(Octant* octant, Vec3<float> *coordinates)
-{//Must be re-implemented
-	UC fid = 0;
-	getNearestFace(octant, coordinates, &fid);
+{
+	getNearestFace(octant, coordinates);
 
-	if(fid == 0 || fid == 1)
+	if(Octree::lfid < 2)
 	{
-		fvalue = fabs(octant->facescenter[fid].x - coordinates->x);
+		Octree::raystep = 0.9f +
+		fabs(octant->facescenter[Octree::lfid].x - coordinates->x); 
 	}
 
-	if(fid == 2 || fid == 3)
+	else if(Octree::lfid < 4)
 	{
-		fvalue = fabs(octant->facescenter[fid].y - coordinates->y);
+		Octree::raystep = 0.9f +
+		fabs(octant->facescenter[Octree::lfid].y - coordinates->y);
 	}
 
-	if(fid == 4 || fid == 5)
+	else if(Octree::lfid < 6)
 	{
-		fvalue = fabs(octant->facescenter[fid].z - coordinates->z);
+		Octree::raystep = 0.9f+
+		fabs(octant->facescenter[Octree::lfid].z - coordinates->z);
 	}
 
-	vvalue = math::vecxscl(*Octree::kbase, fvalue);
-	math::vecadd(vvalue, coordinates);
+	coordinates->x += Octree::kbase->x * Octree::raystep;
+	coordinates->y += Octree::kbase->y * Octree::raystep;
+	coordinates->z += Octree::kbase->z * Octree::raystep;
 }
 
 

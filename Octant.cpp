@@ -19,7 +19,6 @@ Octant::Octant()
 	this->depth = 0;
 
 	this->voxel = NULL;
-	this->parent = this;
 	this->children = NULL;
 
 	this->isparent = false;
@@ -32,6 +31,7 @@ Octant::Octant()
 Octant::~Octant()
 {
 	Octree::delChildreen(this);
+	delete [] this->facescenter;
 	this->isparent = false;
 }
 
@@ -54,7 +54,7 @@ void Octant::setBit(Voxel *voxel)
 		}
 
 		Vec3<float> coordinates;
-		math::vecadd(voxel->coordinates, Octree::center, &coordinates);
+		math::vecadd(&voxel->coordinates, &Octree::root->center, &coordinates);
 
 		this->getChildAt(&coordinates)->setBit(voxel);
 	}
