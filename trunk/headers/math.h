@@ -38,11 +38,12 @@
 		 * vecadd
 		 */
 		template<typename T1, typename T2, typename T3>
-		void vecadd(const T1 v1, const T2 v2, T3 *v3)
+		//void vecadd(const T1 v1, const T2 v2, T3 *v3)
+		void vecadd(T1 *v1, T2 *v2, T3 *v3)
 		{
-			v3->x = v1.x + v2.x;
-			v3->y = v1.y + v2.y;
-			v3->z = v1.z + v2.z;	
+			v3->x = v1->x + v2->x;
+			v3->y = v1->y + v2->y;
+			v3->z = v1->z + v2->z;	
 		}
 
 
@@ -62,11 +63,12 @@
 		 * vecsub
 		 */
 		template<typename T1, typename T2, typename T3>
-		void vecsub(const T1 v1, const T2 v2, T3 *v3)
+		//void vecsub(const T1 v1, const T2 v2, T3 *v3)
+		void vecsub(T1 *v1, T2 *v2, T3 *v3)
 		{
-			v3->x = v1.x - v2.x;
-			v3->y = v1.y - v2.y;
-			v3->z = v1.z - v2.z;	
+			v3->x = v1->x - v2->x;
+			v3->y = v1->y - v2->y;
+			v3->z = v1->z - v2->z;	
 		}
 
 
@@ -106,6 +108,17 @@
 			v->z *= s;
 		}
 
+
+		/*
+		 * vecxscl
+		 */
+		template <typename T1, typename T2, typename T3>
+		void vecxscl(Vec3<T1> *v1, const T2 s, Vec3<T3> *v3)
+		{
+			v3->x = v1->x * s;
+			v3->y = v1->y * s;
+			v3->z = v1->z * s;
+		}
 
 		/*
 		 * cpvec
@@ -161,6 +174,9 @@
 		void translate(const Vec3<float> v, float *m);
 
 
+		/*
+		 * dotproduct
+		 */
 		float dotproduct(Vec3<float> *v1, Vec3<float> *v2);
 
 

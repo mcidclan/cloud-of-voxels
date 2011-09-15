@@ -125,7 +125,7 @@ bool Viewplane::scan()
 
 void Viewplane::getScanPosition(Vec3<float> *scanpos)
 {
-	math::vecadd(this->ivector, this->jvector, scanpos);
+	math::vecadd(&this->ivector, &this->jvector, scanpos);
 }
 
 

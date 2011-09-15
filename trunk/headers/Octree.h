@@ -14,17 +14,15 @@
 	{
 
 		public:
-			static SUI depth;
+			static UC lfid;
+			static UC affectedfaces[3];
 
-			static Vec3<SUI> center;
 			static Vec3<SUI> locpos;
-			static Vec3<float> raypos;
-			static Vec3<float> raysrc;
 
 			static Vec3<float> *kbase;
+			static Vec3<float> raypos;
 
-			static Vec3<float> kbase2;//
-
+			static float raystep;
 			static float depthray;
 			static float raylength;
 			static float colordepthstep;
@@ -99,8 +97,8 @@
 			/*
 			 * getNearestFace
 			 */
-			static void getNearestFace(Octant* octant, Vec3<float> *coordinates,
-			UC *lid);
+			static void getNearestFace(Octant* octant,
+			Vec3<float> *coordinates);
 
 
 			/*
