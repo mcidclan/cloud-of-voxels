@@ -20,16 +20,20 @@
 			static Vec3<SUI> locpos;
 
 			static Vec3<float> *kbase;
+            static Vec3<float> kbsample;
 			static Vec3<float> raypos;
+
 
 			static float raystep;
 			static float depthray;
+            static float lastraystep;
 			static float raylength;
 			static float colordepthstep;
 
 			static Octant *curbit;
 			static Octant *root;
 
+            static float const RAYSTEP_MIN_UNIT;
 
 		public:
 			/*
@@ -39,26 +43,20 @@
 
 
 			/*
-			 *
+			 * initRoot
 			 */
 			static void initRoot(SUI rootsize, SUI maxdepth,
 			const float raylength, Octant *root);
 
 
 			/*
-			 *
+			 * setFacesCenter
 			 */
 			static void setFacesCenter(Octant *octant, const float half);
 
 
 			/*
-			 * keepAffectedFaces()
-			 */
-			static void keepAffectedFaces();
-
-
-			/*
-			 *
+			 * initChild
 			 */
 			static void initChild(const UC i, const UC j, const UC k,
 			Octant *parent);
@@ -95,13 +93,6 @@
 
 
 			/*
-			 * getNearestFace
-			 */
-			static void getNearestFace(Octant* octant,
-			Vec3<float> *coordinates);
-
-
-			/*
 			 * getEntryDot
 			 */
 			static void getNextEntryDot(Octant* octant,
@@ -114,12 +105,22 @@
 			static void addVoxels(Voxel *voxels, const UI nvoxel);
 
 
+            /*
+             * addNeighborVoxels
+             */
+            static void addNeighborVoxels(Vec3<SI>* const coordinates);
+
+
 			/*
 			 * setColorDepth
 			 */
 			static unsigned char getColorDepth();
 
 
+            /*
+			 * rayToBorder
+			 */
+            static void rayToBorder(const float a, const float b, const float c);
 	};
 
 

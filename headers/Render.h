@@ -15,15 +15,15 @@
 	/*
 	 * SCREEN RENDER SIZE
 	 */
-	const short UI SCR_WIDTH = 256;//512;
-	const short UI SCR_HEIGHT = 256;//512;
+	const short UI SCR_WIDTH = 128;
+	const short UI SCR_HEIGHT = 128;
 
 
 	/*
 	 * VIEWPLANE RENDER SIZE
 	 */
-	const short UI VIEW_WIDTH = 256;
-	const short UI VIEW_HEIGHT = 256;
+	const short UI VIEW_WIDTH = SCR_WIDTH;
+	const short UI VIEW_HEIGHT = SCR_HEIGHT;
 
 
 	class Render
@@ -50,7 +50,7 @@
 			/*
 			 * init
 			 */
-			void init(int argc, char *argv[]);
+			void init(int argc, char **argv);
 
 
 			/*
@@ -72,6 +72,12 @@
 
 
 			/*
+			 * reshape
+			 */
+			static void reshape(int width, int height);
+
+
+            /*
 			 * draw
 			 */
 			void draw();
