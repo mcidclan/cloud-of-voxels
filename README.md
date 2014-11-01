@@ -5,9 +5,9 @@ This is a basic voxels to pixels renderer project,
 
 using ray casting through an octree.
 
-To export your model via blender,
-
 <br/>
+
+To export your model via blender,
 
 just open the blender file and run the python script.
 
