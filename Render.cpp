@@ -115,7 +115,7 @@ void Render::draw()
 {
 	glClear(GL_COLOR_BUFFER_BIT);
 
-    glBegin(GL_POINT);
+    glBegin(GL_POINTS);
 
 	if(core != NULL)
 	{
