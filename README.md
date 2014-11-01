@@ -1,7 +1,7 @@
 cloud-of-voxels
 ===============
 
-This is a basic voxels to pixels rendering project,
+This is a basic voxels to pixels renderer project,
 
 using ray casting through an octree.
 
