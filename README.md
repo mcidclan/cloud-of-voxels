@@ -8,7 +8,7 @@ For each Pixel, a Ray is generated and will go through and Octree,
 
 searching for a Voxel. When the Ray hits a Voxel,
 
-the corresponding Pixel is drawn on the screen.
+the corresponding Pixel is drawn to the screen.
 
 <br/>
 
