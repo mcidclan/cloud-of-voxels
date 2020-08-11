@@ -7,8 +7,12 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
-	#include <GL/glut.h>
-	#include <string.h>
+    #ifndef MINGW
+        #include <GL/glut.h>
+    #else
+        #include <GL/freeglut.h>
+	#endif
+    #include <string.h>
 	#include "./types.h"
 
 
