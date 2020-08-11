@@ -2,7 +2,7 @@ cloud-of-voxels
 ===============
 This is a basic Voxel to Pixel renderer project,
 
-using Ray Tracing through an Octree.
+using Ray Casting through an Octree.
 
 For each Pixel, a Ray is generated and will go through and Octree,
 

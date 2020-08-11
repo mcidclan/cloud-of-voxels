@@ -111,20 +111,3 @@ void Core::process(Render *render)
 
 	} while(this->viewplane->scan());
 }
-
-
-/*
- * main
- */
-int main(int argc, char **argv)
-{
-	Core *core = new Core();
-	core->init();
-
-	Render *render = new Render();
-	render->setCore(core);
-	render->init(argc, argv);
-	return 1;
-}
-
-
