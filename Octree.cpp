@@ -16,10 +16,9 @@ Vec3<float> *Octree::kbase;
 Vec3<float> Octree::kbsample;
 Vec3<float> Octree::raypos;
 
-float const Octree::RAYSTEP_MIN_UNIT = 1.0f;//0.01f;
+float const Octree::RAYSTEP_MIN_UNIT = 1.0f;
 
 float Octree::raystep;
-float Octree::lastraystep;
 float Octree::depthray;
 float Octree::raylength;
 float Octree::colordepthstep;
@@ -27,6 +26,7 @@ float Octree::colordepthstep;
 Octant *Octree::root;
 Octant *Octree::curbit;
 
+Mat3f* Octree::basis;
 
 /*
  * Delete childreen
@@ -160,18 +160,18 @@ void Octree::setBit(Voxel *voxel, Octant *octant)
 /*
  * initRayCast
  */
-void Octree::initRayCast(Vec3<float> *kbase)
+void Octree::initRayCast(Mat3f* const basis)
 {
-	Octree::kbase = kbase;
+    Octree::basis = basis;
+	Octree::kbase = &(basis->k);
 }
-
 
 /*
  * resetRayCast
  */
 void Octree::resetRayCast()
 {
-	//Move the ray to its relative position in the octree
+	//Moves the ray to its relative position in the octree
 	Octree::depthray = 0.0f;
 	math::vecadd(Octree::root->center, &Octree::raypos);
 }
@@ -187,13 +187,10 @@ void Octree::rayCast()
 	    Octree::curbit = Octree::root;
 	    Octree::curbit->getBit(&Octree::raypos);
 	    Octree::getNextEntryDot(Octree::curbit, &Octree::raypos);
-
 	    Octree::depthray += Octree::raystep;
-
 	    if(Octree::curbit->voxel != NULL ||
 	    (Octree::depthray > Octree::raylength)) return;
     }
-	//Octree::rayCast();
 }
 
 
@@ -206,15 +203,17 @@ void Octree::rayToBorder(const float a, const float b, const float c)
 {
     if(c != 0.0f)
     {
+        // Distance between the current ray position and the next octant limit position
         borderdist = fabs(b - a);
         
         if(borderdist != 0.0f)
         {
-            Octree::lastraystep = (borderdist / fabs(c));
+            // Number of step to be done to reach the next octant limit position
+            const float steps = (borderdist / fabs(c));
 
-            if(Octree::lastraystep < Octree::raystep)
+            if(steps < Octree::raystep)
             {
-                Octree::raystep = Octree::lastraystep;
+                Octree::raystep = steps;
             }
         } else Octree::raystep = 0.0f;
     }
@@ -234,10 +233,9 @@ void Octree::getNextEntryDot(Octant* octant, Vec3<float> *coordinates)
 
     i = (Octree::kbase->y > 0.0f) ? 3 : 2;
     rayToBorder(coordinates->y, octant->facescenter[i].y, Octree::kbase->y);
-
+    
     i = (Octree::kbase->z > 0.0f) ? 5 : 4;
     rayToBorder(coordinates->z, octant->facescenter[i].z, Octree::kbase->z);
-
 
     if(Octree::raystep == 0)
     {

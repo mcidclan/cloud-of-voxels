@@ -12,8 +12,8 @@
  * extern midentity
  */
 extern float midentity[16];
-
-
+ 
+ 
 /*
  * projection matrix
  */
@@ -32,13 +32,13 @@ static float matrot[16] __attribute__ ((aligned (16)));
 static float mattmp_1[16] __attribute__ ((aligned (16)));
 static float mattmp_2[16] __attribute__ ((aligned (16)));
 
+
 /*
  * Constructor
  */
 Camera::Camera()
 {
 	reset();
-
 	this->nearcenter.x =
 	this->nearcenter.y = 
 	this->nearcenter.z = 0.0f;
@@ -66,7 +66,7 @@ const float znear, const float zfar)
 
 
 /*
- * setFrustum (Opengl)
+ * setFrustum
  */
 void Camera::setFrustum(const float left, const float right, const float bottom,
 const float top, const float znear, const float zfar)
@@ -75,12 +75,12 @@ const float top, const float znear, const float zfar)
 	width = right - left,
 	height = top - bottom,
 	depth = zfar - znear;
-
-	this->znear = znear;
-
-	memset(matprj, 0x0, sizeof(matprj));
-
-	matprj[0] = (2.0f * znear) / width;//E
+	
+    this->znear = znear;
+	
+    memset(matprj, 0x0, sizeof(matprj));
+	
+    matprj[0] = (2.0f * znear) / width;//E
 	matprj[5] = (2.0f * znear) / height;//F
 	matprj[8] = (right + left) / width;//A
 	matprj[9] = (top + bottom) / height;//B
@@ -88,7 +88,7 @@ const float top, const float znear, const float zfar)
 	matprj[11] = -1.0f;
 	matprj[14] = -(2.0f * zfar * znear) / depth;//D
 	matprj[15] = 1.0f;
-
+    
 	this->updateNearInfo(matprj);
 }
 
