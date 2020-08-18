@@ -142,7 +142,7 @@ void Render::resetDraw()
  * Set the current pixel on the drawing board.
  */
 void Render::setPixel(const unsigned char color)
-{
+{       
     glColor3ub(color, color, color);
 	glVertex2i(this->curpixi,this->curpixj);
 }
