@@ -14,15 +14,17 @@
 	#endif
     #include <string.h>
 	#include "./types.h"
-
+    #include <math.h>
 
 	/*
 	 * SCREEN RENDER SIZE
 	 */
-	const short UI SCR_WIDTH = 128;
-	const short UI SCR_HEIGHT = 128;
-
-
+    const short UI OCTREE_SIZE = 1024;
+    // Calculate the screen size, make sure it never goes 
+    const short UI SCR_SIZE = (((short UI)sqrt((double)(OCTREE_SIZE*OCTREE_SIZE)/2))/2)*2;
+    const short UI SCR_WIDTH = SCR_SIZE;
+	const short UI SCR_HEIGHT = SCR_SIZE;
+    
 	/*
 	 * VIEWPLANE RENDER SIZE
 	 */

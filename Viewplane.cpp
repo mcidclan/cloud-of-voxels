@@ -34,13 +34,12 @@ void Viewplane::create(const UI hsize, const UI vsize)
 		hsize/2,
 		vsize/2
 	};
-
+    // set horizontal limit extremities
 	this->hlimit.x = -localcenter.x;
 	this->hlimit.y = localcenter.x;
-
+    // set vertical limit extremities
 	this->vlimit.x = -localcenter.y;
-	this->vlimit.y = localcenter.y;
-
+	this->vlimit.y = localcenter.y;        
 	this->ivectors = new Vec3<float>[hsize];
 }
 
@@ -52,7 +51,6 @@ void Viewplane::resetScan()
 {
 	this->firsthscan = true;
 	this->lastscan = false;
-
 	this->vscan = this->vlimit.x;
 	this->verticalScan();
 	this->horizontalScan();
@@ -64,6 +62,7 @@ void Viewplane::resetScan()
  */
 bool Viewplane::verticalScan()
 {
+    // reset hscan parameters
 	this->hid = 0;
 	this->hscan = this->hlimit.x;
 
