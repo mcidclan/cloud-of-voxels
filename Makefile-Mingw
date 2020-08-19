@@ -23,5 +23,5 @@ $(BIN)%.o: %.cpp
 	$(CC) -o $@ -c $< $(CFLAGS)
 
 clean:
-	rm -rf $(OBJS)
-	rm -rf $(BIN)$(EXEC)
+	powershell " Remove-Item $(BIN)*.o"
+	powershell " Remove-Item $(BIN)*.exe"

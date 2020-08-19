@@ -22,19 +22,19 @@
 			static Vec3<float> *kbase;
             static Vec3<float> kbsample;
 			static Vec3<float> raypos;
-
+            
+            static Mat3f* basis;
 
 			static float raystep;
 			static float depthray;
-            static float lastraystep;
 			static float raylength;
 			static float colordepthstep;
 
 			static Octant *curbit;
 			static Octant *root;
-
+    
             static float const RAYSTEP_MIN_UNIT;
-
+            
 		public:
 			/*
 			 * Delete childreen
@@ -77,7 +77,7 @@
 			/*
 			 * initRayCast
 			 */
-			static void initRayCast(Vec3<float> *kbase);
+			static void initRayCast(Mat3f* const basis);
 
 
 			/*
