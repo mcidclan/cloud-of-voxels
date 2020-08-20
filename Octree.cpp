@@ -22,7 +22,7 @@ void Octree::initRoot(SUI size, SUI maxdepth, const SI raylength) // level
 	this->root->center.y =
 	this->root->center.z = this->root->half;
     this->root->setFacesCenter();
-
+    this->root->voxel = NULL;
 	this->raylength = raylength;
 	this->colordepthstep = (255.0f/(float)raylength);
     
@@ -46,7 +46,7 @@ void Octree::resetRayCast()
 {
 	//Moves the ray to its relative position in the octree
 	this->depthray = 0.0f;
-	math::vecadd(this->root->center, &this->raypos);
+	math::vecadd(this->root->center, &this->raypos); //?
 }
 
 
@@ -60,8 +60,8 @@ void Octree::rayCast()
 	    Octree::curbit = this->root; //?
 	    Octree::curbit->getBit({
             (SI)this->raypos.x,
-            (SI)this->raypos.x,
-            (SI)this->raypos.y
+            (SI)this->raypos.y,
+            (SI)this->raypos.z
         });
 	    this->getNextEntryDot(Octree::curbit);
 	    this->depthray += this->raystep;
@@ -124,7 +124,7 @@ void Octree::getNextEntryDot(Octant* octant)
  * addVoxels
  */
 void Octree::addVoxels(Voxel* voxels, const UI nvoxel)
-{
+{    
 	UI i = 0;
 	while(i < nvoxel)
 	{
