@@ -8,7 +8,6 @@
 #define CORE_H
 
 	#include "./Camera.h"
-	#include "./Viewplane.h"
 	#include "./Octree.h"
 	#include "./Render.h"
 
@@ -17,7 +16,6 @@
         private:
             Octree *octree;
             Camera *camera;
-            Viewplane *viewplane;
 
 		public:
 			/*
