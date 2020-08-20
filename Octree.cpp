@@ -31,9 +31,9 @@ void Octree::initRoot(SUI size, SUI maxdepth, const SI raylength)
 }
 
 /*
- * initRayCast
+ * initRay
  */
-void Octree::initRayCast(Mat3f* const basis)
+void Octree::initRay(Mat3f* const basis)
 {
     this->basis = basis;
 	this->kbase = &(basis->k);
@@ -41,9 +41,9 @@ void Octree::initRayCast(Mat3f* const basis)
 
 
 /*
- * resetRayCast
+ * resetRay
  */
-void Octree::resetRayCast()
+void Octree::resetRay()
 {
 	//Moves the ray to its relative position in the octree
 	this->depthray = 0.0f;
@@ -52,9 +52,9 @@ void Octree::resetRayCast()
 
 
 /*
- * rayCast
+ * rayTrace
  */
-void Octree::rayCast()
+void Octree::rayTrace()
 {
     while(true)
     {

@@ -1,8 +1,8 @@
 cloud-of-voxels
 ===============
-This is a basic Voxel to Pixel renderer project,
+This is a basic Voxels to Pixels rendering project,
 
-using Ray Casting through an Octree.
+using Ray Tracing through an Octree.
 
 For each Pixel, a Ray is generated and will go through the Octree,
 
@@ -12,16 +12,16 @@ the corresponding Pixel is drawn to the screen.
 
 <br/>
 
-To export your model via Blender,
+To export your model, use Blender >= 2.58 <= 2.78c
 
 open the Blender file and run the Python script.
 
-One time is done, replace the voxelmodels.cpp by the generated file.
+Once it's done, replace the voxelmodels.cpp by the generated file.
 
 <br/>
 
-If you want to test different screen size, change the value
+If you want to test different screen size, change the value of OCTREE_SIZE
 
-of OCTREE_SIZE in Render.h
+in Render.h, this will automatically the corresponding screen size.
 
 Enjoy!
