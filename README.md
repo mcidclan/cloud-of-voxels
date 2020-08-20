@@ -20,8 +20,8 @@ Once it's done, replace the voxelmodels.cpp by the generated file.
 
 <br/>
 
-If you want to test different screen size, change the value of OCTREE_SIZE
+If you want to test different screen sizes, change the value of OCTREE_SIZE
 
-in Render.h, this will automatically the corresponding screen size.
+in Render.h, this will automatically calculate the corresponding screen size.
 
 Enjoy!
