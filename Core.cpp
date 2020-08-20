@@ -23,6 +23,7 @@ Core::Core()
  */
 Core::~Core()
 {
+    delete this->octree;
 	delete this->camera;
 	delete this->viewplane;
 }
@@ -32,10 +33,10 @@ Core::~Core()
 /*
  * init
  */
-Vec3<float> *scanpos = NULL;
-
 void Core::init()
 {
+    this->octree = new Octree();
+    
     SUI level = 0;
     unsigned int n = OCTREE_SIZE;
     do{
@@ -45,13 +46,11 @@ void Core::init()
 	this->camera = new Camera();
 	printf("octree number of level %i\n", level);
 
-	Octree::initRoot(OCTREE_SIZE, level, (SCR_SIZE/2)*2, new Octant());
-	Octree::addVoxels(monkey, MESH_SIZE);
+	this->octree->initRoot(OCTREE_SIZE, level, (SCR_SIZE/2)*2);
+	this->octree->addVoxels(monkey, MESH_SIZE);
 
 	this->viewplane = new Viewplane();
 	this->viewplane->create(VIEW_WIDTH, VIEW_HEIGHT);
-
-	scanpos = &Octree::raypos;
 
 	printf("Core initialized\n");
 }
@@ -61,12 +60,13 @@ void Core::init()
  * transform
  */
 static const Vec3<float> yaxis = {0.0f, 1.0f, 0.0f};
-static const float ztrans = -(float)(OCTREE_SIZE / 2);
+static const float ztrans = (float)(OCTREE_SIZE / 2);
 static const float xlimit = (float)(OCTREE_SIZE / 4);
-static float yangle = 0.0f;
-static float xtrans = -xlimit;
-static float ytrans = -xlimit;
-static float xsens = 2.0f;
+
+float ytrans = -xlimit;
+float xsens = 2.0f;
+float xtrans = -xlimit;
+float yangle = 0.0f;
 
 void Core::transform()
 {
@@ -89,18 +89,18 @@ void Core::process(Render *render)
 {
 	this->transform();
 	this->camera->getBasis(&this->viewplane->basis);
-	Octree::initRayCast(&this->viewplane->basis);
+	this->octree->initRayCast(&this->viewplane->basis);
 	this->viewplane->resetScan();
 	render->resetDraw();
 	do
 	{
-		this->viewplane->getScanPosition(scanpos);
-		math::vecadd(this->camera->nearcenter, scanpos);
-		Octree::resetRayCast();
-		Octree::rayCast();
-		if(Octree::curbit->voxel != NULL)
+		this->viewplane->getScanPosition(&this->octree->raypos);
+		math::vecadd(this->camera->nearcenter, &this->octree->raypos);
+		this->octree->resetRayCast();
+		this->octree->rayCast();
+		if(this->octree->curbit->voxel != NULL)
 		{
-			render->setPixel(Octree::getColorDepth());
+			render->setPixel(this->octree->getColorDepth());
 		}
 		render->nextPixel();
 	} while(this->viewplane->scan());

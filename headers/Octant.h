@@ -8,8 +8,7 @@
 #define OCTANT_H
 
 	#include "./math.h"
-
-
+    
 	class Octant
 	{
 		public:
@@ -17,18 +16,16 @@
 			SUI depth;
 
 			Vec3<SI> pos;
+			Vec3<SI> center;
+			Vec3<SI>* facescenter;
 
-			Vec3<float> center;
-			Vec3<float> *facescenter;
-
-			float half;
+			SI half;
 
 			bool isparent;
 
-			Voxel *voxel;
-			Octant ***children;
-
-
+			Voxel* voxel;
+			Octant*** children;
+            
 		public:
 			/*
 			 * Constructor
@@ -43,26 +40,45 @@
 
 
 			/*
+			 * Adds children to the current octant
+			 */
+			void addChildren();
+            
+            
+            /*
+			 * Removes children from the current octant
+			 */
+			void removeChildren();
+            
+
+			/*
+			 * initChild
+			 */
+			void initChild(const SUI i, const SUI j, const SUI k);
+
+
+            /*
+			 * setFacesCenter
+			 */
+			void setFacesCenter();
+
+            
+			/*
 			 * Set bit space, corresponding to the current voxel
 			 */
-			void setBit(Voxel *voxel);
+			void setBit(Voxel* voxel);
 
 
 			/*
 			 * get the bit space corresponding to the current coordinates
 			 */
-			void getBit(Vec3<float> *coordinates);
+			void getBit(const Vec3<SI> coordinates);
 
 
 			/*
 			 * getChildAt
 			 */
-			Octant* getChildAt(Vec3<float> *coordinates);
-
-
-		private:
-
-
+			Octant* getChildAt(const Vec3<SI> coordinates);
 	};
 
 #endif

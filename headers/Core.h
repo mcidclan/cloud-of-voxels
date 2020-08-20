@@ -12,9 +12,12 @@
 	#include "./Octree.h"
 	#include "./Render.h"
 
-
 	class Core
 	{
+        private:
+            Octree *octree;
+            Camera *camera;
+            Viewplane *viewplane;
 
 		public:
 			/*
@@ -39,20 +42,12 @@
 			 * process
 			 */
 			void process(Render *render);
-
-
-		private:
-			Camera *camera;
-			Viewplane *viewplane;
-
-
-		private:
+        
+        private:
 			/*
 			 * transform
 			 */
 			void transform();
-
-
 	};
 
 

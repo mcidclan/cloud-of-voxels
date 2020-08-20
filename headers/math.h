@@ -24,9 +24,9 @@
 		/*
 		 * vecadd
 		 */
-		template<typename T1, typename T2, typename T3>
-		void vecadd(const T1 x, const T1 y, const T1 z,
-		const Vec3<T2> v2, Vec3<T3> *v3)
+		template<typename Ta, typename Tb, typename Tc, typename T1, typename T2>
+		void vecadd(const Ta x, const Tb y, const Tc z,
+		const Vec3<T1> v2, Vec3<T2> *v3)
 		{
 			v3->x = x + v2.x;
 			v3->y = y + v2.y;
@@ -47,6 +47,19 @@
 		}
 
 
+        /*
+		 * vecadd
+		 */
+		template<typename T>
+		const T vecadd(T v1, const T v2)
+		{
+            v1.x += v2.x;
+            v1.y += v2.y;
+            v1.z += v2.z;
+			return v1;
+		}
+
+        
 		/*
 		 * vecadd
 		 */
