@@ -19,7 +19,7 @@
 	/*
 	 * SCREEN RENDER SIZE
 	 */
-    const short UI OCTREE_SIZE = 512;//1024;
+    const short UI OCTREE_SIZE = 1024;
     // Calculate the screen size, makes sure that the size used for the scan,
     // never goes outsite of the octree limits.
     const short UI SCR_SIZE = (((short UI)sqrt((double)(OCTREE_SIZE*OCTREE_SIZE)/2))/2)*2;

@@ -10,7 +10,7 @@
 /*
  * midentity
  */
-float midentity[16] __attribute__ ((aligned (64))) =
+const float midentity[16] __attribute__ ((aligned (32))) =
 {
 	1.0f, 0.0f, 0.0f, 0.0f,
 	0.0f, 1.0f, 0.0f, 0.0f,
@@ -20,8 +20,6 @@ float midentity[16] __attribute__ ((aligned (64))) =
 
 namespace math
 {
-
-
 	/*
 	 * getdecimal
 	 */
@@ -134,7 +132,11 @@ namespace math
 		return (v1->x * v2->x) + (v1->y * v2->y) + (v1->z * v2->z);
 	}
 
-
+    float absf(const float v)
+    {
+        if(v < 0.0f) return -v;
+        return v;
+    }
 }
 
 

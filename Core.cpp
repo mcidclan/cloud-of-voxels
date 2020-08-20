@@ -43,7 +43,7 @@ void Core::init()
         level += 1;
     } while((n >>= 1) != 1);
     
-    const SI raylength = (SCR_SIZE/2)*2);
+    const SI raylength = (SCR_SIZE/2)*2;
     
 	this->camera = new Camera();
     
@@ -91,7 +91,7 @@ void Core::transform()
  * process
  */
 void Core::process(Render *render)
-{
+{    
 	this->transform();
 	this->camera->getBasis(&this->viewplane->basis);
 	this->octree->initRayCast(&this->viewplane->basis);
@@ -105,7 +105,7 @@ void Core::process(Render *render)
 		this->octree->resetRayCast();
 		this->octree->rayCast();
 		
-        if(this->octree->curbit->voxel != NULL)
+        if(Octree::curbit->voxel != NULL)
 		{
 			render->setPixel(this->octree->getColorDepth());
 		}

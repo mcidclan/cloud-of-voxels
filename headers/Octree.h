@@ -20,9 +20,7 @@
            Vec3<float> raypos;
            
 		private:
-			//UC lfid;
-			//UC affectedfaces[3];
-            Octant* root;
+			Octant* root;
             Mat3f* basis;
 			
             Vec3<SUI> locpos;

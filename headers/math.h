@@ -20,6 +20,7 @@
 		 */
 		float getdecimal(const float s);
 
+        float absf(const float v);
 
 		/*
 		 * vecadd
