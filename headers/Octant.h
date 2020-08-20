@@ -26,6 +26,8 @@
 			Voxel* voxel;
 			Octant*** children;
             
+            Octant* parent;
+            
 		public:
 			/*
 			 * Constructor
@@ -66,7 +68,7 @@
 			/*
 			 * Set bit space, corresponding to the current voxel
 			 */
-			void setBit(Voxel* voxel);
+			void setBit(Voxel* const voxel);
 
 
 			/*

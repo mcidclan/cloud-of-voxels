@@ -86,6 +86,7 @@ void Octant::removeChildren() {
 void Octant::initChild(const SUI i, const SUI j, const SUI k)
 {
 	Octant* const child = &(this->children[i][j][k]);
+    child->parent = this;
 	child->depth = this->depth - 1;
 	child->size = this->size / 2;
 	
@@ -122,7 +123,7 @@ void Octant::setFacesCenter()
 /*
  * Set the bit space corresponding to the current voxel
  */
-void Octant::setBit(Voxel* voxel)
+void Octant::setBit(Voxel* const voxel)
 {
 	if(this->depth == 1)
 	{

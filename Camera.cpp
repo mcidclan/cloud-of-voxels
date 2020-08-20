@@ -11,7 +11,7 @@
 /*
  * extern midentity
  */
-extern float midentity[16];
+extern const float midentity[16];
  
  
 /*

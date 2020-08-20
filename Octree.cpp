@@ -12,9 +12,10 @@ Vec3<SI> Octree::center;
 /*
  * initRoot
  */
-void Octree::initRoot(SUI size, SUI maxdepth, const SI raylength) // level
+void Octree::initRoot(SUI size, SUI maxdepth, const SI raylength)
 {
     this->root = new Octant();
+    this->root->parent = NULL;
 	this->root->depth = maxdepth;
 	this->root->size = size;
 	this->root->half = size/2;
@@ -57,16 +58,20 @@ void Octree::rayCast()
 {
     while(true)
     {
-	    Octree::curbit = this->root; //?
+        Octree::curbit = this->root;
+        // Searches for the deepest available octant from the root,
+        // corresponding to the current ray position
 	    Octree::curbit->getBit({
             (SI)this->raypos.x,
             (SI)this->raypos.y,
             (SI)this->raypos.z
         });
+	    if(Octree::curbit->voxel != NULL) break;
+        
+        // Calculates the new ray position
 	    this->getNextEntryDot(Octree::curbit);
 	    this->depthray += this->raystep;
-	    if(Octree::curbit->voxel != NULL ||
-	    (this->depthray > this->raylength)) return;
+	    if(((SI)this->depthray) > this->raylength) break;
     }
 }
 
@@ -78,12 +83,14 @@ void Octree::rayToBorder(const float a, const float b, const float c)
 {
     if(c != 0.0f)
     {
-        // Distance between the current ray position and the next octant limit position
-        const float borderdist = fabs(b - a);
+        // Distance between the current ray position and the next potential
+        // octant limit position
+        const float borderdist = math::absf(b - a);
         if(borderdist != 0.0f)
         {
-            // Number of step to be done to reach the next octant limit position
-            const float steps = (borderdist / fabs(c));
+            // Number of step to be done to reach the next potential
+            // octant limit position
+            const float steps = (borderdist / math::absf(c));
             if(steps < this->raystep)
             {
                 this->raystep = steps;
