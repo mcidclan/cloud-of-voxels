@@ -42,21 +42,21 @@
 
 
 			/*
-			 * initRayCast
+			 * initRay
 			 */
-			void initRayCast(Mat3f* const basis);
+			void initRay(Mat3f* const basis);
 
 
 			/*
-			 * resetRayCast
+			 * resetRay
 			 */
-			void resetRayCast();
+			void resetRay();
 
 
 			/*
-			 * rayCast
+			 * rayTrace
 			 */
-			void rayCast();
+			void rayTrace();
 
 
 			/*

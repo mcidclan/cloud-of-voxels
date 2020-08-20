@@ -96,7 +96,7 @@ void Core::process(Render *render)
     
 	this->transform();
 	this->camera->getBasis(&basis);
-	this->octree->initRayCast(&basis);
+	this->octree->initRay(&basis);
 	render->resetDraw();
     
 	do
@@ -104,8 +104,8 @@ void Core::process(Render *render)
         this->octree->raypos = render->getPixelCoordinates(&basis);
 		math::vecadd(this->camera->nearcenter, &this->octree->raypos);
         
-		this->octree->resetRayCast();
-		this->octree->rayCast();
+		this->octree->resetRay();
+		this->octree->rayTrace();
 		
         if(Octree::curbit->voxel != NULL)
 		{
