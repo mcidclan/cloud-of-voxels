@@ -25,7 +25,6 @@ Core::~Core()
 {
     delete this->octree;
 	delete this->camera;
-	delete this->viewplane;
 }
 
 
@@ -53,9 +52,6 @@ void Core::init()
 
 	this->octree->initRoot(OCTREE_SIZE, level, raylength);
 	this->octree->addVoxels(monkey, MESH_SIZE);
-
-	this->viewplane = new Viewplane();
-	this->viewplane->create(VIEW_WIDTH, VIEW_HEIGHT);
 
 	printf("Core initialized\n");
 }
@@ -91,15 +87,21 @@ void Core::transform()
  * process
  */
 void Core::process(Render *render)
-{    
+{
+    Mat3f basis = {
+        {1.0f, 0.0f, 0.0f},
+        {0.0f, 1.0f, 0.0f},
+        {0.0f, 0.0f, 1.0f}
+    };
+    
 	this->transform();
-	this->camera->getBasis(&this->viewplane->basis);
-	this->octree->initRayCast(&this->viewplane->basis);
-	this->viewplane->resetScan();
+	this->camera->getBasis(&basis);
+	this->octree->initRayCast(&basis);
 	render->resetDraw();
+    
 	do
 	{
-		this->viewplane->getScanPosition(&this->octree->raypos);
+        this->octree->raypos = render->getPixelCoordinates(&basis);
 		math::vecadd(this->camera->nearcenter, &this->octree->raypos);
         
 		this->octree->resetRayCast();
@@ -109,6 +111,5 @@ void Core::process(Render *render)
 		{
 			render->setPixel(this->octree->getColorDepth());
 		}
-		render->nextPixel();
-	} while(this->viewplane->scan());
+	} while(render->nextPixel());
 }

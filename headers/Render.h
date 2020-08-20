@@ -19,19 +19,15 @@
 	/*
 	 * SCREEN RENDER SIZE
 	 */
-    const short UI OCTREE_SIZE = 1024;
+    const short UI OCTREE_SIZE = 512;
     // Calculate the screen size, makes sure that the size used for the scan,
     // never goes outsite of the octree limits.
     const short UI SCR_SIZE = (((short UI)sqrt((double)(OCTREE_SIZE*OCTREE_SIZE)/2))/2)*2;
     const short UI SCR_WIDTH = SCR_SIZE;
 	const short UI SCR_HEIGHT = SCR_SIZE;
     
-	/*
-	 * VIEWPLANE RENDER SIZE
-	 */
-	const short UI VIEW_WIDTH = SCR_WIDTH;
-	const short UI VIEW_HEIGHT = SCR_HEIGHT;
-
+    const short UI SCR_HALF_WIDTH = SCR_WIDTH / 2;
+    const short UI SCR_HALF_HEIGHT = SCR_HEIGHT / 2;
 
 	class Render
 	{
@@ -105,14 +101,20 @@
 			/*
 			 * Jump to next pixel
 			 */
-			void nextPixel();
+			bool nextPixel();
+
+
+			/*
+			 * Get current pixel coordinates
+			 */
+            Vec3<float> getPixelCoordinates(const Mat3f* const basis);
 
 
 			private:
 				void *core;
 
-				UI curpixi;
-				UI curpixj;
+				SI curpixi;
+				SI curpixj;
 
 				GLuint tid[2];
 				GLuint dwplane;

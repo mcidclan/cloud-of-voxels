@@ -151,14 +151,30 @@ void Render::setPixel(const unsigned char color)
 /*
  * Jump to next pixel
  */
-void Render::nextPixel()
+bool Render::nextPixel()
 {
 	this->curpixi++;
-	if(this->curpixi >= VIEW_WIDTH)
+	if(this->curpixi >= SCR_WIDTH)
 	{
 		this->curpixi = 0;
-		this->curpixj++;
+        if(++this->curpixj >= SCR_HEIGHT)
+        {
+            return false;
+        }
 	}
+    return true;
+}
+
+Vec3<float> Render::getPixelCoordinates(const Mat3f* const basis)
+{
+    const float v = (float)(this->curpixi - SCR_HALF_WIDTH);
+    const float h = (float)(this->curpixj - SCR_HALF_HEIGHT);
+
+    Vec3<float> i = math::vecxscl(basis->i, v);
+    const Vec3<float> j = math::vecxscl(basis->j, h);
+    math::vecadd(j, &i);
+    
+    return i;
 }
 
 
