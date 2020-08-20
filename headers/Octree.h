@@ -8,122 +8,88 @@
 #define OCTREE_H
 
 	#include "./Octant.h"
+    #define RAYSTEP_MIN_UNIT 1.0f;
 
 
 	class Octree
 	{
-
-		public:
-			static UC lfid;
-			static UC affectedfaces[3];
-
-			static Vec3<SUI> locpos;
-
-			static Vec3<float> *kbase;
-            static Vec3<float> kbsample;
-			static Vec3<float> raypos;
+        public:
+           static Octant* curbit;
+           static Vec3<SI> center;
+           
+           Vec3<float> raypos;
+           
+		private:
+			//UC lfid;
+			//UC affectedfaces[3];
+            Octant* root;
+            Mat3f* basis;
+			
+            Vec3<SUI> locpos;
+			Vec3<float>* kbase;
+            Vec3<float> kbsample;
             
-            static Mat3f* basis;
-
-			static float raystep;
-			static float depthray;
-			static float raylength;
-			static float colordepthstep;
-
-			static Octant *curbit;
-			static Octant *root;
-    
-            static float const RAYSTEP_MIN_UNIT;
+            SI raylength;
+			
+            float raystep;
+			float depthray;
+			float colordepthstep;
+			
             
 		public:
-			/*
-			 * Delete childreen
-			 */
-			static void delChildreen(Octant *octant);
-
-
 			/*
 			 * initRoot
 			 */
-			static void initRoot(SUI rootsize, SUI maxdepth,
-			const float raylength, Octant *root);
-
-
-			/*
-			 * setFacesCenter
-			 */
-			static void setFacesCenter(Octant *octant, const float half);
-
-
-			/*
-			 * initChild
-			 */
-			static void initChild(const UC i, const UC j, const UC k,
-			Octant *parent);
-
-
-			/*
-			 * Add children to the current octant
-			 */
-			static void addChildren(Octant *octant);
-
-
-			/*
-			 * Set bit space
-			 */
-			static void setBit(Voxel *voxel, Octant *octant);
+			void initRoot(SUI rootsize, SUI maxdepth, const SI raylength);
 
 
 			/*
 			 * initRayCast
 			 */
-			static void initRayCast(Mat3f* const basis);
+			void initRayCast(Mat3f* const basis);
 
 
 			/*
 			 * resetRayCast
 			 */
-			static void resetRayCast();
+			void resetRayCast();
 
 
 			/*
 			 * rayCast
 			 */
-			static void rayCast();
+			void rayCast();
 
 
 			/*
 			 * getEntryDot
 			 */
-			static void getNextEntryDot(Octant* octant,
-			Vec3<float> *coordinates);
+			void getNextEntryDot(Octant* octant);
 
 
 			/*
 			 * addVoxels
 			 */
-			static void addVoxels(Voxel *voxels, const UI nvoxel);
+			void addVoxels(Voxel* voxels, const UI nvoxel);
 
 
             /*
              * addNeighborVoxels
              */
-            static void addNeighborVoxels(Vec3<SI>* const coordinates);
+            void addNeighborVoxels(Vec3<SI>* const coordinates);
 
 
 			/*
 			 * setColorDepth
 			 */
-			static unsigned char getColorDepth();
+			unsigned char getColorDepth();
 
 
             /*
 			 * rayToBorder
 			 */
-            static void rayToBorder(const float a, const float b, const float c);
+            void rayToBorder(const float a, const float b, const float c);
 	};
 
 
 #endif
-
-
