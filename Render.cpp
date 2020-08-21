@@ -26,7 +26,6 @@ Render::Render()
  */
 Render::~Render()
 {
-	glDeleteLists(dwplane, 1);
 }
 
 
@@ -36,7 +35,7 @@ Render::~Render()
 void Render::timer(int value) //
 {
 	glutPostRedisplay();
-	glutTimerFunc(16, Render::timer, value);
+	glutTimerFunc(33, Render::timer, value);
 }
 
 
@@ -45,7 +44,7 @@ void Render::timer(int value) //
  */
 void Render::initBoard()
 {
-    glPointSize(PIXEL_SIZE);
+    glPointSize(PIXEL_STEP);
 }
 
 
@@ -88,11 +87,11 @@ void Render::setCore(Core* const core)
 void Render::reshape(int width, int height)
 {
     glViewport(0, 0, width, height);
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	glOrtho(0.0, SCR_WIDTH-1.0, SCR_HEIGHT-1.0, 0.0, -1.0, 1.0);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(width, 0.0, height, 0.0);
     glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
+    glLoadIdentity();
 }
 
 
@@ -115,9 +114,9 @@ void Render::draw()
 	if(core != NULL)
 	{
 		this->core->process(this);
-	}
+	}    
     glEnd();
-	glutSwapBuffers();
+	glFlush();
 }
 
 
@@ -146,10 +145,10 @@ void Render::setPixel(const unsigned char color)
  */
 bool Render::nextPixel()
 {
-	if((this->curpixi += PIXEL_SIZE) >= SCR_WIDTH)
+	if((this->curpixi += PIXEL_STEP) >= SCR_WIDTH)
 	{
 		this->curpixi = 0;
-        if((this->curpixj += PIXEL_SIZE) >= SCR_HEIGHT)
+        if((this->curpixj += PIXEL_STEP) >= SCR_HEIGHT)
         {
             return false;
         }
