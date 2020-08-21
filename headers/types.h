@@ -8,7 +8,8 @@
 #define ADDITIONAL_TYPE_H
 
 	#include <stdio.h>
-
+    #include "Options.h"
+    
 	#define UC unsigned char
 
 	#define SI short int

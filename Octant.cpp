@@ -128,13 +128,19 @@ void Octant::setBit(Voxel* const voxel)
 	if(this->depth == 1)
 	{
         this->voxel = voxel;
-		printf("Add voxel at: %i %i %i\n", this->pos.x,this->pos.y,this->pos.z);
+        if(!Options::nologs)
+        {
+            printf("Add voxel at: %i %i %i\n", this->pos.x,this->pos.y,this->pos.z);
+        }
 	} else
 	{
 		if(this->isparent == false)
 		{
 			this->addChildren();
-			printf("children added in %i\n", depth);
+            if(!Options::nologs)
+            {
+                printf("children added in %i\n", depth);
+            }
 		}
 		Vec3<SI> coordinates = math::vecadd(voxel->coordinates, Octree::center);
 		this->getChildAt(coordinates)->setBit(voxel);

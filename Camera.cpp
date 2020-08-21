@@ -190,9 +190,9 @@ void Camera::getBasis(Mat3f *basis)
 
 
 /*
- * Apply translation to a given coordinates
+ * Reajust the given coordinates to the camera center
  */
-void Camera::applyTranslation(Vec3<float>* const coordinates)
+void Camera::reajust(Vec3<float>* const coordinates)
 {
     math::vecadd(this->nearcenter, coordinates);
 }

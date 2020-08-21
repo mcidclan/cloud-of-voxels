@@ -61,8 +61,8 @@ void Core::init()
  * transform
  */
 static const Vec3<float> yaxis = {0.0f, 1.0f, 0.0f};
-static const float ztrans = -(float)(OCTREE_SIZE / 2);
-static const float xlimit = (float)(OCTREE_SIZE / 4);
+static const float ztrans = -(float)(SCR_SIZE / 2);
+static const float xlimit = (float)(SCR_SIZE / 4);
 
 float ytrans = -xlimit;
 float xsens = 2.0f;
@@ -73,13 +73,21 @@ void Core::transform()
 {
 	this->camera->resetTransformation();
 	this->camera->rotate(yaxis, yangle);
-	Vec3<float> translate = {xtrans, ytrans, ztrans};
+	Vec3<float> translate = {
+        Options::nomotion ? 0.0f : xtrans,
+        Options::nomotion ? 0.0f : ytrans,
+        ztrans
+    };
 	this->camera->translate(translate);
-	if(xtrans > xlimit) xsens = -2.0f;
-	if(xtrans < -xlimit) xsens = 2.0f;
-	xtrans += xsens;
-	ytrans += xsens;
-	yangle += 0.0349f * xsens; //2°
+	
+    if(!Options::nomotion)
+    {
+        if(xtrans > xlimit) xsens = -2.0f;
+        if(xtrans < -xlimit) xsens = 2.0f;
+        xtrans += xsens;
+        ytrans += xsens;
+	}
+    yangle += 0.0349f * xsens;
 }
 
 /*
@@ -87,7 +95,7 @@ void Core::transform()
  */
 void Core::processRay(Render* const render, Vec3<float>* const ray)
 {
-    this->camera->applyTranslation(ray);
+    this->camera->reajust(ray);
     this->octree->setRay(ray);
     this->octree->rayTrace(); //
     if(Octree::curbit->voxel != NULL) //

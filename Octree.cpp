@@ -9,6 +9,10 @@
 Octant* Octree::curbit;
 Vec3<SI> Octree::center;
 
+Octree::Octree() {
+}
+
+
 /*
  * initRoot
  */
@@ -41,12 +45,14 @@ void Octree::initBasis(Mat3f* const basis)
 	this->kbase = &(basis->k);
 }
 
+
 /*
  * setRay
  */
 void Octree::setRay(Vec3<float>* const ray) {
     this->ray = ray;
 }
+
 
 /*
  * resetRay
@@ -150,11 +156,26 @@ void Octree::addVoxels(Voxel* voxels, const UI nvoxel)
 	UI i = 0;
 	while(i < nvoxel)
 	{
-        this->addNeighborVoxels(&voxels[i].coordinates);
+        if(Options::noneighbour)
+        {
+            this->addSingleVoxel(&voxels[i].coordinates);
+        } else this->addNeighborVoxels(&voxels[i].coordinates);
 		i++;
 	}
 }
 
+
+/*
+ * add single voxel
+ */
+void Octree::addSingleVoxel(Vec3<SI>* const coordinates)
+{
+    Voxel* voxel = new Voxel();
+    voxel->coordinates.x = coordinates->x;
+    voxel->coordinates.y = coordinates->y;
+    voxel->coordinates.z = coordinates->z;
+    this->root->setBit(voxel);
+}
 
 /*
  * addNeighborVoxels
