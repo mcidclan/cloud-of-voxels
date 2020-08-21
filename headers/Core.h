@@ -10,7 +10,7 @@
 	#include "./Camera.h"
 	#include "./Octree.h"
 	#include "./Render.h"
-
+    
 	class Core
 	{
         private:

@@ -34,7 +34,12 @@
 			float colordepthstep;
             
             
-		public:        
+		public:
+            /*
+			 * constructor
+			 */
+             Octree();
+        
 			/*
 			 * setRay
 			 */
@@ -70,7 +75,12 @@
 			 */
 			void addVoxels(Voxel* voxels, const UI nvoxel);
 
-
+			/*
+			 * add a single voxel
+			 */
+			void addSingleVoxel(Vec3<SI>* const coordinates);
+            
+            
             /*
              * addNeighborVoxels
              */

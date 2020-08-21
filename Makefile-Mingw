@@ -1,10 +1,10 @@
 CC = gcc
 BIN = ./bin/
-EXEC = cov
+EXEC = cov.exe
 
 
 DATA = voxelmodels.o
-OBJS = Core.o Camera.o math.o Render.o \
+OBJS = Options.o Core.o Camera.o math.o Render.o \
 	Octree.o Octant.o main.o
 
 OBJS := $(addprefix $(BIN), $(OBJS))

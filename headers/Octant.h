@@ -28,6 +28,7 @@
             
             Octant* parent;
             
+            
 		public:
 			/*
 			 * Constructor

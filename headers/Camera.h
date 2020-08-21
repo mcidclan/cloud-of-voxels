@@ -84,7 +84,7 @@
             /*
              * Apply translation to a given coordinates
              */
-            void applyTranslation(Vec3<float>* const coordinates);
+            void reajust(Vec3<float>* const coordinates);
 
 
 		private:

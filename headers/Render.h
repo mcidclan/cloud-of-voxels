@@ -27,7 +27,7 @@
     
     const short UI SCR_HALF_WIDTH = SCR_WIDTH / 2;
     const short UI SCR_HALF_HEIGHT = SCR_HEIGHT / 2;
-    const UC PIXEL_STEP = 2;
+    const UC PIXEL_STEP = 1;
     
     class Core;
     
