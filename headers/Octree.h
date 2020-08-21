@@ -17,9 +17,9 @@
            static Octant* curbit;
            static Vec3<SI> center;
            
-           Vec3<float> raypos;
            
 		private:
+            Vec3<float>* ray;
 			Octant* root;
             Mat3f* basis;
 			
@@ -32,9 +32,15 @@
             float raystep;
 			float depthray;
 			float colordepthstep;
-			
             
-		public:
+            
+		public:        
+			/*
+			 * setRay
+			 */
+            void setRay(Vec3<float>* const ray);
+            
+            
 			/*
 			 * initRoot
 			 */
@@ -42,15 +48,9 @@
 
 
 			/*
-			 * initRay
+			 * initBasis
 			 */
-			void initRay(Mat3f* const basis);
-
-
-			/*
-			 * resetRay
-			 */
-			void resetRay();
+			void initBasis(Mat3f* const basis);
 
 
 			/*
@@ -87,6 +87,13 @@
 			 * rayToBorder
 			 */
             void rayToBorder(const float a, const float b, const float c);
+            
+        
+        private:
+            /*
+			 * resetRay
+			 */
+			void resetRay();
 	};
 
 
