@@ -82,11 +82,24 @@ void Core::transform()
 	yangle += 0.0349f * xsens; //2°
 }
 
+/*
+ * process ray
+ */
+void Core::processRay(Render* const render, Vec3<float>* const ray)
+{
+    this->camera->applyTranslation(ray);
+    this->octree->setRay(ray);
+    this->octree->rayTrace(); //
+    if(Octree::curbit->voxel != NULL) //
+    {
+        render->setPixel(this->octree->getColorDepth());
+    }
+}
 
 /*
  * process
  */
-void Core::process(Render *render)
+void Core::process(Render* const render)
 {
     Mat3f basis = {
         {1.0f, 0.0f, 0.0f},
@@ -96,20 +109,14 @@ void Core::process(Render *render)
     
 	this->transform();
 	this->camera->getBasis(&basis);
-	this->octree->initRay(&basis);
-	render->resetDraw();
+	this->octree->initBasis(&basis);
+	render->reset();
     
 	do
 	{
-        this->octree->raypos = render->getPixelCoordinates(&basis);
-		math::vecadd(this->camera->nearcenter, &this->octree->raypos);
-        
-		this->octree->resetRay();
-		this->octree->rayTrace();
-		
-        if(Octree::curbit->voxel != NULL)
-		{
-			render->setPixel(this->octree->getColorDepth());
-		}
-	} while(render->nextPixel());
+        Vec3<float> ray = render->getPixelCoordinates(&basis);
+        this->processRay(render, &ray);
+        if(!render->nextPixel()) break;
+	}
+    while(true);
 }

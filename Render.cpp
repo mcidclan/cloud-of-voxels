@@ -27,14 +27,13 @@ Render::Render()
 Render::~Render()
 {
 	glDeleteLists(dwplane, 1);
-	glDeleteTextures(2, tid);
 }
 
 
 /*
  * 
  */
-void Render::timer(int value)
+void Render::timer(int value) //
 {
 	glutPostRedisplay();
 	glutTimerFunc(16, Render::timer, value);
@@ -46,9 +45,7 @@ void Render::timer(int value)
  */
 void Render::initBoard()
 {
-	glDisable(GL_DEPTH_TEST);
-	glDisable(GL_LIGHTING);
-    glPointSize(1);
+    glPointSize(PIXEL_SIZE);
 }
 
 
@@ -58,7 +55,7 @@ void Render::initBoard()
 void Render::init(int argc, char **argv)
 {
 	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_LUMINANCE | GLUT_SINGLE/* | GLUT_DOUBLE*/);
+	glutInitDisplayMode(GLUT_LUMINANCE | GLUT_SINGLE);
 	glutInitWindowSize(SCR_WIDTH, SCR_HEIGHT);
 
 	glutInitWindowPosition(10, 10);
@@ -79,7 +76,7 @@ void Render::init(int argc, char **argv)
 /*
  * setCore
  */
-void Render::setCore(void *core)
+void Render::setCore(Core* const core)
 {
 	this->core = core;
 }
@@ -93,7 +90,7 @@ void Render::reshape(int width, int height)
     glViewport(0, 0, width, height);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glOrtho(SCR_WIDTH, 0, 0, SCR_HEIGHT, -1, 1);
+	glOrtho(0.0, SCR_WIDTH-1.0, SCR_HEIGHT-1.0, 0.0, -1.0, 1.0);
     glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 }
@@ -114,16 +111,12 @@ void Render::display()
 void Render::draw()
 {
 	glClear(GL_COLOR_BUFFER_BIT);
-
     glBegin(GL_POINTS);
-
 	if(core != NULL)
 	{
-		((Core*)core)->process(this);
+		this->core->process(this);
 	}
-
     glEnd();
-
 	glutSwapBuffers();
 }
 
@@ -131,7 +124,7 @@ void Render::draw()
 /*
  * Reset pixel position at the begining of the drawing board
  */
-void Render::resetDraw()
+void Render::reset()
 {
 	this->curpixi =
 	this->curpixj = 0;
@@ -153,11 +146,10 @@ void Render::setPixel(const unsigned char color)
  */
 bool Render::nextPixel()
 {
-	this->curpixi++;
-	if(this->curpixi >= SCR_WIDTH)
+	if((this->curpixi += PIXEL_SIZE) >= SCR_WIDTH)
 	{
 		this->curpixi = 0;
-        if(++this->curpixj >= SCR_HEIGHT)
+        if((this->curpixj += PIXEL_SIZE) >= SCR_HEIGHT)
         {
             return false;
         }
@@ -165,6 +157,10 @@ bool Render::nextPixel()
     return true;
 }
 
+
+/*
+ * getPixelCoordinates
+ */
 Vec3<float> Render::getPixelCoordinates(const Mat3f* const basis)
 {
     const float v = (float)(this->curpixi - SCR_HALF_WIDTH);

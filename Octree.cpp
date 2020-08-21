@@ -24,30 +24,38 @@ void Octree::initRoot(SUI size, SUI maxdepth, const SI raylength)
 	this->root->center.z = this->root->half;
     this->root->setFacesCenter();
     this->root->voxel = NULL;
-	this->raylength = raylength;
+    
+	this->ray = NULL;
+    this->raylength = raylength;
 	this->colordepthstep = (255.0f/(float)raylength);
     
     Octree::center = this->root->center;
 }
 
 /*
- * initRay
+ * init
  */
-void Octree::initRay(Mat3f* const basis)
+void Octree::initBasis(Mat3f* const basis)
 {
     this->basis = basis;
 	this->kbase = &(basis->k);
 }
 
+/*
+ * setRay
+ */
+void Octree::setRay(Vec3<float>* const ray) {
+    this->ray = ray;
+}
 
 /*
  * resetRay
  */
 void Octree::resetRay()
 {
-	//Moves the ray to its relative position in the octree
+	// Moves the ray to its relative position in the octree
 	this->depthray = 0.0f;
-	math::vecadd(this->root->center, &this->raypos); //?
+	math::vecadd(this->root->center, this->ray);
 }
 
 
@@ -56,22 +64,26 @@ void Octree::resetRay()
  */
 void Octree::rayTrace()
 {
-    while(true)
+    if(this->ray != NULL)
     {
-        Octree::curbit = this->root;
-        // Searches for the deepest available octant from the root,
-        // corresponding to the current ray position
-	    Octree::curbit->getBit({
-            (SI)this->raypos.x,
-            (SI)this->raypos.y,
-            (SI)this->raypos.z
-        });
-	    if(Octree::curbit->voxel != NULL) break;
-        
-        // Calculates the new ray position
-	    this->getNextEntryDot(Octree::curbit);
-	    this->depthray += this->raystep;
-	    if(((SI)this->depthray) > this->raylength) break;
+        this->resetRay();
+        while(true)
+        {
+            Octree::curbit = this->root;
+            // Searches for the deepest available octant from the root,
+            // corresponding to the current ray position
+            Octree::curbit->getBit({
+                (SI)this->ray->x,
+                (SI)this->ray->y,
+                (SI)this->ray->z
+            });
+            if(Octree::curbit->voxel != NULL) break;
+            
+            // Calculates the new ray position
+            this->getNextEntryDot(Octree::curbit);
+            this->depthray += this->raystep;
+            if(((SI)this->depthray) > this->raylength) break;
+        }
     }
 }
 
@@ -105,25 +117,28 @@ void Octree::rayToBorder(const float a, const float b, const float c)
  */
 void Octree::getNextEntryDot(Octant* octant)
 {
-    UC i = 0;
-    this->raystep = ((float)this->root->size);
-
-    i = (this->kbase->x > 0.0f) ? 1 : 0;
-    rayToBorder(this->raypos.x, octant->facescenter[i].x, this->kbase->x);
-
-    i = (this->kbase->y > 0.0f) ? 3 : 2;
-    rayToBorder(this->raypos.y, octant->facescenter[i].y, this->kbase->y);
-    
-    i = (this->kbase->z > 0.0f) ? 5 : 4;
-    rayToBorder(this->raypos.z, octant->facescenter[i].z, this->kbase->z);
-
-    if(this->raystep == 0)
+    if(this->ray != NULL)
     {
-        this->raystep = RAYSTEP_MIN_UNIT;
+        UC i = 0;
+        this->raystep = ((float)this->root->size);
+
+        i = (this->kbase->x > 0.0f) ? 1 : 0;
+        rayToBorder(this->ray->x, octant->facescenter[i].x, this->kbase->x);
+
+        i = (this->kbase->y > 0.0f) ? 3 : 2;
+        rayToBorder(this->ray->y, octant->facescenter[i].y, this->kbase->y);
+        
+        i = (this->kbase->z > 0.0f) ? 5 : 4;
+        rayToBorder(this->ray->z, octant->facescenter[i].z, this->kbase->z);
+
+        if(this->raystep == 0)
+        {
+            this->raystep = RAYSTEP_MIN_UNIT;
+        }
+        this->ray->x += this->kbase->x * this->raystep;
+        this->ray->y += this->kbase->y * this->raystep;
+        this->ray->z += this->kbase->z * this->raystep;
     }
-	this->raypos.x += this->kbase->x * this->raystep;
-	this->raypos.y += this->kbase->y * this->raystep;
-	this->raypos.z += this->kbase->z * this->raystep;
 }
 
 

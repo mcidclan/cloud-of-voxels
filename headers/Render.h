@@ -15,7 +15,6 @@
     #include <string.h>
 	#include "./types.h"
     #include <math.h>
-
 	/*
 	 * SCREEN RENDER SIZE
 	 */
@@ -28,7 +27,10 @@
     
     const short UI SCR_HALF_WIDTH = SCR_WIDTH / 2;
     const short UI SCR_HALF_HEIGHT = SCR_HEIGHT / 2;
-
+    const UC PIXEL_SIZE = 1;
+    
+    class Core;
+    
 	class Render
 	{
 		public:
@@ -65,7 +67,7 @@
 			/*
 			 * setCore
 			 */
-			void setCore(void *core);
+			void setCore(Core* const core);
 
 
 			/*
@@ -89,7 +91,7 @@
 			/*
 			 * Reset pixel position at the begining of the drawing board
 			 */
-			void resetDraw();
+			void reset();
 
 
 			/*
@@ -111,12 +113,11 @@
 
 
 			private:
-				void *core;
-
+				Core* core;
+    
 				SI curpixi;
 				SI curpixj;
-
-				GLuint tid[2];
+                
 				GLuint dwplane;
 	};
 

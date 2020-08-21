@@ -39,13 +39,19 @@
 			/*
 			 * process
 			 */
-			void process(Render *render);
+			void process(Render* const render);
         
         private:
 			/*
 			 * transform
 			 */
 			void transform();
+
+			/*
+			 * process ray
+			 */
+            void processRay(Render* const render, Vec3<float>* const ray);
+
 	};
 
 

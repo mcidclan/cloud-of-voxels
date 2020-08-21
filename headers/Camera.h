@@ -13,10 +13,6 @@
 	class Camera
 	{
 		public:
-			Vec3<float> nearcenter;
-
-
-		public:
 			/*
 			 * Constructor
 			 */
@@ -85,9 +81,16 @@
 			void getBasis(Mat3f *basis);
 
 
+            /*
+             * Apply translation to a given coordinates
+             */
+            void applyTranslation(Vec3<float>* const coordinates);
+
+
 		private:
 			float znear;
 			Mat3f basis;
+            Vec3<float> nearcenter;
 
 
 		private:
