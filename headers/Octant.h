@@ -7,7 +7,8 @@
 #ifndef OCTANT_H
 #define OCTANT_H
 
-	#include "./math.h"
+	#include "math.h"
+    #include "options.h"
     
 	class Octant
 	{
@@ -23,7 +24,7 @@
 
 			bool isparent;
 
-			Voxel* voxel;
+			Voxel voxel;
 			Octant*** children;
             
             Octant* parent;
@@ -69,7 +70,7 @@
 			/*
 			 * Set bit space, corresponding to the current voxel
 			 */
-			void setBit(Voxel* const voxel);
+			void setBit(const Voxel voxel);
 
 
 			/*

@@ -98,7 +98,7 @@ void Core::processRay(Render* const render, Vec3<float>* const ray)
     this->camera->reajust(ray);
     this->octree->setRay(ray);
     this->octree->rayTrace(); //
-    if(Octree::curbit->voxel != NULL) //
+    if(Octree::curbit->voxel.color != 0x00) //
     {
         render->setPixel(this->octree->getColorDepth());
     }

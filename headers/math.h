@@ -8,7 +8,7 @@
 #define ADDITIONAL_MATH_H
 
 	#include <math.h>
-	#include "./types.h"
+	#include "types.h"
 
 
 	namespace math

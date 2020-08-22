@@ -7,9 +7,9 @@
 #ifndef CORE_H
 #define CORE_H
 
-	#include "./Camera.h"
-	#include "./Octree.h"
-	#include "./Render.h"
+	#include "Camera.h"
+	#include "Octree.h"
+	#include "Render.h"
     
 	class Core
 	{

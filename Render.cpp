@@ -45,7 +45,7 @@ void Render::timer(int value)
  */
 void Render::initBoard()
 {
-    glPointSize(PIXEL_STEP);
+    glPointSize(Options::PIXEL_STEP);
     this->list = glGenLists(1);
 }
 
@@ -56,7 +56,7 @@ void Render::initBoard()
 void Render::init(int argc, char **argv)
 {
 	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_LUMINANCE | GLUT_SINGLE);
+	glutInitDisplayMode(GLUT_RGB | GLUT_SINGLE);
 	glutInitWindowSize(SCR_WIDTH, SCR_HEIGHT);
 
 	glutInitWindowPosition(10, 10);
@@ -163,10 +163,10 @@ void Render::setPixel(const unsigned char color)
  */
 bool Render::nextPixel()
 {
-	if((this->curpixi += PIXEL_STEP) >= SCR_WIDTH)
+	if((this->curpixi += Options::PIXEL_STEP) >= SCR_WIDTH)
 	{
 		this->curpixi = 0;
-        if((this->curpixj += PIXEL_STEP) >= SCR_HEIGHT)
+        if((this->curpixj += Options::PIXEL_STEP) >= SCR_HEIGHT)
         {
             return false;
         }
