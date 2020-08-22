@@ -10,3 +10,4 @@
 bool Options::nologs = false;
 bool Options::nomotion = false;
 bool Options::noneighbour = false;
+UC Options::PIXEL_STEP = 1;

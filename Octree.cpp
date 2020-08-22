@@ -27,7 +27,6 @@ void Octree::initRoot(SUI size, SUI maxdepth, const SI raylength)
 	this->root->center.y =
 	this->root->center.z = this->root->half;
     this->root->setFacesCenter();
-    this->root->voxel = NULL;
     
 	this->ray = NULL;
     this->raylength = raylength;
@@ -83,7 +82,7 @@ void Octree::rayTrace()
                 (SI)this->ray->y,
                 (SI)this->ray->z
             });
-            if(Octree::curbit->voxel != NULL) break;
+            if(Octree::curbit->voxel.color != 0x00) break;
             
             // Calculates the new ray position
             this->getNextEntryDot(Octree::curbit);
@@ -104,7 +103,7 @@ void Octree::rayToBorder(const float a, const float b, const float c)
         // Distance between the current ray position and the next potential
         // octant limit position
         const float borderdist = math::absf(b - a);
-        if(borderdist != 0.0f)
+        if(borderdist > 0.0f)
         {
             // Number of step to be done to reach the next potential
             // octant limit position
@@ -137,7 +136,7 @@ void Octree::getNextEntryDot(Octant* octant)
         i = (this->kbase->z > 0.0f) ? 5 : 4;
         rayToBorder(this->ray->z, octant->facescenter[i].z, this->kbase->z);
 
-        if(this->raystep == 0)
+        if(this->raystep == 0.0f)
         {
             this->raystep = RAYSTEP_MIN_UNIT;
         }
@@ -158,8 +157,8 @@ void Octree::addVoxels(Voxel* voxels, const UI nvoxel)
 	{
         if(Options::noneighbour)
         {
-            this->addSingleVoxel(&voxels[i].coordinates);
-        } else this->addNeighborVoxels(&voxels[i].coordinates);
+            this->addSingleVoxel(voxels[i]);
+        } else this->addNeighborVoxels(voxels[i]);
 		i++;
 	}
 }
@@ -168,19 +167,15 @@ void Octree::addVoxels(Voxel* voxels, const UI nvoxel)
 /*
  * add single voxel
  */
-void Octree::addSingleVoxel(Vec3<SI>* const coordinates)
+void Octree::addSingleVoxel(const Voxel voxel)
 {
-    Voxel* voxel = new Voxel();
-    voxel->coordinates.x = coordinates->x;
-    voxel->coordinates.y = coordinates->y;
-    voxel->coordinates.z = coordinates->z;
     this->root->setBit(voxel);
 }
 
 /*
  * addNeighborVoxels
  */
-void Octree::addNeighborVoxels(Vec3<SI>* const coordinates)
+void Octree::addNeighborVoxels(const Voxel voxel)
 {
     SI i = - 1;
     while(i < 2)
@@ -191,11 +186,12 @@ void Octree::addNeighborVoxels(Vec3<SI>* const coordinates)
             SI k = - 1;
             while(k < 2)
             {
-                Voxel* voxel = new Voxel();
-                voxel->coordinates.x = coordinates->x + i;
-                voxel->coordinates.y = coordinates->y + j;
-                voxel->coordinates.z = coordinates->z + k;
-                this->root->setBit(voxel);
+                Voxel v = voxel;
+                v.coordinates.x += i;
+                v.coordinates.y += j;
+                v.coordinates.z += k;
+                v.color = voxel.color;
+                this->root->setBit(v);
                 k++;
             }
             j++;

@@ -26,6 +26,10 @@ int main(int argc, char **argv)
     Options::nomotion = options.find("nomotion") != options.end();
     Options::noneighbour = options.find("noneighbour") != options.end();
     
+    Options::PIXEL_STEP = options.find("stepx2") != options.end() ? 2 :
+    options.find("stepx3") != options.end() ? 3 :
+    options.find("stepx4") != options.end() ? 4 : Options::PIXEL_STEP;
+
 	Core *core = new Core();
 	core->init();
 

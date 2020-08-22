@@ -8,11 +8,14 @@
 #ifndef OPTIONS_H
 #define OPTIONS_H
 
+    #include "types.h"
+    
     class Options {
         public:
             static bool nologs;
             static bool nomotion;
             static bool noneighbour;
+            static UC PIXEL_STEP;
     };
     
 #endif

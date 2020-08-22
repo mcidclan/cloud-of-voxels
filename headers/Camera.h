@@ -7,7 +7,7 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-	 #include "./math.h"
+	 #include "math.h"
 
 
 	class Camera

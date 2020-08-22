@@ -16,7 +16,7 @@ Octant::Octant()
 	this->pos.y =
 	this->pos.z = 0;
 	this->depth = 0;
-	this->voxel = NULL;
+	this->voxel.color = 0x00;
 	this->children = NULL;
 	this->isparent = false;
 }
@@ -123,28 +123,31 @@ void Octant::setFacesCenter()
 /*
  * Set the bit space corresponding to the current voxel
  */
-void Octant::setBit(Voxel* const voxel)
+void Octant::setBit(const Voxel voxel)
 {
-	if(this->depth == 1)
-	{
-        this->voxel = voxel;
-        if(!Options::nologs)
+    if(this->voxel.color == 0x00)
+    {
+        if(this->depth == 1)
         {
-            printf("Add voxel at: %i %i %i\n", this->pos.x,this->pos.y,this->pos.z);
-        }
-	} else
-	{
-		if(this->isparent == false)
-		{
-			this->addChildren();
+            this->voxel = voxel;
             if(!Options::nologs)
             {
-                printf("children added in %i\n", depth);
+                printf("Add voxel at: %i %i %i\n", this->pos.x,this->pos.y,this->pos.z);
             }
-		}
-		Vec3<SI> coordinates = math::vecadd(voxel->coordinates, Octree::center);
-		this->getChildAt(coordinates)->setBit(voxel);
-	}
+        } else
+        {
+            if(this->isparent == false)
+            {
+                this->addChildren();
+                if(!Options::nologs)
+                {
+                    printf("children added in level %i\n", depth);
+                }
+            }
+            Vec3<SI> coordinates = math::vecadd(voxel.coordinates, Octree::center);
+            this->getChildAt(coordinates)->setBit(voxel);
+        }
+    }
 }
 
 

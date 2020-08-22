@@ -7,7 +7,7 @@
 #ifndef OCTREE_H
 #define OCTREE_H
 
-	#include "./Octant.h"
+	#include "Octant.h"
     #define RAYSTEP_MIN_UNIT 1.0f;
 
 
@@ -78,13 +78,13 @@
 			/*
 			 * add a single voxel
 			 */
-			void addSingleVoxel(Vec3<SI>* const coordinates);
+			void addSingleVoxel(const Voxel voxel);
             
             
             /*
              * addNeighborVoxels
              */
-            void addNeighborVoxels(Vec3<SI>* const coordinates);
+            void addNeighborVoxels(const Voxel voxel);
 
 
 			/*

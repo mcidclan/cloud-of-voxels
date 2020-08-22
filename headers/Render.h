@@ -13,7 +13,7 @@
         #include <GL/freeglut.h>
 	#endif
     #include <string.h>
-	#include "./types.h"
+	#include "options.h"
     #include <math.h>
 	/*
 	 * SCREEN RENDER SIZE
@@ -27,7 +27,6 @@
     
     const short UI SCR_HALF_WIDTH = SCR_WIDTH / 2;
     const short UI SCR_HALF_HEIGHT = SCR_HEIGHT / 2;
-    const UC PIXEL_STEP = 2;
     
     class Core;
     
