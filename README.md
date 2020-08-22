@@ -16,17 +16,25 @@ To export your model, use Blender 2.78c. Start Blender from command line
 
 and open the file from which you want to export the model. Make sure than the
 
-mesh is in "vertex paint" mode then run the Python script. Once it's done, replace
+mesh is in "vertex paint" mode, then run the Python script. Once it's done,
 
-the voxelmodels.cpp by the generated file and report the number of voxels given
+replace the voxelmodels.cpp by the generated file and report the number of
 
-by your prompt to voxelmodels.h. From Windows compile by executing:
+voxels given by your prompt to voxelmodels.h. Note: To get a better display
+
+quality, subdivide the mesh until it reduces the gaps between the vertices.
+
+<br/>
+
+From Windows compile by executing:
 
 mingw32-make -f Makefile-Mingw clean; mingw32-make -f Makefile-Mingw
 
 or from Linux: make clean; make;
 
-Finally launch the program with: ./bin/cov.exe nomotion nologs stepx2
+Finally launch the program with: ./bin/cov.exe nomotion nologs or
+
+./bin/cov.exe nomotion nologs stepx2 if it's to slow.
 
 Available options are: nomotion, nologs, noneighbour, stepx2, stepx3 and stepx4.
 
