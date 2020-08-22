@@ -26,16 +26,17 @@ Render::Render()
  */
 Render::~Render()
 {
+    glDeleteLists(this->list, 1);
 }
 
 
 /*
  * 
  */
-void Render::timer(int value) //
+void Render::timer(int value)
 {
 	glutPostRedisplay();
-	glutTimerFunc(33, Render::timer, value);
+	glutTimerFunc(40, Render::timer, value); //25 frames per second
 }
 
 
@@ -45,6 +46,7 @@ void Render::timer(int value) //
 void Render::initBoard()
 {
     glPointSize(PIXEL_STEP);
+    this->list = glGenLists(1);
 }
 
 
@@ -62,15 +64,15 @@ void Render::init(int argc, char **argv)
 
 	glutReshapeFunc(Render::reshape);
     glutDisplayFunc(Render::display);
-
+    glutIdleFunc(Render::idle);
+    
 	this->initBoard();
 
-	printf("Renderer initialized\n");
-
-	Render::timer(0);
+    Render::timer(0);
 	glutMainLoop();
+    
+	printf("Renderer initialized\n");
 }
-
 
 /*
  * setCore
@@ -107,15 +109,31 @@ void Render::display()
 /*
  * 
  */
-void Render::draw()
+
+void Render::idle()
 {
-	glClear(GL_COLOR_BUFFER_BIT);
-    glBegin(GL_POINTS);
-	if(core != NULL)
+    render->process();
+}
+
+
+/*
+ * 
+ */
+void Render::process()
+{
+    if(core != NULL)
 	{
-		this->core->process(this);
-	}    
-    glEnd();
+        this->core->process(this);
+    }
+}
+
+/*
+ * 
+ */
+void Render::draw()
+{   
+	glClear(GL_COLOR_BUFFER_BIT);
+    glCallList(this->list);
 	glFlush();
 }
 
@@ -134,7 +152,7 @@ void Render::reset()
  * Set the current pixel on the drawing board.
  */
 void Render::setPixel(const unsigned char color)
-{       
+{
     glColor3ub(color, color, color);
 	glVertex2i(this->curpixi,this->curpixj);
 }
@@ -171,5 +189,3 @@ Vec3<float> Render::getPixelCoordinates(const Mat3f* const basis)
     
     return i;
 }
-
-
