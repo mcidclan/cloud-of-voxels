@@ -16,7 +16,7 @@ Octant::Octant()
 	this->pos.y =
 	this->pos.z = 0;
 	this->depth = 0;
-	this->voxel.color = 0x00;
+	this->voxel.active = 0;
 	this->children = NULL;
 	this->isparent = false;
 }
@@ -125,7 +125,7 @@ void Octant::setFacesCenter()
  */
 void Octant::setBit(const Voxel voxel)
 {
-    if(this->voxel.color == 0x00)
+    if(!this->voxel.active)
     {
         if(this->depth == 1)
         {

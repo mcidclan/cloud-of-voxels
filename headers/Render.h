@@ -112,7 +112,7 @@
             /*
              * Set the current pixel on the drawing board.
              */
-            void setPixel(unsigned char color);
+            void setPixel(const Color color);
 
 
             /*

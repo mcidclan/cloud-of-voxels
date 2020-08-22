@@ -91,7 +91,7 @@ void Render::reshape(int width, int height)
     glViewport(0, 0, width, height);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluOrtho2D(width, 0.0, height, 0.0);
+    gluOrtho2D(0.0, width, height, 0.0);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 }
@@ -151,9 +151,9 @@ void Render::reset()
 /*
  * Set the current pixel on the drawing board.
  */
-void Render::setPixel(const unsigned char color)
+void Render::setPixel(const Color color)
 {
-    glColor3ub(color, color, color);
+    glColor3ub(color.r, color.g, color.b);
 	glVertex2i(this->curpixi,this->curpixj);
 }
 

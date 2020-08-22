@@ -12,11 +12,23 @@ the corresponding Pixel is drawn to the screen.
 
 <br/>
 
-To export your model, use Blender >= 2.58 <= 2.78c
+To export your model, use Blender 2.78c. Start Blender from command line
 
-open the Blender file and run the Python script.
+and open the file from which you want to export the model. Make sure than the
 
-Once it's done, replace the voxelmodels.cpp by the generated file.
+mesh is in "vertex paint" mode then run the Python script. Once it's done, replace
+
+the voxelmodels.cpp by the generated file and report the number of voxels given
+
+by your prompt to voxelmodels.h. From Windows compile by executing:
+
+mingw32-make -f Makefile-Mingw clean; mingw32-make -f Makefile-Mingw
+
+or from Linux: make clean; make;
+
+Finally launch the program with: ./bin/cov.exe nomotion nologs stepx2
+
+Available options are: nomotion, nologs, noneighbour, stepx2, stepx3 and stepx4.
 
 <br/>
 
