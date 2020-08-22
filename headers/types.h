@@ -43,13 +43,18 @@
 		Vec3<float> i, j, k;
 	} Mat3f;
 
+    typedef struct
+    {
+        UC r, g, b;
+    } Color;
 
 	/*
 	 * Voxel
 	 */
 	typedef struct
 	{
-		UC color;
+        UC active;
+		Color color;
 		Vec3<SI> coordinates;
 	} Voxel;
 

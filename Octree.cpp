@@ -30,7 +30,7 @@ void Octree::initRoot(SUI size, SUI maxdepth, const SI raylength)
     
 	this->ray = NULL;
     this->raylength = raylength;
-	this->colordepthstep = (255.0f/(float)raylength);
+	this->colordepthstep = (1.0f/(float)raylength);
     
     Octree::center = this->root->center;
 }
@@ -82,7 +82,7 @@ void Octree::rayTrace()
                 (SI)this->ray->y,
                 (SI)this->ray->z
             });
-            if(Octree::curbit->voxel.color != 0x00) break;
+            if(Octree::curbit->voxel.active) break;
             
             // Calculates the new ray position
             this->getNextEntryDot(Octree::curbit);
@@ -190,7 +190,6 @@ void Octree::addNeighborVoxels(const Voxel voxel)
                 v.coordinates.x += i;
                 v.coordinates.y += j;
                 v.coordinates.z += k;
-                v.color = voxel.color;
                 this->root->setBit(v);
                 k++;
             }
@@ -204,12 +203,12 @@ void Octree::addNeighborVoxels(const Voxel voxel)
 /*
  * setColorDepth
  */
-unsigned char Octree::getColorDepth()
+Color Octree::getColorDepth(const Color color)
 {
-	const int c = 0xFF - (int)(this->depthray*this->colordepthstep);
-	if(c <= 0)
-	{
-		return 0;
-	}
-	return c;
+    float darkness = 1.0f - this->depthray*this->colordepthstep;
+	return {
+        (UC)(color.r * darkness),
+        (UC)(color.g * darkness),
+        (UC)(color.b * darkness)
+    };
 }

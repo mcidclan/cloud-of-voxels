@@ -88,9 +88,9 @@
 
 
 			/*
-			 * setColorDepth
+			 * getColorDepth
 			 */
-			unsigned char getColorDepth();
+			Color getColorDepth(const Color color);
 
 
             /*
