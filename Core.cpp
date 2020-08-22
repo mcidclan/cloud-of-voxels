@@ -120,11 +120,15 @@ void Core::process(Render* const render)
 	this->octree->initBasis(&basis);
 	render->reset();
     
-	do
-	{
-        Vec3<float> ray = render->getPixelCoordinates(&basis);
-        this->processRay(render, &ray);
-        if(!render->nextPixel()) break;
-	}
-    while(true);
+    glNewList(render->list, GL_COMPILE);
+    glBegin(GL_POINTS);
+        do
+        {
+            Vec3<float> ray = render->getPixelCoordinates(&basis);
+            this->processRay(render, &ray);
+            if(!render->nextPixel()) break;
+        }
+        while(true);
+    glEnd();
+    glEndList();
 }

@@ -18,7 +18,7 @@
 	/*
 	 * SCREEN RENDER SIZE
 	 */
-    const short UI OCTREE_SIZE = 512;
+    const short UI OCTREE_SIZE = 1024;
     // Calculate the screen size, makes sure that the size used for the scan,
     // never goes outsite of the octree limits.
     const short UI SCR_SIZE = (((short UI)sqrt((double)(OCTREE_SIZE*OCTREE_SIZE)/2))/2)*2;
@@ -27,99 +27,112 @@
     
     const short UI SCR_HALF_WIDTH = SCR_WIDTH / 2;
     const short UI SCR_HALF_HEIGHT = SCR_HEIGHT / 2;
-    const UC PIXEL_STEP = 1;
+    const UC PIXEL_STEP = 2;
     
     class Core;
     
 	class Render
 	{
-		public:
-			/*
-			 * Constructor
-			 */
-			Render();
+        public:
+            GLuint list;
+            
+            
+        private:
+            Core* core;
+            UC* pixels;
 
+            SI curpixi;
+            SI curpixj;
 
-			/*
-			 * Destructor
-			 */
-			~Render();
-
-
-			/*
-			 * timer
-			 */
-			static void timer(int value);
-
-
-			/*
-			 * init
-			 */
-			void init(int argc, char **argv);
-
-
-			/*
-			 * initBoard
-			 */
-			void initBoard();
-
-
-			/*
-			 * setCore
-			 */
-			void setCore(Core* const core);
-
-
-			/*
-			 * display
-			 */
-			static void display();
-
-
-			/*
-			 * reshape
-			 */
-			static void reshape(int width, int height);
+        public:
+            /*
+             * Constructor
+             */
+            Render();
 
 
             /*
-			 * draw
-			 */
-			void draw();
+             * Destructor
+             */
+            ~Render();
 
 
-			/*
-			 * Reset pixel position at the begining of the drawing board
-			 */
-			void reset();
+            /*
+             * timer
+             */
+            static void timer(int value);
 
 
-			/*
-			 * Set the current pixel on the drawing board.
-			 */
-			void setPixel(unsigned char color);
+            /*
+             * init
+             */
+            void init(int argc, char **argv);
 
 
-			/*
-			 * Jump to next pixel
-			 */
-			bool nextPixel();
+            /*
+             * setCore
+             */
+            void setCore(Core* const core);
 
 
-			/*
-			 * Get current pixel coordinates
-			 */
+            /*
+             * display
+             */
+            static void display();
+
+
+            /*
+             * process
+             */
+            void process();
+            
+            
+            /*
+             * idle
+             */
+            static void idle();
+            
+            /*
+             * reshape
+             */
+            static void reshape(int width, int height);
+
+
+            /*
+             * draw
+             */
+            void draw();
+
+
+            /*
+             * Reset pixel position at the begining of the drawing board
+             */
+            void reset();
+
+
+            /*
+             * Set the current pixel on the drawing board.
+             */
+            void setPixel(unsigned char color);
+
+
+            /*
+             * Jump to next pixel
+             */
+            bool nextPixel();
+
+
+            /*
+             * Get current pixel coordinates
+             */
             Vec3<float> getPixelCoordinates(const Mat3f* const basis);
 
 
-			private:
-				Core* core;
-                UC* pixels;
-    
-				SI curpixi;
-				SI curpixj;
-                
-				GLuint dwplane;
+        private:
+            /*
+             * initBoard
+             */
+            void initBoard();
 	};
 
 

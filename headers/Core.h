@@ -40,18 +40,18 @@
 			 * process
 			 */
 			void process(Render* const render);
-        
+            
+            
+            /*
+			 * process ray
+			 */
+            void processRay(Render* const render, Vec3<float>* const ray);
+
         private:
 			/*
 			 * transform
 			 */
 			void transform();
-
-			/*
-			 * process ray
-			 */
-            void processRay(Render* const render, Vec3<float>* const ray);
-
 	};
 
 

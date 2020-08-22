@@ -7,6 +7,7 @@
 
 #include "./headers/Core.h"
 #include <map>
+
 using namespace std;
 
 /*
@@ -15,7 +16,7 @@ using namespace std;
 int main(int argc, char **argv)
 {
     int i = 1;
-    map<string, bool> options;    
+    map<string, bool> options;
     while(i < argc) {
         options[argv[i]] = true;
         i++;
@@ -24,12 +25,13 @@ int main(int argc, char **argv)
     Options::nologs = options.find("nologs") != options.end();
     Options::nomotion = options.find("nomotion") != options.end();
     Options::noneighbour = options.find("noneighbour") != options.end();
-        
+    
 	Core *core = new Core();
 	core->init();
 
 	Render *render = new Render();
 	render->setCore(core);
 	render->init(argc, argv);
-	return 1;
+    
+    return 1;
 }
