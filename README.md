@@ -16,11 +16,11 @@ and open the file from which you want to export the model. Make sure than the
 
 mesh is in "vertex paint" mode, then run the Python script. Once it's done,
 
-replace the voxelmodels.cpp by the generated file and report the number of
+replace the voxelmodels.cpp and voxelmodels.h by the generated files. Note that
 
-voxels given by your prompt to voxelmodels.h. Note: To get a better display
+the provided example contains gap. From blender, before exporting, you need to
 
-quality, subdivide the mesh until it reduces the gaps between the vertices.
+subdivide the mesh until you don't see gaps anymore between the vertices.
 
 <br/>
 
