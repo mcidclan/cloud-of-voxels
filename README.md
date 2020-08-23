@@ -1,14 +1,12 @@
 cloud-of-voxels
 ===============
-This is a basic Voxels to Pixels rendering project,
+This is a basic Voxels to Pixels rendering project, using Ray Tracing through
 
-using Ray Tracing through an Octree.
+an Octree. For each Pixel, a Ray is generated and will go through the Octree,
 
-For each Pixel, a Ray is generated and will go through the Octree,
+searching for the first Voxel on its path. When the Ray hits the Voxel, the
 
-searching for the first Voxel on its path. When the Ray hits the Voxel,
-
-the corresponding Pixel is drawn to the screen.
+corresponding Pixel is drawn to the screen.
 
 <br/>
 
@@ -26,22 +24,32 @@ quality, subdivide the mesh until it reduces the gaps between the vertices.
 
 <br/>
 
-From Windows compile by executing:
+From Windows compile the code with: mingw32-make -f Makefile-Mingw clean;
 
-mingw32-make -f Makefile-Mingw clean; mingw32-make -f Makefile-Mingw
+mingw32-make -f Makefile-Mingw or from Linux: make clean; make;
 
-or from Linux: make clean; make;
+By default octree size is 256. That size is also the maximun size your
 
-Finally launch the program with: ./bin/cov.exe nomotion nologs or
+object could have with this configuration. Launch the program with:
 
-./bin/cov.exe nomotion nologs stepx2 if it's to slow.
+./bin/cov.exe nomotion nologs or with ./bin/cov.exe nomotion nologs stepx2 
 
-Available options are: nomotion, nologs, noneighbour, stepx2, stepx3 and stepx4.
+if it's too slow. The available options are: nomotion, nologs, noneighbour,
+
+stepx2, stepx3, stepx4, w:, h:, o:, r: and z:. 
 
 <br/>
 
-If you want to test different screen sizes, change the value of OCTREE_SIZE
+If you want to test different screen sizes use the w: and h: options. To change
 
-in Render.h, this will automatically calculate the corresponding screen size.
+the octree size use the o: option. The max ray length can be changed by using
 
+the r: option. And the camera z position with the use of the z: option. 
+
+<br/>
+
+With the given voxelmodels.cpp compiled, you launch the program with the
+
+following: ./bin/cov.exe nomotion nologs stepx2 w:1024 h:576 o:1024 z:-370 r:370
+ 
 Enjoy!
