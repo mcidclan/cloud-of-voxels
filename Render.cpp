@@ -57,7 +57,7 @@ void Render::init(int argc, char **argv)
 {
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_RGB | GLUT_SINGLE);
-	glutInitWindowSize(SCR_WIDTH, SCR_HEIGHT);
+	glutInitWindowSize(Options::SCR_WIDTH, Options::SCR_HEIGHT);
 
 	glutInitWindowPosition(10, 10);
 	glutCreateWindow("Cloud of Voxels");
@@ -163,10 +163,10 @@ void Render::setPixel(const Color color)
  */
 bool Render::nextPixel()
 {
-	if((this->curpixi += Options::PIXEL_STEP) >= SCR_WIDTH)
+	if((this->curpixi += Options::PIXEL_STEP) >= Options::SCR_WIDTH)
 	{
 		this->curpixi = 0;
-        if((this->curpixj += Options::PIXEL_STEP) >= SCR_HEIGHT)
+        if((this->curpixj += Options::PIXEL_STEP) >= Options::SCR_HEIGHT)
         {
             return false;
         }
@@ -180,8 +180,8 @@ bool Render::nextPixel()
  */
 Vec3<float> Render::getPixelCoordinates(const Mat3f* const basis)
 {
-    const float v = (float)(this->curpixi - SCR_HALF_WIDTH);
-    const float h = (float)(this->curpixj - SCR_HALF_HEIGHT);
+    const float v = (float)(this->curpixi - Options::SCR_HALF_WIDTH);
+    const float h = (float)(this->curpixj - Options::SCR_HALF_HEIGHT);
 
     Vec3<float> i = math::vecxscl(basis->i, v);
     const Vec3<float> j = math::vecxscl(basis->j, h);
