@@ -6,7 +6,6 @@
  */
 
 #include "./headers/Core.h"
-#include <map>
 
 using namespace std;
 
@@ -15,20 +14,7 @@ using namespace std;
  */
 int main(int argc, char **argv)
 {
-    int i = 1;
-    map<string, bool> options;
-    while(i < argc) {
-        options[argv[i]] = true;
-        i++;
-    }
-    
-    Options::nologs = options.find("nologs") != options.end();
-    Options::nomotion = options.find("nomotion") != options.end();
-    Options::noneighbour = options.find("noneighbour") != options.end();
-    
-    Options::PIXEL_STEP = options.find("stepx2") != options.end() ? 2 :
-    options.find("stepx3") != options.end() ? 3 :
-    options.find("stepx4") != options.end() ? 4 : Options::PIXEL_STEP;
+    Options::process(argc, argv);
 
 	Core *core = new Core();
 	core->init();

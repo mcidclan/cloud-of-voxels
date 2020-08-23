@@ -15,6 +15,12 @@ extern Voxel monkey[MESH_SIZE] __attribute__((aligned(8)));
  */
 Core::Core()
 {
+    this->ztrans = (float)Options::CAM_Z_TRANSLATION;
+    this->xlimit = (float)(Options::SCR_WIDTH / 4);
+    this->ytrans = -xlimit;
+    this->xsens = 2.0f;
+    this->xtrans = -xlimit;
+    this->yangle = 0.0f;
 }
 
 
@@ -37,57 +43,36 @@ void Core::init()
     this->octree = new Octree();
     
     SUI level = 0;
-    unsigned int n = OCTREE_SIZE;
+    unsigned int n = Options::Options::OCTREE_SIZE;
     do{
         level += 1;
     } while((n >>= 1) != 1);
-    
-    const SI raylength = (SCR_SIZE/2)*2;
+    printf("octree number of level %i\n", level);
     
 	this->camera = new Camera();
-    
-    printf("Max ray length %i\n", raylength);
-    printf("octree size %i\n", OCTREE_SIZE);
-	printf("octree number of level %i\n", level);
-
-	this->octree->initRoot(OCTREE_SIZE, level, raylength);
+	this->octree->initRoot(Options::OCTREE_SIZE, level, Options::MAX_RAY_LENGTH);
 	this->octree->addVoxels(monkey, MESH_SIZE);
-
 	printf("Core initialized\n");
 }
-
-
-/*
- * transform
- */
-static const Vec3<float> yaxis = {0.0f, 1.0f, 0.0f};
-static const float ztrans = -(float)(SCR_SIZE / 2);
-static const float xlimit = (float)(SCR_SIZE / 4);
-
-float ytrans = -xlimit;
-float xsens = 2.0f;
-float xtrans = -xlimit;
-float yangle = 0.0f;
 
 void Core::transform()
 {
 	this->camera->resetTransformation();
-	this->camera->rotate(yaxis, yangle);
-	Vec3<float> translate = {
-        Options::nomotion ? 0.0f : xtrans,
-        Options::nomotion ? 0.0f : ytrans,
+	this->camera->rotate({0.0f, 1.0f, 0.0f}, this->yangle);
+	this->camera->translate({
+        Options::nomotion ? 0.0f : this->xtrans,
+        Options::nomotion ? 0.0f : this->ytrans,
         ztrans
-    };
-	this->camera->translate(translate);
+    });
 	
     if(!Options::nomotion)
     {
-        if(xtrans > xlimit) xsens = -2.0f;
-        if(xtrans < -xlimit) xsens = 2.0f;
-        xtrans += xsens;
-        ytrans += xsens;
+        if(this->xtrans > this->xlimit) this->xsens = -2.0f;
+        if(this->xtrans < -this->xlimit) this->xsens = 2.0f;
+        this->xtrans += this->xsens;
+        this->ytrans += this->xsens;
 	}
-    yangle += 0.0349f * xsens;
+    this->yangle += 0.0349f * this->xsens;
 }
 
 /*

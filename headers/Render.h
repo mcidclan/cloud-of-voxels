@@ -15,21 +15,8 @@
     #include <string.h>
 	#include "options.h"
     #include <math.h>
-	/*
-	 * SCREEN RENDER SIZE
-	 */
-    const short UI OCTREE_SIZE = 1024;
-    // Calculate the screen size, makes sure that the size used for the scan,
-    // never goes outsite of the octree limits.
-    const short UI SCR_SIZE = (((short UI)sqrt((double)(OCTREE_SIZE*OCTREE_SIZE)/2))/2)*2;
-    const short UI SCR_WIDTH = SCR_SIZE;
-	const short UI SCR_HEIGHT = SCR_SIZE;
-    
-    const short UI SCR_HALF_WIDTH = SCR_WIDTH / 2;
-    const short UI SCR_HALF_HEIGHT = SCR_HEIGHT / 2;
     
     class Core;
-    
 	class Render
 	{
         public:

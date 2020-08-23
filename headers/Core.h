@@ -14,6 +14,13 @@
 	class Core
 	{
         private:
+            float ztrans;
+            float xlimit;
+            float ytrans;
+            float xsens;
+            float xtrans;
+            float yangle;
+
             Octree *octree;
             Camera *camera;
 
