@@ -1,16 +1,14 @@
 /*
- * Cloud of voxels (COV) project
- * Author: mcidclan, m.cid.clan@gmail.com
- * Date: 2011
- */
+* Cloud of voxels (COV) project
+* Author: mcidclan, m.cid.clan@gmail.com
+* Date: 2011
+*/
 
 #ifndef VOXELMODELS_H
 #define VOXELMODELS_H
 
 	#include "types.h"
 
-	const UI MESH_SIZE  = 496290;
+	const UI MESH_SIZE  = 7830;
 
 #endif
-
-
