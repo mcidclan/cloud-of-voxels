@@ -19,7 +19,7 @@ SUI Options::OCTREE_SIZE = 0;
 SUI Options::SCR_HALF_WIDTH = 128;
 SUI Options::SCR_HALF_HEIGHT = 128;
 SUI Options::MAX_RAY_LENGTH = 0;
-
+LUI Options::MAX_FRAME_TIME = 25;
 SI Options::CAM_Z_TRANSLATION = 0;
 
 void Options::process(int argc, char **argv)
@@ -35,6 +35,7 @@ void Options::process(int argc, char **argv)
         const size_t op = name.find("o:");
         const size_t zp = name.find("z:");
         const size_t rp = name.find("r:");
+        const size_t fp = name.find("fps:");
         
         if(wp != string::npos)
         {
@@ -48,6 +49,9 @@ void Options::process(int argc, char **argv)
         } else if(rp != string::npos)
         {
             Options::MAX_RAY_LENGTH = stoi(name.substr(2));
+        } else if(fp != string::npos)
+        {
+            Options::MAX_FRAME_TIME = stoi(name.substr(4));
         } else if(zp != string::npos)
         {
             ztrans = true;
@@ -55,6 +59,10 @@ void Options::process(int argc, char **argv)
         } else options[name] = true;
         i++;
     }
+    
+    printf("Max fps: %lu\n", MAX_FRAME_TIME);
+    Options::MAX_FRAME_TIME = (LUI)(1000000.0f*(1.0f/Options::MAX_FRAME_TIME));
+    printf("Max frame time: %lu microseconds\n", MAX_FRAME_TIME);
     
     Options::nologs = options.find("nologs") != options.end();
     Options::nomotion = options.find("nomotion") != options.end();

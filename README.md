@@ -36,7 +36,7 @@ object could have with this configuration. Launch the program with:
 
 if it's too slow. The available options are: nomotion, nologs, noneighbour,
 
-stepx2, stepx3, stepx4, w:, h:, o:, r: and z:. 
+stepx2, stepx3, stepx4, w:, h:, o:, r: and z:.
 
 <br/>
 
@@ -45,6 +45,10 @@ If you want to test different screen sizes use the w: and h: options. To change
 the octree size use the o: option. The max ray length can be changed by using
 
 the r: option. And the camera z position with the use of the z: option. 
+
+By default the maximun fps is at 25 to you can ajust the value if you which by
+
+using the fps: option.
 
 <br/>
 
