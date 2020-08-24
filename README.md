@@ -2,11 +2,13 @@ cloud-of-voxels
 ===============
 This is a basic Voxels to Pixels rendering (voxel rasterizer) project,
 
-using Ray Tracing through an Octree. For each Pixel a Ray is generated,
+using a CPU Ray Tracing process over an Octree. For each Pixel a Ray is
 
-and will go through the Octree searching for the first Voxel on its path.
+generated, and goes through the Octree searching for the first Voxel on
 
-When the Ray hits the Voxel, the corresponding Pixel is drawn to the screen.
+its path. When the Ray hits the Voxel, the corresponding Pixel is drawn
+
+to the screen.
 
 <br/>
 
