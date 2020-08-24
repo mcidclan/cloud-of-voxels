@@ -8,15 +8,15 @@
 #define OCTREE_H
 
 	#include "Octant.h"
-    #define RAYSTEP_MIN_UNIT 1.0f;
+    #define RAYSTEP_MIN_UNIT 0.5f
 
 
 	class Octree
 	{
         public:
            static Octant* curbit;
-           static Vec3<SI> center;
-           
+           static float half;
+           static UI frame;
            
 		private:
             Vec3<float>* ray;
