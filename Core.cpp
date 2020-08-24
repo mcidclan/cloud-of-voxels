@@ -4,12 +4,22 @@
  * Date: 2011
  */
 
+#include <unistd.h>
+#include <sys/time.h>
+
 #include "./headers/Core.h"
 #include "./headers/voxelmodels.h"
+
 
 extern Voxel monkey[MESH_SIZE] __attribute__((aligned(8)));
 
 
+long UI now() {
+    struct timeval tp;
+    gettimeofday(&tp, NULL);
+    return tp.tv_sec*1000000 + tp.tv_usec;
+}
+    
 /*
  * Constructor
  */
@@ -95,7 +105,8 @@ void Core::processRay(Render* const render, Vec3<float>* const ray)
  */
 void Core::process(Render* const render)
 {
-    //Octree::frame++;
+    //Octree::frame++;    
+    long UI time = now();
     
     Mat3f basis = {
         {1.0f, 0.0f, 0.0f},
@@ -119,4 +130,9 @@ void Core::process(Render* const render)
         while(true);
     glEnd();
     glEndList();
+    
+    while((now() - time) < Options::MAX_FRAME_TIME)
+    {
+        usleep(100);
+    }
 }

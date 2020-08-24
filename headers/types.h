@@ -13,6 +13,7 @@
 	#define SI short int
 	#define UI unsigned int
 	#define SUI short unsigned int
+	#define LUI long unsigned int
 
 
 	/*

@@ -36,7 +36,7 @@ Render::~Render()
 void Render::timer(int value)
 {
 	glutPostRedisplay();
-	glutTimerFunc(40, Render::timer, value); //25 frames per second
+	glutTimerFunc(Options::MAX_FRAME_TIME/1000, Render::timer, value);
 }
 
 
