@@ -2,7 +2,7 @@ cloud-of-voxels
 ===============
 This is a basic Voxels to Pixels rendering project, using Ray Tracing through
 
-an Octree. For each Pixel, a Ray is generated and will go through the Octree,
+an Octree. For each Pixel a Ray is generated, and will go through the Octree
 
 searching for the first Voxel on its path. When the Ray hits the Voxel, the
 
@@ -18,9 +18,9 @@ mesh is in "vertex paint" mode, then run the Python script. Once it's done,
 
 replace the voxelmodels.cpp and voxelmodels.h by the generated files. Note that
 
-the provided example contains gap. From blender, before exporting, you need to
+the provided example contains gaps. From blender, before exporting, you need to
 
-subdivide the mesh until you don't see gaps anymore between the vertices.
+subdivide the mesh, until you don't see gaps anymore between the vertices.
 
 <br/>
 
@@ -28,7 +28,7 @@ From Windows compile the code with: mingw32-make -f Makefile-Mingw clean;
 
 mingw32-make -f Makefile-Mingw or from Linux: make clean; make;
 
-By default octree size is 256. That size is also the maximun size your
+By default the octree size is set to 256. That size is also the maximun size your
 
 object could have with this configuration. Launch the program with:
 
@@ -36,7 +36,7 @@ object could have with this configuration. Launch the program with:
 
 if it's too slow. The available options are: nomotion, nologs, noneighbour,
 
-stepx2, stepx3, stepx4, w:, h:, o:, r: and z:.
+stepx2, stepx3, stepx4, w:, h:, o:, r:, z: and fps:.
 
 <br/>
 
@@ -44,15 +44,15 @@ If you want to test different screen sizes use the w: and h: options. To change
 
 the octree size use the o: option. The max ray length can be changed by using
 
-the r: option. And the camera z position with the use of the z: option. 
+the r: option and the camera z position with the use of the z: option. 
 
-By default the maximun fps is at 25 to you can ajust the value if you which by
+By default the maximun fps is at 25. You can ajust the value if you which, by
 
 using the fps: option.
 
 <br/>
 
-With the given voxelmodels.cpp compiled, you launch the program with the
+With the given voxelmodels.cpp compiled, launch the program with the
 
 following: ./bin/cov.exe nomotion nologs stepx2 w:1024 h:576 o:1024 z:-370 r:370
  
