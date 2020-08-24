@@ -7,7 +7,8 @@
 #include "./headers/Octree.h"
 
 Octant* Octree::curbit;
-Vec3<SI> Octree::center;
+float Octree::half;
+UI Octree::frame;
 
 Octree::Octree() {
 }
@@ -23,16 +24,22 @@ void Octree::initRoot(SUI size, SUI maxdepth, const SI raylength)
 	this->root->depth = maxdepth;
 	this->root->size = size;
 	this->root->half = size/2;
-	this->root->center.x =
+
+    this->root->pos.x =
+	this->root->pos.y =
+	this->root->pos.z = -this->root->half;
+	
+    this->root->center.x =
 	this->root->center.y =
-	this->root->center.z = this->root->half;
+	this->root->center.z = 0.0f;
     this->root->setFacesCenter();
     
 	this->ray = NULL;
     this->raylength = raylength;
 	this->colordepthstep = (1.0f/(float)raylength);
     
-    Octree::center = this->root->center;
+    Octree::frame = 0;
+    Octree::half = this->root->half;
 }
 
 /*
@@ -60,7 +67,7 @@ void Octree::resetRay()
 {
 	// Moves the ray to its relative position in the octree
 	this->depthray = 0.0f;
-	math::vecadd(this->root->center, this->ray);
+    Octree::curbit = this->root;
 }
 
 
@@ -72,7 +79,7 @@ void Octree::rayTrace()
     if(this->ray != NULL)
     {
         this->resetRay();
-        while(true)
+        while(((SI)this->depthray) < this->raylength)
         {
             Octree::curbit = this->root;
             // Searches for the deepest available octant from the root,
@@ -87,7 +94,6 @@ void Octree::rayTrace()
             // Calculates the new ray position
             this->getNextEntryDot(Octree::curbit);
             this->depthray += this->raystep;
-            if(((SI)this->depthray) > this->raylength) break;
         }
     }
 }
@@ -136,7 +142,7 @@ void Octree::getNextEntryDot(Octant* octant)
         i = (this->kbase->z > 0.0f) ? 5 : 4;
         rayToBorder(this->ray->z, octant->facescenter[i].z, this->kbase->z);
 
-        if(this->raystep == 0.0f)
+        if(this->raystep < RAYSTEP_MIN_UNIT)
         {
             this->raystep = RAYSTEP_MIN_UNIT;
         }
@@ -205,7 +211,7 @@ void Octree::addNeighborVoxels(const Voxel voxel)
  */
 Color Octree::getColorDepth(const Color color)
 {
-    float darkness = 1.0f - this->depthray*this->colordepthstep;
+    const float darkness = 1.0f - this->depthray*this->colordepthstep;
 	return {
         (UC)(color.r * darkness),
         (UC)(color.g * darkness),

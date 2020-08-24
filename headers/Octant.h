@@ -22,11 +22,11 @@
 
 			SI half;
 
+            UC frame;
 			bool isparent;
 
 			Voxel voxel;
 			Octant*** children;
-            
             Octant* parent;
             
             

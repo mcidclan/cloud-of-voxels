@@ -19,6 +19,7 @@ Octant::Octant()
 	this->voxel.active = 0;
 	this->children = NULL;
 	this->isparent = false;
+    this->frame = 0;
 }
 
 
@@ -125,6 +126,10 @@ void Octant::setFacesCenter()
  */
 void Octant::setBit(const Voxel voxel)
 {
+    if(math::absf(voxel.coordinates.x) >= (Octree::half - 2) ||
+        math::absf(voxel.coordinates.y) >= (Octree::half - 2) ||
+        math::absf(voxel.coordinates.z) >= (Octree::half - 2)) return;
+        
     if(!this->voxel.active)
     {
         if(this->depth == 1)
@@ -144,8 +149,7 @@ void Octant::setBit(const Voxel voxel)
                     printf("children added in level %i\n", depth);
                 }
             }
-            Vec3<SI> coordinates = math::vecadd(voxel.coordinates, Octree::center);
-            this->getChildAt(coordinates)->setBit(voxel);
+            this->getChildAt(voxel.coordinates)->setBit(voxel);
         }
     }
 }
@@ -158,8 +162,8 @@ void Octant::getBit(const Vec3<SI> coordinates)
 {
 	if(this->children == NULL)
 	{
-		Octree::curbit = this;
-		return;
+        Octree::curbit = this;
+        return;
 	} else
 	{
 		this->getChildAt(coordinates)->getBit(coordinates);
@@ -173,9 +177,9 @@ void Octant::getBit(const Vec3<SI> coordinates)
 Octant* Octant::getChildAt(const Vec3<SI> coordinates)
 {
     const Vec3<UC> r = {
-        (UC)(coordinates.x - this->center.x < 0.0f ? 0 : 1),
-        (UC)(coordinates.y - this->center.y < 0.0f ? 0 : 1),
-        (UC)(coordinates.z - this->center.z < 0.0f ? 0 : 1)
+        (UC)(coordinates.x < this->center.x ? 0 : 1),
+        (UC)(coordinates.y < this->center.y ? 0 : 1),
+        (UC)(coordinates.z < this->center.z ? 0 : 1)
     };
 	return &this->children[r.x][r.y][r.z];
 }

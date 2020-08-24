@@ -82,9 +82,10 @@ void Core::processRay(Render* const render, Vec3<float>* const ray)
 {
     this->camera->reajust(ray);
     this->octree->setRay(ray);
-    this->octree->rayTrace(); //
-    if(Octree::curbit->voxel.active) //
+    this->octree->rayTrace();
+    if(Octree::curbit->voxel.active/* && Octree::frame > Octree::curbit->frame*/) //
     {
+        //Octree::curbit->frame = Octree::frame;
         render->setPixel(this->octree->getColorDepth(Octree::curbit->voxel.color));
     }
 }
@@ -94,6 +95,8 @@ void Core::processRay(Render* const render, Vec3<float>* const ray)
  */
 void Core::process(Render* const render)
 {
+    //Octree::frame++;
+    
     Mat3f basis = {
         {1.0f, 0.0f, 0.0f},
         {0.0f, 1.0f, 0.0f},
