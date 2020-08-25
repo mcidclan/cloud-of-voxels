@@ -20,8 +20,7 @@ int main(int argc, char **argv)
 	core->init();
 
 	Render *render = new Render();
-	render->setCore(core);
-	render->init(argc, argv);
+	render->init(argc, argv, core);
     
     return 1;
 }

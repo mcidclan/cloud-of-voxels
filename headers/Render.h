@@ -18,18 +18,12 @@
     
     class Core;
 	class Render
-	{
-        public:
+	{       
+        private:
+            bool ready;
+            Core* core;
             GLuint list;
             
-            
-        private:
-            Core* core;
-            UC* pixels;
-
-            SI curpixi;
-            SI curpixj;
-
         public:
             /*
              * Constructor
@@ -52,13 +46,7 @@
             /*
              * init
              */
-            void init(int argc, char **argv);
-
-
-            /*
-             * setCore
-             */
-            void setCore(Core* const core);
+            void init(int argc, char **argv, Core* const core);
 
 
             /*
@@ -77,6 +65,7 @@
              * idle
              */
             static void idle();
+
             
             /*
              * reshape
@@ -88,30 +77,6 @@
              * draw
              */
             void draw();
-
-
-            /*
-             * Reset pixel position at the begining of the drawing board
-             */
-            void reset();
-
-
-            /*
-             * Set the current pixel on the drawing board.
-             */
-            void setPixel(const Color color);
-
-
-            /*
-             * Jump to next pixel
-             */
-            bool nextPixel();
-
-
-            /*
-             * Get current pixel coordinates
-             */
-            Vec3<float> getPixelCoordinates(const Mat3f* const basis);
 
 
         private:

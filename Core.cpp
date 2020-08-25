@@ -4,22 +4,12 @@
  * Date: 2011
  */
 
-#include <unistd.h>
-#include <sys/time.h>
-
 #include "./headers/Core.h"
 #include "./headers/voxelmodels.h"
 
 
 extern Voxel monkey[MESH_SIZE] __attribute__((aligned(8)));
-
-
-long UI now() {
-    struct timeval tp;
-    gettimeofday(&tp, NULL);
-    return tp.tv_sec*1000000 + tp.tv_usec;
-}
-    
+ 
 /*
  * Constructor
  */
@@ -85,54 +75,66 @@ void Core::transform()
     this->yangle += 0.0349f * this->xsens;
 }
 
+
 /*
- * process ray
+ * Jump to next pixel
  */
-void Core::processRay(Render* const render, Vec3<float>* const ray)
+bool Core::nextPixel(Vec2<SI>* const curpix)
 {
-    this->camera->reajust(ray);
-    this->octree->setRay(ray);
-    this->octree->rayTrace();
-    if(Octree::curbit->voxel.active/* && Octree::frame > Octree::curbit->frame*/) //
-    {
-        //Octree::curbit->frame = Octree::frame;
-        render->setPixel(this->octree->getColorDepth(Octree::curbit->voxel.color));
-    }
+	if((curpix->x += Options::PIXEL_STEP) >= Options::SCR_HALF_WIDTH)
+	{
+		curpix->x = -Options::SCR_HALF_WIDTH;
+        if((curpix->y += Options::PIXEL_STEP) >= Options::SCR_HALF_HEIGHT)
+        {
+            return false;
+        }
+	}
+    return true;
 }
 
 /*
  * process
  */
-void Core::process(Render* const render)
+void Core::process()
 {
-    //Octree::frame++;    
-    long UI time = now();
-    
     Mat3f basis = {
         {1.0f, 0.0f, 0.0f},
         {0.0f, 1.0f, 0.0f},
         {0.0f, 0.0f, 1.0f}
     };
-    
-	this->transform();
+    Vec2<SI> curpix = {
+        (SI)-Options::SCR_HALF_WIDTH,
+        (SI)-Options::SCR_HALF_HEIGHT
+    };
 	this->camera->getBasis(&basis);
 	this->octree->initBasis(&basis);
-	render->reset();
-    
-    glNewList(render->list, GL_COMPILE);
+	
+    glNewList(1, GL_COMPILE);
     glBegin(GL_POINTS);
         do
         {
-            Vec3<float> ray = render->getPixelCoordinates(&basis);
-            this->processRay(render, &ray);
-            if(!render->nextPixel()) break;
+            // Generates ray coordinates from current the pixel
+            Vec3<float> ray = math::vecxscl(basis.i, curpix.x);
+            math::vecadd(math::vecxscl(basis.j, curpix.y), &ray);
+            
+            // Send the ray through the octree
+            this->camera->reajust(&ray);
+            this->octree->setRay(&ray);
+            this->octree->rayTrace();
+            
+            // Display a pixel when the ray hits a voxel.
+            if(Octree::curbit->voxel.active)
+            {
+                const Color color = this->octree->getColorDepth(
+                Octree::curbit->voxel.color);
+                
+                glColor3ub(color.r, color.g, color.b);
+                glVertex2i(curpix.x, curpix.y);
+            }
+            
+            if(!this->nextPixel(&curpix)) break;
         }
         while(true);
     glEnd();
     glEndList();
-    
-    while((now() - time) < Options::MAX_FRAME_TIME)
-    {
-        usleep(100);
-    }
 }

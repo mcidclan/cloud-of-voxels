@@ -3,20 +3,18 @@
  * Author: mcidclan, m.cid.clan@gmail.com
  * Date: 2011
  */
-
+ 
 #include "./headers/Render.h"
 #include "./headers/Core.h"
 
 
 static Render *render = NULL;
 
-
 /*
  * 
  */
 Render::Render()
 {
-	this->core = NULL;
 	render = this;
 }
 
@@ -47,14 +45,17 @@ void Render::initBoard()
 {
     glPointSize(Options::PIXEL_STEP);
     this->list = glGenLists(1);
+    this->ready = false;
 }
 
 
 /*
  * 
  */
-void Render::init(int argc, char **argv)
+void Render::init(int argc, char **argv, Core* const core)
 {
+    this->core = core;
+    
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_RGB | GLUT_SINGLE);
 	glutInitWindowSize(Options::SCR_WIDTH, Options::SCR_HEIGHT);
@@ -74,24 +75,18 @@ void Render::init(int argc, char **argv)
 	printf("Renderer initialized\n");
 }
 
-/*
- * setCore
- */
-void Render::setCore(Core* const core)
-{
-	this->core = core;
-}
-
 
 /*
  * 
  */
 void Render::reshape(int width, int height)
 {
+    const double halfw = width/2.0;
+    const double halfh = height/2.0;
     glViewport(0, 0, width, height);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluOrtho2D(0.0, width, height, 0.0);
+    gluOrtho2D(-halfw, halfw, halfh, -halfh);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 }
@@ -121,71 +116,27 @@ void Render::idle()
  */
 void Render::process()
 {
-    if(core != NULL)
-	{
-        this->core->process(this);
+    if(!this->ready)
+    {
+        this->core->transform();
+        this->core->process();
+        this->ready = true;
     }
 }
+
 
 /*
  * 
  */
 void Render::draw()
-{   
-	glClear(GL_COLOR_BUFFER_BIT);
-    glCallList(this->list);
-	glFlush();
-}
-
-
-/*
- * Reset pixel position at the begining of the drawing board
- */
-void Render::reset()
 {
-	this->curpixi =
-	this->curpixj = 0;
-}
+    glClear(GL_COLOR_BUFFER_BIT);
+    glCallList(1);
+    glFlush();
 
-
-/*
- * Set the current pixel on the drawing board.
- */
-void Render::setPixel(const Color color)
-{
-    glColor3ub(color.r, color.g, color.b);
-	glVertex2i(this->curpixi,this->curpixj);
-}
-
-
-/*
- * Jump to next pixel
- */
-bool Render::nextPixel()
-{
-	if((this->curpixi += Options::PIXEL_STEP) >= Options::SCR_WIDTH)
-	{
-		this->curpixi = 0;
-        if((this->curpixj += Options::PIXEL_STEP) >= Options::SCR_HEIGHT)
-        {
-            return false;
-        }
-	}
-    return true;
-}
-
-
-/*
- * getPixelCoordinates
- */
-Vec3<float> Render::getPixelCoordinates(const Mat3f* const basis)
-{
-    const float v = (float)(this->curpixi - Options::SCR_HALF_WIDTH);
-    const float h = (float)(this->curpixj - Options::SCR_HALF_HEIGHT);
-
-    Vec3<float> i = math::vecxscl(basis->i, v);
-    const Vec3<float> j = math::vecxscl(basis->j, h);
-    math::vecadd(j, &i);
-    
-    return i;
+    // Make sure that the core process is sync
+    if(this->ready)
+    {
+        this->ready = false;
+    }
 }

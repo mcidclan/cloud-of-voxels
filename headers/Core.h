@@ -46,19 +46,21 @@
 			/*
 			 * process
 			 */
-			void process(Render* const render);
+			void process();
             
             
             /*
-			 * process ray
-			 */
-            void processRay(Render* const render, Vec3<float>* const ray);
-
-        private:
-			/*
 			 * transform
 			 */
 			void transform();
+        
+
+        private:
+            /*
+             * Jump to next pixel
+             */
+            bool nextPixel(Vec2<SI>* const curpix);
+
 	};
 
 
