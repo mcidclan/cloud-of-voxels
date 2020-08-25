@@ -46,6 +46,11 @@
 
     typedef struct
     {
+        Vec2<int> l, r;
+    } Scan;
+    
+    typedef struct
+    {
         UC r, g, b;
     } Color;
 
