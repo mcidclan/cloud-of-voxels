@@ -18,15 +18,17 @@ object could have with this configuration. You need Blender 2.78c to export your
 
 model. Start Blender from command line and open the file from which you want to
 
-export the model. Make sure than the mesh is in "vertex paint" mode, then run the
+export the model. If your mesh has been transformed, make sure to apply Location,
+
+Rotation & Scale (CTRL+A). Put your mesh in "vertex paint" mode, then run the
 
 Python script. Once it's done, replace the voxelmodels.cpp and voxelmodels.h by
 
 the generated files. Note that the provided example contains gaps. From blender,
 
-before exporting, you need to subdivide the mesh, until you don't see gaps anymore
+before exporting, you could subdivide your mesh, until you don't see gaps anymore
 
-between the vertices.
+between its vertices.
 
 <br/>
 
