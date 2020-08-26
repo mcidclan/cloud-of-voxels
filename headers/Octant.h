@@ -76,7 +76,7 @@
 			/*
 			 * get the bit space corresponding to the current coordinates
 			 */
-			void getBit(const Vec3<SI> coordinates);
+			Octant* getBit(const Vec3<SI> coordinates);
 
 
 			/*

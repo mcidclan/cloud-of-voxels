@@ -158,16 +158,13 @@ void Octant::setBit(const Voxel voxel)
 /*
  * getBit
  */
-void Octant::getBit(const Vec3<SI> coordinates)
+Octant* Octant::getBit(const Vec3<SI> coordinates)
 {
-	if(this->children == NULL)
+	if(this->children != NULL)
 	{
-        Octree::curbit = this;
-        return;
-	} else
-	{
-		this->getChildAt(coordinates)->getBit(coordinates);
+		return this->getChildAt(coordinates)->getBit(coordinates);
 	}
+    return this;
 }
 
 

@@ -74,28 +74,28 @@ void Octree::resetRay()
 /*
  * rayTrace
  */
-void Octree::rayTrace()
+bool Octree::rayTrace()
 {
     if(this->ray != NULL)
     {
         this->resetRay();
         while(((SI)this->depthray) < this->raylength)
         {
-            Octree::curbit = this->root;
             // Searches for the deepest available octant from the root,
             // corresponding to the current ray position
-            Octree::curbit->getBit({
+            Octree::curbit = this->root->getBit({
                 (SI)this->ray->x,
                 (SI)this->ray->y,
                 (SI)this->ray->z
             });
-            if(Octree::curbit->voxel.active) break;
+            if(Octree::curbit->voxel.active) return true;
             
             // Calculates the new ray position
             this->getNextEntryDot(Octree::curbit);
             this->depthray += this->raystep;
         }
     }
+    return false;
 }
 
 
@@ -161,10 +161,10 @@ void Octree::addVoxels(Voxel* voxels, const UI nvoxel)
 	UI i = 0;
 	while(i < nvoxel)
 	{
-        if(Options::noneighbour)
+        if(Options::nosiblings)
         {
             this->addSingleVoxel(voxels[i]);
-        } else this->addNeighborVoxels(voxels[i]);
+        } else this->addSiblings(voxels[i]);
 		i++;
 	}
 }
@@ -179,9 +179,9 @@ void Octree::addSingleVoxel(const Voxel voxel)
 }
 
 /*
- * addNeighborVoxels
+ * addSiblings
  */
-void Octree::addNeighborVoxels(const Voxel voxel)
+void Octree::addSiblings(const Voxel voxel)
 {
     SI i = - 1;
     while(i < 2)
