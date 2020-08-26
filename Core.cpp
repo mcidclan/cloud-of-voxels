@@ -44,7 +44,8 @@ void Core::init()
     
     SUI level = 0;
     unsigned int n = Options::Options::OCTREE_SIZE;
-    do{
+    do
+    {
         level += 1;
     } while((n >>= 1) != 1);
     printf("octree number of level %i\n", level);
@@ -116,14 +117,13 @@ void Core::process()
             // Generates ray coordinates from current the pixel
             Vec3<float> ray = math::vecxscl(basis.i, curpix.x);
             math::vecadd(math::vecxscl(basis.j, curpix.y), &ray);
-            
-            // Send the ray through the octree
+           
+            // Reajusts the ray
             this->camera->reajust(&ray);
             this->octree->setRay(&ray);
-            this->octree->rayTrace();
             
-            // Display a pixel when the ray hits a voxel.
-            if(Octree::curbit->voxel.active)
+            // Display a pixel if the ray hits a voxel.
+            if(this->octree->rayTrace())
             {
                 const Color color = this->octree->getColorDepth(
                 Octree::curbit->voxel.color);

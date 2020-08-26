@@ -8,7 +8,7 @@
 #define OCTREE_H
 
 	#include "Octant.h"
-    #define RAYSTEP_MIN_UNIT 0.5f
+    #define RAYSTEP_MIN_UNIT 1.0f
 
 
 	class Octree
@@ -61,7 +61,7 @@
 			/*
 			 * rayTrace
 			 */
-			void rayTrace();
+			bool rayTrace();
 
 
 			/*
@@ -82,9 +82,9 @@
             
             
             /*
-             * addNeighborVoxels
+             * addSiblings
              */
-            void addNeighborVoxels(const Voxel voxel);
+            void addSiblings(const Voxel voxel);
 
 
 			/*

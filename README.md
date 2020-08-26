@@ -34,19 +34,19 @@ By default the octree size is set to 256. That size is also the maximun size you
 
 object could have with this configuration. Launch the program with:
 
-./bin/cov.exe nomotion nologs or with ./bin/cov.exe nomotion nologs stepx2 
+./bin/cov no-motion no-logs no-siblings or with ./bin/cov no-motion no-logs stepx:2 
 
-if it's too slow. The available options are: nomotion, nologs, noneighbour,
+if it's too slow. The available options are: no-motion, no-logs, no-siblings,
 
-stepx2, stepx3, stepx4, w:, h:, o:, r:, z: and fps:.
+w:, h:, z:, ray:, step:, fps:, and o-size:.
 
 <br/>
 
 If you want to test different screen sizes use the w: and h: options. To change
 
-the octree size use the o: option. The max ray length can be changed by using
+the octree size use the o-size: option. The max ray length can be changed by using
 
-the r: option and the camera z position with the use of the z: option. 
+the ray: option and the camera z position with the use of the z: option. 
 
 By default the maximun fps is at 25. You can ajust the value if you which, by
 
@@ -54,8 +54,8 @@ using the fps: option.
 
 <br/>
 
-With the given voxelmodels.cpp compiled, launch the program with the
+With the given voxelmodels.cpp, once compiled, you can test the program with:
 
-following: ./bin/cov.exe nomotion nologs stepx2 w:1024 h:576 o:1024 z:-370 r:370
+./bin/cov no-motion no-logs step:4 w:1024 h:576 o-size:1024 z:-370 ray:370 fps:8
  
 Enjoy!

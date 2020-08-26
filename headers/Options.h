@@ -18,9 +18,10 @@
         public:
             static bool nologs;
             static bool nomotion;
-            static bool noneighbour;
+            static bool nosiblings;
             
             static UC PIXEL_STEP;
+            
             static SUI SCR_WIDTH;
             static SUI SCR_HEIGHT;
             static SUI OCTREE_SIZE;

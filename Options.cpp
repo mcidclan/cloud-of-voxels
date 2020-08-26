@@ -11,7 +11,7 @@ UC Options::PIXEL_STEP = 1;
 
 bool Options::nologs = false;
 bool Options::nomotion = false;
-bool Options::noneighbour = false;
+bool Options::nosiblings = false;
 
 SUI Options::SCR_WIDTH = 256;
 SUI Options::SCR_HEIGHT = 256;
@@ -30,32 +30,28 @@ void Options::process(int argc, char **argv)
     while(i < argc)
     {    
         const string name = argv[i];
-        const size_t wp = name.find("w:");
-        const size_t hp = name.find("h:");
-        const size_t op = name.find("o:");
-        const size_t zp = name.find("z:");
-        const size_t rp = name.find("r:");
-        const size_t fp = name.find("fps:");
-        
-        if(wp != string::npos)
+        if(name.find("w:") == 0)
         {
            Options::SCR_WIDTH = stoi(name.substr(2)); 
-        } else if(hp != string::npos)
+        } else if(name.find("h:") == 0)
         {
             Options::SCR_HEIGHT = stoi(name.substr(2));
-        } else if(op != string::npos)
+        } else if(name.find("z:") == 0)
         {
-            Options::OCTREE_SIZE = stoi(name.substr(2));
-        } else if(rp != string::npos)
+            Options::CAM_Z_TRANSLATION = stoi(name.substr(2));
+            ztrans = true;
+        } else if(name.find("ray:") == 0)
         {
-            Options::MAX_RAY_LENGTH = stoi(name.substr(2));
-        } else if(fp != string::npos)
+            Options::MAX_RAY_LENGTH = stoi(name.substr(4));
+        } else if(name.find("fps:") == 0)
         {
             Options::MAX_FRAME_TIME = stoi(name.substr(4));
-        } else if(zp != string::npos)
+        } else if(name.find("step:") == 0)
         {
-            ztrans = true;
-            Options::CAM_Z_TRANSLATION = stoi(name.substr(2));
+            Options::PIXEL_STEP = stoi(name.substr(5));
+        } else if(name.find("o-size:") == 0)
+        {
+            Options::OCTREE_SIZE = stoi(name.substr(7));
         } else options[name] = true;
         i++;
     }
@@ -64,13 +60,9 @@ void Options::process(int argc, char **argv)
     Options::MAX_FRAME_TIME = (LUI)(1000000.0f*(1.0f/Options::MAX_FRAME_TIME));
     printf("Max frame time: %lu microseconds\n", MAX_FRAME_TIME);
     
-    Options::nologs = options.find("nologs") != options.end();
-    Options::nomotion = options.find("nomotion") != options.end();
-    Options::noneighbour = options.find("noneighbour") != options.end();
-    
-    Options::PIXEL_STEP = options.find("stepx2") != options.end() ? 2 :
-    options.find("stepx3") != options.end() ? 3 :
-    options.find("stepx4") != options.end() ? 4 : Options::PIXEL_STEP;
+    Options::nologs = options.find("no-logs") != options.end();
+    Options::nomotion = options.find("no-motion") != options.end();
+    Options::nosiblings = options.find("no-siblings") != options.end();
     
     if(Options::OCTREE_SIZE == 0)
     {
