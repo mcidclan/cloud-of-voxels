@@ -33,13 +33,22 @@
 			float depthray;
 			float colordepthstep;
             
+            bool accelerated;
+            Octant**** accelerator;
             
 		public:
             /*
 			 * constructor
 			 */
-             Octree();
-        
+            Octree();
+            
+            
+            /*
+			 * destructor
+			 */
+            ~Octree();
+             
+             
 			/*
 			 * setRay
 			 */
@@ -98,12 +107,42 @@
 			 */
             void rayToBorder(const float a, const float b, const float c);
             
-        
+            
+            /*
+             * initAccelerator
+             */
+             void initAccelerator();
+            
+
         private:
             /*
 			 * resetRay
 			 */
 			void resetRay();
+            
+            
+            /*
+             * fillAccelerator
+             */
+            void fillAccelerator();
+            
+            
+            /*
+             * destroyAccelerator
+             */
+            void destroyAccelerator();
+
+
+            /*
+             * getAccelerator
+             */
+            void createAccelerator();
+            
+            
+            /*
+             * getBit
+             */
+            Octant* getBit();
 	};
 
 

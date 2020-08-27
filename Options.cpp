@@ -12,6 +12,7 @@ UC Options::PIXEL_STEP = 1;
 bool Options::nologs = false;
 bool Options::nomotion = false;
 bool Options::nosiblings = false;
+bool Options::ACCELERATED = false;
 
 SUI Options::SCR_WIDTH = 256;
 SUI Options::SCR_HEIGHT = 256;
@@ -63,7 +64,8 @@ void Options::process(int argc, char **argv)
     Options::nologs = options.find("no-logs") != options.end();
     Options::nomotion = options.find("no-motion") != options.end();
     Options::nosiblings = options.find("no-siblings") != options.end();
-    
+    Options::ACCELERATED = options.find("accelerate") != options.end();
+        
     if(Options::OCTREE_SIZE == 0)
     {
         (Options::OCTREE_SIZE = (Options::SCR_WIDTH/2)*2);

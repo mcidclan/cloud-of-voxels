@@ -34,7 +34,6 @@ Core::~Core()
 }
 
 
-
 /*
  * init
  */
@@ -51,9 +50,14 @@ void Core::init()
     printf("octree number of level %i\n", level);
     
 	this->camera = new Camera();
-	this->octree->initRoot(Options::OCTREE_SIZE, level, Options::MAX_RAY_LENGTH);
+    this->octree->initRoot(Options::OCTREE_SIZE, level, Options::MAX_RAY_LENGTH);
 	this->octree->addVoxels(monkey, MESH_SIZE);
-	printf("Core initialized\n");
+    
+    if(Options::ACCELERATED)
+    {
+        this->octree->initAccelerator();
+        printf("Core initialized with acceleration\n");
+    } else printf("Core initialized\n");
 }
 
 void Core::transform()

@@ -18,7 +18,8 @@
         public:
             static bool nologs;
             static bool nomotion;
-            static bool nosiblings;
+            static bool nosiblings;            
+            static bool ACCELERATED;
             
             static UC PIXEL_STEP;
             

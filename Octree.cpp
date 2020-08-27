@@ -11,6 +11,93 @@ float Octree::half;
 UI Octree::frame;
 
 Octree::Octree() {
+    this->accelerated = false;
+}
+
+
+Octree::~Octree() {
+    delete this->root;
+    this->destroyAccelerator();
+}
+
+
+/*
+ *
+ */
+ void Octree::destroyAccelerator()
+{
+    UI i = 0, j =0;
+	while(i < Options::OCTREE_SIZE)
+    {
+		j = 0;
+		while(j < Options::OCTREE_SIZE)
+        {
+			delete [] this->accelerator[i][j];
+            j++;
+		}
+		delete [] this->accelerator[i];
+        i++;
+	}
+	delete [] this->accelerator;
+}
+
+/*
+ *
+ */
+void Octree::createAccelerator()
+{
+    double msize = (pow(Options::OCTREE_SIZE, 3.0)*4.0) / pow(1000.0, 3);
+    printf("Trying to allocate %f GB for accelerator\n", msize);
+    this->accelerator = new Octant***[Options::OCTREE_SIZE];
+    UI i = 0, j = 0;
+    while(i < Options::OCTREE_SIZE)
+    {
+        this->accelerator[i] = new Octant**[Options::OCTREE_SIZE];
+        j = 0;
+        while(j < Options::OCTREE_SIZE)
+        {
+            this->accelerator[i][j] = new Octant*[Options::OCTREE_SIZE];
+            j++;
+        }
+        i++;
+    }
+    printf("Accelerator created\n");
+}
+
+
+/*
+ * fillAccelerator
+ */
+void Octree::fillAccelerator()
+{
+    int i = 0, j = 0, k = 0;
+    const SI OCTREE_HALF_SIZE = Options::OCTREE_SIZE / 2;
+    while(i < Options::OCTREE_SIZE)
+    {
+        j = 0;
+        const SI x = i - OCTREE_HALF_SIZE;
+        while(j < Options::OCTREE_SIZE)
+        {
+            k = 0;
+            const SI y = j - OCTREE_HALF_SIZE;
+            while(k < Options::OCTREE_SIZE)
+            {
+                const SI z = k - OCTREE_HALF_SIZE;
+                this->accelerator[i][j][k] = this->root->getBit({x, y, z});
+                k++;
+            }
+            j++;
+        }
+        i++;
+    }
+    printf("Accelerator filled\n");
+}
+
+void Octree::initAccelerator()
+{
+    this->createAccelerator();
+    this->fillAccelerator();
+    this->accelerated = true;
 }
 
 
@@ -43,7 +130,7 @@ void Octree::initRoot(SUI size, SUI maxdepth, const SI raylength)
 }
 
 /*
- * init
+ * initBasis
  */
 void Octree::initBasis(Mat3f* const basis)
 {
@@ -72,6 +159,32 @@ void Octree::resetRay()
 
 
 /*
+ * getBit
+ */
+Octant* Octree::getBit()
+{    
+    if(this->accelerated)
+    {
+        const SI x = (this->ray->x + Octree::half);
+        const SI y = (this->ray->y + Octree::half);
+        const SI z = (this->ray->z + Octree::half);
+        
+        if(x >= 0 && x < Options::OCTREE_SIZE &&
+            y >= 0 && y < Options::OCTREE_SIZE &&
+            z >= 0 && z < Options::OCTREE_SIZE)
+        {
+            return this->accelerator[x][y][z];
+        }
+        return this->root;
+    }
+    return this->root->getBit({
+        (SI)this->ray->x,
+        (SI)this->ray->y,
+        (SI)this->ray->z
+    });
+}
+
+/*
  * rayTrace
  */
 bool Octree::rayTrace()
@@ -83,11 +196,8 @@ bool Octree::rayTrace()
         {
             // Searches for the deepest available octant from the root,
             // corresponding to the current ray position
-            Octree::curbit = this->root->getBit({
-                (SI)this->ray->x,
-                (SI)this->ray->y,
-                (SI)this->ray->z
-            });
+            Octree::curbit = this->getBit();
+            
             if(Octree::curbit->voxel.active) return true;
             
             // Calculates the new ray position
