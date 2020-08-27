@@ -274,8 +274,14 @@ void Octree::addVoxels(Voxel* voxels, const UI nvoxel)
         if(Options::nosiblings)
         {
             this->addSingleVoxel(voxels[i]);
-        } else this->addSiblings(voxels[i]);
-		i++;
+        } else
+        {
+            if(Options::SMOOTH_SIBLINGS)
+            {
+                this->addSmooths(voxels[i]);
+            } else this->addSiblings(voxels[i]);
+		}
+        i++;
 	}
 }
 
@@ -285,6 +291,73 @@ void Octree::addVoxels(Voxel* voxels, const UI nvoxel)
  */
 void Octree::addSingleVoxel(const Voxel voxel)
 {
+    this->root->setBit(voxel);
+}
+
+/*static const Vec3<SI> s0[8] = {
+    {-1, -1, -1},
+    {1, -1, -1},
+    {-1, 1, -1},
+    {1, 1, -1},
+    {-1, -1, 1},
+    {1, -1, 1},
+    {-1, 1, 1},
+    {1, 1, 1}
+}*/
+
+static const Vec3<SI> s1[12] = {
+    {0, -1, -1},
+    {0, 1, -1},
+    {0, -1, 1},
+    {0, 1, 1},
+    
+    {-1, -1, 0},
+    {1, -1, 0},
+    {-1, 1, 0},
+    {1, 1, 0},
+    
+    {-1, 0, -1},
+    {1, 0, -1},
+    {-1, 0, 1},
+    {1, 0, 1}
+};
+
+static const Vec3<SI> s2[6] = {
+    {0, 0, -1},
+    {0, 0, 1},
+    {0, -1, 0},
+    {0, 1, 0},
+    {-1, 0, 0},
+    {1, 0, 0}
+};
+
+/*
+ * addSiblings
+ */
+void Octree::addSmooths(const Voxel voxel)
+{
+    UC i = 0;
+    while(i < 12)
+    {
+        Voxel v = voxel;
+        v.coordinates.x += s1[i].x;
+        v.coordinates.y += s1[i].y;
+        v.coordinates.z += s1[i].z;
+        v.color.a = 63;
+        this->root->setBit(v);
+        i++;
+    }
+    i = 0;
+    while(i < 6)
+    {
+        Voxel v = voxel;
+        v.coordinates.x += s2[i].x;
+        v.coordinates.y += s2[i].y;
+        v.coordinates.z += s2[i].z;
+        v.color.a = 127;
+        this->root->setBit(v);
+        i++;
+    }
     this->root->setBit(voxel);
 }
 
@@ -325,6 +398,7 @@ Color Octree::getColorDepth(const Color color)
 	return {
         (UC)(color.r * darkness),
         (UC)(color.g * darkness),
-        (UC)(color.b * darkness)
+        (UC)(color.b * darkness),
+        color.a
     };
 }

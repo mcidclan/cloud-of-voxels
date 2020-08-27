@@ -22,6 +22,7 @@
             static bool nomotion;
             static bool nosiblings;            
             static bool ACCELERATED;
+            static bool SMOOTH_SIBLINGS;
             
             static UC PIXEL_STEP;
             static SUI SCR_WIDTH;

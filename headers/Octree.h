@@ -96,6 +96,12 @@
             void addSiblings(const Voxel voxel);
 
 
+            /*
+             * addSiblings
+             */
+            void addSmooths(const Voxel voxel);
+
+
 			/*
 			 * getColorDepth
 			 */

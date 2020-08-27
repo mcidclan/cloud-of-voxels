@@ -64,6 +64,6 @@ by adding the accelerate option in the command line.
 
 With the given voxelmodels.cpp, once compiled, you can test the program with:
 
-./bin/cov no-motion no-logs step:3 w:768 h:576 o-size:768 z:-370 ray:370 accelerate
+./bin/cov no-motion no-logs step:2 w:512 h:512 o-size:512 z:-256 ray:256 accelerate
 
 Enjoy!
