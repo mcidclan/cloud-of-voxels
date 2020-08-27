@@ -39,6 +39,7 @@ Core::~Core()
  */
 void Core::init()
 {
+    bool warning = false;
     this->octree = new Octree();
     
     SUI level = 0;
@@ -46,10 +47,17 @@ void Core::init()
     do
     {
         level += 1;
+        if((n & 1) != 0) {
+            warning = true;
+        }
     } while((n >>= 1) != 1);
-    printf("octree number of level %i\n", level);
+    printf("Number of level in the octree: %i\n", level);
+    if(warning) {
+        printf("!!!Warning octree size not a multiple of 2!!!\n");
+    }
     
 	this->camera = new Camera();
+    printf("Adding voxels, please wait...\n");
     this->octree->initRoot(Options::OCTREE_SIZE, level, Options::MAX_RAY_LENGTH);
 	this->octree->addVoxels(monkey, MESH_SIZE);
     
@@ -77,7 +85,7 @@ void Core::transform()
         this->xtrans += this->xsens;
         this->ytrans += this->xsens;
 	}
-    this->yangle += 0.0349f * this->xsens;
+    this->yangle += Options::CAM_Y_ROTATION * this->xsens;
 }
 
 

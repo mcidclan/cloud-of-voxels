@@ -40,7 +40,7 @@ Launch the program with: ./bin/cov no-motion no-logs no-siblings or with
  
 ./bin/cov no-motion no-logs stepx:2 if it's too slow. The available options are:
  
-no-motion, no-logs, no-siblings, w:, h:, z:, ray:, step:, fps: o-size: and
+no-motion, no-logs, no-siblings, w:, h:, z:, r:, ray:, step:, fps: o-size: and
 
 accelerate.
 
@@ -54,9 +54,11 @@ using the ray: option and the camera z position with the use of the z: option.
 
 By default the maximun fps is set at 25. You can ajust the value if you which,
 
-by using the fps: option. To accelerate the ray tracing, enable the pre-searching
+by using the fps: option. The value of rotation step angle can be changed by using
 
-process, by the use of the accelerate option.
+the r: option. To accelerate the ray tracing, enable the pre-searching process
+
+by adding the accelerate option in the command line.
 
 <br/>
 
