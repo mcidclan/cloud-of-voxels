@@ -53,7 +53,7 @@ void Core::init()
     } while((n >>= 1) != 1);
     printf("Number of level in the octree: %i\n", level);
     if(warning) {
-        printf("!!!Warning octree size not a multiple of 2!!!\n");
+        printf("!!!Warning octree size not a power of 2!!!\n");
     }
     
 	this->camera = new Camera();
