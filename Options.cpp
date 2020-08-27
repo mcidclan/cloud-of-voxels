@@ -9,6 +9,8 @@
 
 UC Options::PIXEL_STEP = 1;
 
+float Options::CAM_Y_ROTATION = 0.01745f;
+
 bool Options::nologs = false;
 bool Options::nomotion = false;
 bool Options::nosiblings = false;
@@ -37,6 +39,9 @@ void Options::process(int argc, char **argv)
         } else if(name.find("h:") == 0)
         {
             Options::SCR_HEIGHT = stoi(name.substr(2));
+        } else if(name.find("r:") == 0)
+        {
+            Options::CAM_Y_ROTATION *= (float)stoi(name.substr(2));
         } else if(name.find("z:") == 0)
         {
             Options::CAM_Z_TRANSLATION = stoi(name.substr(2));
@@ -83,8 +88,8 @@ void Options::process(int argc, char **argv)
     Options::SCR_HALF_WIDTH = Options::SCR_WIDTH/2;
     Options::SCR_HALF_HEIGHT = Options::SCR_HEIGHT/2;  
     
-    printf("Width:%d, Height:%d\nOctree Size:%d\nMax Ray Length: %d\nZcam: %d\n",
+    printf("Width: %d, Height: %d\nOctree Size: %d\nMax Ray Length: %d\nZcam: %d\n",
     Options::SCR_WIDTH, Options::SCR_HEIGHT, Options::OCTREE_SIZE,
     Options::MAX_RAY_LENGTH, Options::CAM_Z_TRANSLATION);
-    printf("Pixel Step:%d\n", Options::PIXEL_STEP);
+    printf("Pixel Step: %d\n", Options::PIXEL_STEP);
 }

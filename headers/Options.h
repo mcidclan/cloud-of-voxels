@@ -16,13 +16,14 @@
     
     class Options {
         public:
+            static float CAM_Y_ROTATION;
+        
             static bool nologs;
             static bool nomotion;
             static bool nosiblings;            
             static bool ACCELERATED;
             
             static UC PIXEL_STEP;
-            
             static SUI SCR_WIDTH;
             static SUI SCR_HEIGHT;
             static SUI OCTREE_SIZE;
