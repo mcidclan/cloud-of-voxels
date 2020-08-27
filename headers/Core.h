@@ -60,7 +60,6 @@
              * Jump to next pixel
              */
             bool nextPixel(Vec2<SI>* const curpix);
-
 	};
 
 
