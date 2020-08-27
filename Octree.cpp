@@ -70,6 +70,7 @@ void Octree::createAccelerator()
  */
 void Octree::fillAccelerator()
 {
+    printf("Filling the accelerator, please wait...\n");
     int i = 0, j = 0, k = 0;
     const SI OCTREE_HALF_SIZE = Options::OCTREE_SIZE / 2;
     while(i < Options::OCTREE_SIZE)
@@ -175,7 +176,6 @@ Octant* Octree::getBit()
         {
             return this->accelerator[x][y][z];
         }
-        return this->root;
     }
     return this->root->getBit({
         (SI)this->ray->x,

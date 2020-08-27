@@ -62,6 +62,6 @@ process, by the use of the accelerate option.
 
 With the given voxelmodels.cpp, once compiled, you can test the program with:
 
-./bin/cov no-motion no-logs step:4 w:1024 h:576 o-size:512 z:-370 ray:370
- 
+./bin/cov no-motion no-logs step:3 w:768 h:576 o-size:768 z:-370 ray:370 accelerate
+
 Enjoy!
