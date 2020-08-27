@@ -15,6 +15,7 @@ bool Options::nologs = false;
 bool Options::nomotion = false;
 bool Options::nosiblings = false;
 bool Options::ACCELERATED = false;
+bool Options::SMOOTH_SIBLINGS = false;
 
 SUI Options::SCR_WIDTH = 256;
 SUI Options::SCR_HEIGHT = 256;
@@ -24,6 +25,7 @@ SUI Options::SCR_HALF_HEIGHT = 128;
 SUI Options::MAX_RAY_LENGTH = 0;
 LUI Options::MAX_FRAME_TIME = 25;
 SI Options::CAM_Z_TRANSLATION = 0;
+
 
 void Options::process(int argc, char **argv)
 {
@@ -70,7 +72,8 @@ void Options::process(int argc, char **argv)
     Options::nomotion = options.find("no-motion") != options.end();
     Options::nosiblings = options.find("no-siblings") != options.end();
     Options::ACCELERATED = options.find("accelerate") != options.end();
-        
+    Options::SMOOTH_SIBLINGS = options.find("smooth-siblings") != options.end();
+    
     if(Options::OCTREE_SIZE == 0)
     {
         (Options::OCTREE_SIZE = (Options::SCR_WIDTH/2)*2);

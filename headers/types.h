@@ -51,7 +51,7 @@
     
     typedef struct
     {
-        UC r, g, b;
+        UC r, g, b, a;
     } Color;
 
 	/*

@@ -43,6 +43,9 @@ void Render::timer(int value)
  */
 void Render::initBoard()
 {
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_POINT_SMOOTH);
     glPointSize(Options::PIXEL_STEP);
     this->list = glGenLists(1);
     this->ready = false;
@@ -57,7 +60,7 @@ void Render::init(int argc, char **argv, Core* const core)
     this->core = core;
     
 	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_RGB | GLUT_SINGLE);
+	glutInitDisplayMode(GLUT_RGBA | GLUT_ALPHA | GLUT_SINGLE);
 	glutInitWindowSize(Options::SCR_WIDTH, Options::SCR_HEIGHT);
 
 	glutInitWindowPosition(10, 10);

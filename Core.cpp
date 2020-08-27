@@ -140,7 +140,7 @@ void Core::process()
                 const Color color = this->octree->getColorDepth(
                 Octree::curbit->voxel.color);
                 
-                glColor3ub(color.r, color.g, color.b);
+                glColor4ub(color.r, color.g, color.b, color.a);
                 glVertex2i(curpix.x, curpix.y);
             }
             
