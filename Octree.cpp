@@ -6,7 +6,6 @@
 
 #include "./headers/Octree.h"
 
-Octant* Octree::curbit;
 float Octree::half;
 UI Octree::frame;
 
@@ -149,17 +148,6 @@ void Octree::setRay(Vec3<float>* const ray) {
 
 
 /*
- * resetRay
- */
-void Octree::resetRay()
-{
-	// Moves the ray to its relative position in the octree
-	this->depthray = 0.0f;
-    Octree::curbit = this->root;
-}
-
-
-/*
  * getBit
  */
 Octant* Octree::getBit()
@@ -184,34 +172,39 @@ Octant* Octree::getBit()
     });
 }
 
+
 /*
  * rayTrace
  */
-bool Octree::rayTrace()
+bool Octree::rayTrace(vector<DynamicVoxel>* const voxels)
 {
     if(this->ray != NULL)
     {
-        this->resetRay();
-        while(((SI)this->depthray) < this->raylength)
+        float depthray = 0.0f;
+        while(depthray < (float)this->raylength)
         {
             // Searches for the deepest available octant from the root,
             // corresponding to the current ray position
-            Octree::curbit = this->getBit();
-            
-            if(Octree::curbit->voxel.active) return true;
-            
+            Octant* const curbit = this->getBit();
+            if(curbit->voxel.active)
+            {
+                voxels->push_back({curbit->voxel, depthray});
+                if(!Options::SMOOTH_SIBLINGS ||
+                    curbit->voxel.color.a == 0xFF) return true;
+            }
             // Calculates the new ray position
-            this->getNextEntryDot(Octree::curbit);
-            this->depthray += this->raystep;
+            this->getNextEntryDot(curbit);
+            depthray += this->raystep;
         }
     }
-    return false;
+    return voxels->size() > 0;
 }
 
 
 /*
  * rayToBorder
  */
+ 
 void Octree::rayToBorder(const float a, const float b, const float c)
 {
     if(c != 0.0f)
@@ -240,7 +233,7 @@ void Octree::getNextEntryDot(Octant* octant)
         (this->kbase->y > 0.0f) ? 3 : 2].y, this->kbase->y);
         rayToBorder(this->ray->z, octant->facescenter[
         (this->kbase->z > 0.0f) ? 5 : 4].z, this->kbase->z);
-        
+         
         if(this->raystep < RAYSTEP_MIN_UNIT)
         {
             this->raystep = RAYSTEP_MIN_UNIT;
@@ -284,17 +277,6 @@ void Octree::addSingleVoxel(const Voxel voxel)
     this->root->setBit(voxel);
 }
 
-/*static const Vec3<SI> s0[8] = {
-    {-1, -1, -1},
-    {1, -1, -1},
-    {-1, 1, -1},
-    {1, 1, -1},
-    {-1, -1, 1},
-    {1, -1, 1},
-    {-1, 1, 1},
-    {1, 1, 1}
-}*/
-
 static const Vec3<SI> s1[12] = {
     {0, -1, -1},
     {0, 1, -1},
@@ -333,7 +315,7 @@ void Octree::addSmooths(const Voxel voxel)
         v.coordinates.x += s1[i].x;
         v.coordinates.y += s1[i].y;
         v.coordinates.z += s1[i].z;
-        v.color.a = 63;
+        v.color.a = 127;
         this->root->setBit(v);
         i++;
     }
@@ -344,7 +326,7 @@ void Octree::addSmooths(const Voxel voxel)
         v.coordinates.x += s2[i].x;
         v.coordinates.y += s2[i].y;
         v.coordinates.z += s2[i].z;
-        v.color.a = 127;
+        v.color.a = 190;
         this->root->setBit(v);
         i++;
     }
@@ -382,13 +364,13 @@ void Octree::addSiblings(const Voxel voxel)
 /*
  * setColorDepth
  */
-Color Octree::getColorDepth(const Color color)
+Color Octree::getColorDepth(const DynamicVoxel* const dynamic)
 {
-    const float darkness = 1.0f - this->depthray*this->colordepthstep;
+    const float darkness = 1.0f - dynamic->depth*this->colordepthstep;
 	return {
-        (UC)(color.r * darkness),
-        (UC)(color.g * darkness),
-        (UC)(color.b * darkness),
-        color.a
+        (UC)(dynamic->voxel.color.r * darkness),
+        (UC)(dynamic->voxel.color.g * darkness),
+        (UC)(dynamic->voxel.color.b * darkness),
+        dynamic->voxel.color.a
     };
 }

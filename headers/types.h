@@ -8,6 +8,8 @@
 #define ADDITIONAL_TYPE_H
 
 	#include <stdio.h>
+    #include <vector>
+    using namespace std;
     
 	#define UC unsigned char
 	#define SI short int
@@ -64,6 +66,12 @@
 		Vec3<SI> coordinates;
 	} Voxel;
 
+
+	typedef struct
+	{
+        Voxel voxel;
+        float depth;
+	} DynamicVoxel;
 
 #endif
 
