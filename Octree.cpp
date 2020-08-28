@@ -216,19 +216,12 @@ void Octree::rayToBorder(const float a, const float b, const float c)
 {
     if(c != 0.0f)
     {
-        // Distance between the current ray position and the next potential
-        // octant limit position
-        const float borderdist = math::absf(b - a);
-        if(borderdist > 0.0f)
-        {
-            // Number of step to be done to reach the next potential
-            // octant limit position
-            const float steps = (borderdist / math::absf(c));
-            if(steps < this->raystep)
-            {
-                this->raystep = steps;
-            }
-        } else this->raystep = 0.0f;
+        // Distance between the current ray position and
+        // the next potential octant limit position
+        const float d = math::absf(b - a) / math::absf(c);
+        if(d < this->raystep) {
+            this->raystep = d;
+        }
     }
 }
 
@@ -240,22 +233,19 @@ void Octree::getNextEntryDot(Octant* octant)
 {
     if(this->ray != NULL)
     {
-        UC i = 0;
         this->raystep = ((float)this->root->size);
-
-        i = (this->kbase->x > 0.0f) ? 1 : 0;
-        rayToBorder(this->ray->x, octant->facescenter[i].x, this->kbase->x);
-
-        i = (this->kbase->y > 0.0f) ? 3 : 2;
-        rayToBorder(this->ray->y, octant->facescenter[i].y, this->kbase->y);
+        rayToBorder(this->ray->x, octant->facescenter[
+        (this->kbase->x > 0.0f) ? 1 : 0].x, this->kbase->x);
+        rayToBorder(this->ray->y, octant->facescenter[
+        (this->kbase->y > 0.0f) ? 3 : 2].y, this->kbase->y);
+        rayToBorder(this->ray->z, octant->facescenter[
+        (this->kbase->z > 0.0f) ? 5 : 4].z, this->kbase->z);
         
-        i = (this->kbase->z > 0.0f) ? 5 : 4;
-        rayToBorder(this->ray->z, octant->facescenter[i].z, this->kbase->z);
-
         if(this->raystep < RAYSTEP_MIN_UNIT)
         {
             this->raystep = RAYSTEP_MIN_UNIT;
         }
+        
         this->ray->x += this->kbase->x * this->raystep;
         this->ray->y += this->kbase->y * this->raystep;
         this->ray->z += this->kbase->z * this->raystep;
