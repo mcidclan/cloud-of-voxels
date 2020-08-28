@@ -3,7 +3,7 @@ BIN = ./bin/
 EXEC = cov
 
 
-DATA = voxelmodels.o
+DATA = voxeldisplays.o voxelmodels.o
 OBJS = Options.o Core.o Camera.o math.o Render.o \
 	Octree.o Octant.o main.o
 

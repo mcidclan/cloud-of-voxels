@@ -43,13 +43,10 @@ void Render::timer(int value)
  */
 void Render::initBoard()
 {
-    glDepthFunc(GL_LESS); 
-    glEnable(GL_DEPTH_TEST);
-    
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_POINT_SMOOTH);
-    glPointSize(Options::PIXEL_STEP);
+    glPointSize(Options::PIXEL_STEP*1.5f);
     this->list = glGenLists(1);
     this->ready = false;
 }
@@ -63,7 +60,7 @@ void Render::init(int argc, char **argv, Core* const core)
     this->core = core;
     
 	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_RGBA | GLUT_ALPHA | GLUT_DEPTH | GLUT_SINGLE);
+	glutInitDisplayMode(GLUT_RGBA | GLUT_ALPHA | GLUT_SINGLE);
 	glutInitWindowSize(Options::SCR_WIDTH, Options::SCR_HEIGHT);
 
 	glutInitWindowPosition(10, 10);
@@ -136,7 +133,7 @@ void Render::process()
  */
 void Render::draw()
 {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT);
     glCallList(1);
     glFlush();
 

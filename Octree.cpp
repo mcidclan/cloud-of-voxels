@@ -6,6 +6,10 @@
 
 #include "./headers/Octree.h"
 
+extern Vec3<SI> atom[18];
+extern Vec3<SI> shell[54];
+extern Vec3<SI> shellxl[150];
+
 float Octree::half;
 UI Octree::frame;
 
@@ -238,7 +242,6 @@ void Octree::getNextEntryDot(Octant* octant)
         {
             this->raystep = RAYSTEP_MIN_UNIT;
         }
-        
         this->ray->x += this->kbase->x * this->raystep;
         this->ray->y += this->kbase->y * this->raystep;
         this->ray->z += this->kbase->z * this->raystep;
@@ -277,56 +280,30 @@ void Octree::addSingleVoxel(const Voxel voxel)
     this->root->setBit(voxel);
 }
 
-static const Vec3<SI> s1[12] = {
-    {0, -1, -1},
-    {0, 1, -1},
-    {0, -1, 1},
-    {0, 1, 1},
-    
-    {-1, -1, 0},
-    {1, -1, 0},
-    {-1, 1, 0},
-    {1, 1, 0},
-    
-    {-1, 0, -1},
-    {1, 0, -1},
-    {-1, 0, 1},
-    {1, 0, 1}
-};
-
-static const Vec3<SI> s2[6] = {
-    {0, 0, -1},
-    {0, 0, 1},
-    {0, -1, 0},
-    {0, 1, 0},
-    {-1, 0, 0},
-    {1, 0, 0}
-};
-
 /*
  * addSiblings
  */
 void Octree::addSmooths(const Voxel voxel)
 {
     UC i = 0;
-    while(i < 12)
+    while(i < 18)
     {
         Voxel v = voxel;
-        v.coordinates.x += s1[i].x;
-        v.coordinates.y += s1[i].y;
-        v.coordinates.z += s1[i].z;
-        v.color.a = 127;
+        v.coordinates.x += atom[i].x;
+        v.coordinates.y += atom[i].y;
+        v.coordinates.z += atom[i].z;
+        v.color.a = 255;
         this->root->setBit(v);
         i++;
     }
     i = 0;
-    while(i < 6)
+    while(i < 150)
     {
         Voxel v = voxel;
-        v.coordinates.x += s2[i].x;
-        v.coordinates.y += s2[i].y;
-        v.coordinates.z += s2[i].z;
-        v.color.a = 190;
+        v.coordinates.x += shellxl[i].x;
+        v.coordinates.y += shellxl[i].y;
+        v.coordinates.z += shellxl[i].z;
+        v.color.a = 16;
         this->root->setBit(v);
         i++;
     }
