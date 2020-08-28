@@ -139,8 +139,8 @@ void Core::process()
                 while(i-- > 0)
                 {
                     const Color color = this->octree->getColorDepth(&voxels[i]);
-                    glColor4ub(color.r, color.g, color.b, color.a);
-                    glVertex2i(curpix.x, curpix.y);
+                        glColor4ub(color.r, color.g, color.b, color.a);
+                        glVertex2i(curpix.x, curpix.y);
                 }   
             }
             if(!this->nextPixel(&curpix)) break;

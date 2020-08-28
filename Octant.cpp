@@ -17,6 +17,7 @@ Octant::Octant()
 	this->pos.z = 0;
 	this->depth = 0;
 	this->voxel.active = 0;
+    this->voxel.color.a = 0;
 	this->children = NULL;
 	this->isparent = false;
     this->frame = 0;
@@ -132,7 +133,7 @@ void Octant::setBit(const Voxel voxel)
             
     if(this->depth == 0)
     {
-        if(!this->voxel.active) {
+        if(!this->voxel.active || voxel.color.a == 255) {
             this->voxel = voxel;
             if(!Options::nologs)
             {
