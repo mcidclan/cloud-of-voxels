@@ -7,7 +7,6 @@
 #include "./headers/Core.h"
 #include "./headers/voxelmodels.h"
 
-
 extern Voxel monkey[MESH_SIZE] __attribute__((aligned(8)));
  
 /*
@@ -43,7 +42,7 @@ void Core::init()
     this->octree = new Octree();
     
     SUI level = 0;
-    unsigned int n = Options::Options::OCTREE_SIZE;
+    unsigned int n = Options::OCTREE_SIZE;
     do
     {
         level += 1;
@@ -129,21 +128,21 @@ void Core::process()
             // Generates ray coordinates from current the pixel
             Vec3<float> ray = math::vecxscl(basis.i, curpix.x);
             math::vecadd(math::vecxscl(basis.j, curpix.y), &ray);
-           
             // Reajusts the ray
             this->camera->reajust(&ray);
             this->octree->setRay(&ray);
-            
             // Display a pixel if the ray hits a voxel.
-            if(this->octree->rayTrace())
+            vector<DynamicVoxel> voxels;
+            if(this->octree->rayTrace(&voxels))
             {
-                const Color color = this->octree->getColorDepth(
-                Octree::curbit->voxel.color);
-                
-                glColor4ub(color.r, color.g, color.b, color.a);
-                glVertex2i(curpix.x, curpix.y);
+                UC i = voxels.size();
+                while(i-- > 0)
+                {
+                    const Color color = this->octree->getColorDepth(&voxels[i]);
+                    glColor4ub(color.r, color.g, color.b, color.a);
+                    glVertex2i(curpix.x, curpix.y);
+                }   
             }
-            
             if(!this->nextPixel(&curpix)) break;
         }
         while(true);

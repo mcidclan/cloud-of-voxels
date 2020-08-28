@@ -129,28 +129,27 @@ void Octant::setBit(const Voxel voxel)
     if(math::absf(voxel.coordinates.x) >= (Octree::half - 2) ||
         math::absf(voxel.coordinates.y) >= (Octree::half - 2) ||
         math::absf(voxel.coordinates.z) >= (Octree::half - 2)) return;
-        
-    if(!this->voxel.active)
+            
+    if(this->depth == 0)
     {
-        if(this->depth == 1)
-        {
+        if(!this->voxel.active) {
             this->voxel = voxel;
             if(!Options::nologs)
             {
                 printf("Add voxel at: %i %i %i\n", this->pos.x,this->pos.y,this->pos.z);
             }
-        } else
+        }            
+    } else
+    {
+        if(this->isparent == false)
         {
-            if(this->isparent == false)
+            this->addChildren();
+            if(!Options::nologs)
             {
-                this->addChildren();
-                if(!Options::nologs)
-                {
-                    printf("children added in level %i\n", depth);
-                }
+                printf("children added in level %i\n", depth);
             }
-            this->getChildAt(voxel.coordinates)->setBit(voxel);
         }
+        this->getChildAt(voxel.coordinates)->setBit(voxel);
     }
 }
 

@@ -14,7 +14,6 @@
 	class Octree
 	{
         public:
-           static Octant* curbit;
            static float half;
            static UI frame;
            
@@ -30,7 +29,6 @@
             SI raylength;
 			
             float raystep;
-			float depthray;
 			float colordepthstep;
             
             bool accelerated;
@@ -70,7 +68,7 @@
 			/*
 			 * rayTrace
 			 */
-			bool rayTrace();
+			bool rayTrace(vector<DynamicVoxel>* const voxels);
 
 
 			/*
@@ -105,7 +103,7 @@
 			/*
 			 * getColorDepth
 			 */
-			Color getColorDepth(const Color color);
+			Color getColorDepth(const DynamicVoxel* const dynamic);
 
 
             /*
@@ -121,12 +119,6 @@
             
 
         private:
-            /*
-			 * resetRay
-			 */
-			void resetRay();
-            
-            
             /*
              * fillAccelerator
              */
