@@ -112,7 +112,7 @@
 			 * rayToBorder
 			 */
             void rayToBorder(const float a, const float b, const float c);
-            
+
             
             /*
              * initAccelerator
