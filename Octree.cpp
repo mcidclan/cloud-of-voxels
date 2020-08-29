@@ -178,6 +178,47 @@ Octant* Octree::getBit()
 
 
 /*
+ * getNextBit
+ */
+Octant* Octree::getNextBit(float* axis, const float side)
+{
+    const float d = *axis;
+    *axis = ((SI)d) + side;
+    Octant* const curbit = this->getBit();
+    *axis = d;
+    return curbit;
+}
+
+
+/*
+ * avoidScanGlitches
+ */
+void Octree::avoidScanGlitches(Octant** const curbit)
+{
+    if(Options::AVOID_SCAN_GLITCHES)
+    {
+        if(!(*curbit)->voxel.active) {
+            *curbit = getNextBit(&this->ray->x, 1.0f);
+        }
+        if(!(*curbit)->voxel.active) {
+            *curbit = getNextBit(&this->ray->y, 1.0f);
+        }
+        if(!(*curbit)->voxel.active) {
+            *curbit = getNextBit(&this->ray->z, 1.0f);
+        }
+        if(!(*curbit)->voxel.active) {
+            *curbit = getNextBit(&this->ray->x, -1.0f);
+        }
+        if(!(*curbit)->voxel.active) {
+            *curbit = getNextBit(&this->ray->y, -1.0f);
+        }
+        if(!(*curbit)->voxel.active) {
+            *curbit = getNextBit(&this->ray->z, -1.0f);
+        }
+    }
+}
+
+/*
  * rayTrace
  */
 bool Octree::rayTrace(vector<DynamicVoxel>* const voxels)
@@ -189,11 +230,12 @@ bool Octree::rayTrace(vector<DynamicVoxel>* const voxels)
         {
             // Searches for the deepest available octant from the root,
             // corresponding to the current ray position
-            Octant* const curbit = this->getBit();
+            Octant* curbit = this->getBit();
+            this->avoidScanGlitches(&curbit);
             if(curbit->voxel.active)
             {
                 voxels->push_back({curbit->voxel, depthray});
-                if(!Options::SMOOTH_SIBLINGS ||
+                if(!Options::TRANSPARENCY ||
                     curbit->voxel.color.a == 0xFF) return true;
             }
             // Calculates the new ray position
@@ -257,16 +299,23 @@ void Octree::addVoxels(Voxel* voxels, const UI nvoxel)
 	UI i = 0;
 	while(i < nvoxel)
 	{
-        if(Options::nosiblings)
+        if(Options::SMOOTH_SIBLINGS)
         {
-            this->addSingleVoxel(voxels[i]);
-        } else
+            this->addSmooths(voxels[i]);
+        } else if(Options::HARD_SIBLINGS)
         {
-            if(Options::SMOOTH_SIBLINGS)
-            {
-                this->addSmooths(voxels[i]);
-            } else this->addSiblings(voxels[i]);
-		}
+            this->addSiblings(voxels[i]);
+        } else this->addSingleVoxel(voxels[i]);
+            
+        switch(Options::VOXEL_SHELL_TYPE)
+        {
+            case 1:
+                this->addShell(voxels[i]);
+                break;
+            case 2:
+                this->addShellXL(voxels[i]);
+                break;
+        }
         i++;
 	}
 }
@@ -281,7 +330,7 @@ void Octree::addSingleVoxel(const Voxel voxel)
 }
 
 /*
- * addSiblings
+ * addSmooths
  */
 void Octree::addSmooths(const Voxel voxel)
 {
@@ -296,19 +345,55 @@ void Octree::addSmooths(const Voxel voxel)
         this->root->setBit(v);
         i++;
     }
-    i = 0;
+    this->root->setBit(voxel);
+}
+
+
+/*
+ * addShellXL
+ */
+void Octree::addShellXL(const Voxel voxel)
+{
+    UC i = 0;
     while(i < 150)
     {
         Voxel v = voxel;
         v.coordinates.x += shellxl[i].x;
         v.coordinates.y += shellxl[i].y;
         v.coordinates.z += shellxl[i].z;
-        v.color.a = 16;
+        if(Options::SHELL_COLOR.a > 0)
+        {
+            v.color = Options::SHELL_COLOR;
+        }
+        else v.color.a = 16;
         this->root->setBit(v);
         i++;
     }
-    this->root->setBit(voxel);
 }
+
+
+/*
+ * addShell
+ */
+void Octree::addShell(const Voxel voxel)
+{
+    UC i = 0;
+    while(i < 54)
+    {
+        Voxel v = voxel;
+        v.coordinates.x += shell[i].x;
+        v.coordinates.y += shell[i].y;
+        v.coordinates.z += shell[i].z;
+        if(Options::SHELL_COLOR.a > 0)
+        {
+            v.color = Options::SHELL_COLOR;
+        }
+        else v.color.a = 16;
+        this->root->setBit(v);
+        i++;
+    }
+}
+   
 
 /*
  * addSiblings

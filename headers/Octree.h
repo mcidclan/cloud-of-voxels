@@ -72,17 +72,30 @@
 
 
 			/*
-			 * getEntryDot
-			 */
-			void getNextEntryDot(Octant* octant);
-
-
-			/*
 			 * addVoxels
 			 */
 			void addVoxels(Voxel* voxels, const UI nvoxel);
+            
 
 			/*
+			 * getColorDepth
+			 */
+			Color getColorDepth(const DynamicVoxel* const dynamic);
+
+            
+            /*
+             * initAccelerator
+             */
+             void initAccelerator();
+            
+
+        private:
+            /*
+			 * getEntryDot
+			 */
+			void getNextEntryDot(Octant* octant);
+            
+            /*
 			 * add a single voxel
 			 */
 			void addSingleVoxel(const Voxel voxel);
@@ -100,25 +113,23 @@
             void addSmooths(const Voxel voxel);
 
 
-			/*
-			 * getColorDepth
-			 */
-			Color getColorDepth(const DynamicVoxel* const dynamic);
+            /*
+             * addShellXL
+             */
+             void addShellXL(const Voxel voxel);
 
 
+            /*
+             * addShell
+             */
+            void addShell(const Voxel voxel);
+            
             /*
 			 * rayToBorder
 			 */
             void rayToBorder(const float a, const float b, const float c);
-
             
-            /*
-             * initAccelerator
-             */
-             void initAccelerator();
             
-
-        private:
             /*
              * fillAccelerator
              */
@@ -141,6 +152,18 @@
              * getBit
              */
             Octant* getBit();
+            
+            
+            /*
+             * getNextBit
+             */
+            Octant* getNextBit(float* axis, const float side);
+
+
+            /*
+             * avoidScanGlitches
+             */
+            void avoidScanGlitches(Octant** const curbit);
 	};
 
 

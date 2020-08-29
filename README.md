@@ -1,14 +1,12 @@
 cloud-of-voxels
 ===============
-This is a basic Voxels to Pixels rendering (voxel rasterizer) project,
+This is a basic Voxels to Pixels rendering (voxel rasterizer) project, using a
 
-using a CPU Ray Tracing process over an Octree. For each Pixel a Ray is
+CPU Ray Tracing process over an Octree. For each Pixel a Ray is generated, and
 
-generated, and goes through the Octree searching for the first Voxel on
+goes through the Octree searching for the first Voxel on its path. When the Ray
 
-its path. When the Ray hits the Voxel, the corresponding Pixel is drawn
-
-to the screen.
+hits the Voxel, the corresponding Pixel is drawn to the screen.
 
 <br/>
 
@@ -36,34 +34,36 @@ From Windows compile the code with: mingw32-make -f Makefile-Mingw clean;
 
 mingw32-make -f Makefile-Mingw or from Linux: make clean; make;
 
-Launch the program with: ./bin/cov no-motion no-logs no-siblings or with
+Launch the program with: ./bin/cov no-motion no-logs or with
  
-./bin/cov no-motion no-logs stepx:2 if it's too slow. The available options are:
- 
-no-motion, no-logs, no-siblings, w:, h:, z:, r:, ray:, step:, fps: o-size: and
-
-accelerate.
+./bin/cov no-motion no-logs smooth-siblings stepx:2 if it's too slow.
 
 <br/>
 
-If you want to test different screen sizes use the w: and h: options. To change
+Available options:
 
-the octree size use the o-size: option. The max ray length can be changed by
-
-using the ray: option and the camera z position with the use of the z: option. 
-
-By default the maximun fps is set at 25. You can ajust the value if you which,
-
-by using the fps: option. The value of rotation step angle can be changed by using
-
-the r: option. To accelerate the ray tracing, enable the pre-searching process
-
-by adding the accelerate option in the command line.
+no-logs             => Disable useless log
+no-motion           => Disable the default motion
+accelerate          => Enable the pre-searching process
+transparency        => Enable transparency
+hard-siblings       => Force additionnal voxels arround each voxel.
+mooth-siblings      => Force smoother additionnal voxels arround each voxel.
+avoid-scan-glitches => Try to avoid glitches in real-time
+w:                  => Sets the view render width
+h:                  => Sets the view render height
+z:                  => Sets the camera z position
+r:                  => Changes the default value of the camera step angle
+ray:                => Set the max ray length
+fps:                => Changes the default max fps value
+step:               => Changes the default scan x and y step pixel 
+octree-size:        => Changes the default octree size
+voxel-shell-type:   => Activates transparent voxel shell (xl, normal)
+voxel-shell-rgba:   => Affects a specific RGBA color to the voxel shell (0xFFFFFFFF). 
 
 <br/>
 
 With the given voxelmodels.cpp, once compiled, you can test the program with:
 
-./bin/cov no-motion no-logs step:2 w:512 h:512 o-size:512 z:-256 ray:256 accelerate
+./bin/cov no-motion no-logs step:2 w:512 h:512 octree-size:512 z:-256 ray:256 accelerate
 
 Enjoy!

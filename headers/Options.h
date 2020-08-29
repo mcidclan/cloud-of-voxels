@@ -20,11 +20,15 @@
         
             static bool nologs;
             static bool nomotion;
-            static bool nosiblings;            
             static bool ACCELERATED;
+            static bool HARD_SIBLINGS;            
             static bool SMOOTH_SIBLINGS;
+            static bool AVOID_SCAN_GLITCHES;
+            static bool TRANSPARENCY;
             
+            static UC VOXEL_SHELL_TYPE;
             static UC PIXEL_STEP;
+            
             static SUI SCR_WIDTH;
             static SUI SCR_HEIGHT;
             static SUI OCTREE_SIZE;
@@ -33,6 +37,8 @@
             static SUI MAX_RAY_LENGTH;
             static LUI MAX_FRAME_TIME;            
             static SI CAM_Z_TRANSLATION;
+            
+            static Color SHELL_COLOR;
             
             static void process(int argc, char **argv);
     };
