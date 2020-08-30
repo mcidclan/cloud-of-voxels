@@ -297,8 +297,19 @@ void Octree::getNextEntryDot(Octant* octant)
 void Octree::addVoxels(Voxel* voxels, const UI nvoxel)
 {    
 	UI i = 0;
+    
+    #ifdef PSP
+    UC percent = 0;
+    const UI step = nvoxel / 100;
+    #endif
 	while(i < nvoxel)
 	{
+        #ifdef PSP
+        if(i % (step * 10) == 0) {
+            printf(">%d ", percent);
+            percent+=10;
+        }
+        #endif
         if(Options::SMOOTH_SIBLINGS)
         {
             this->addSmooths(voxels[i]);
@@ -315,9 +326,13 @@ void Octree::addVoxels(Voxel* voxels, const UI nvoxel)
             case 2:
                 this->addShellXL(voxels[i]);
                 break;
+            case 3:
+                this->addShellLite(voxels[i]);
+                break;
         }
         i++;
 	}
+    printf("\n");
 }
 
 
@@ -346,6 +361,26 @@ void Octree::addSmooths(const Voxel voxel)
         i++;
     }
     this->root->setBit(voxel);
+}
+
+/*
+ * addSmooths
+ */
+void Octree::addShellLite(const Voxel voxel)
+{   
+    UC i = 1;
+    while(i < 6)
+    {
+        Voxel v = voxel;
+        math::vecxscl(&v.coordinates, 1.0f + i / 120.0f);
+        if(Options::SHELL_COLOR.a > 0)
+        {
+            v.color = Options::SHELL_COLOR;
+        }
+        else v.color.a = 16;
+        this->root->setBit(v);
+        i++;
+    }
 }
 
 

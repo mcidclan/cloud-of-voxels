@@ -19,7 +19,7 @@ Core::Core()
     this->ytrans = -xlimit;
     this->xsens = 2.0f;
     this->xtrans = -xlimit;
-    this->yangle = 0.0f;
+    this->yangle = 0.01745f * 180.0f;
 }
 
 
@@ -118,34 +118,38 @@ void Core::process()
         (SI)-Options::SCR_HALF_WIDTH,
         (SI)-Options::SCR_HALF_HEIGHT
     };
+    
+    const UC step = Options::PIXEL_STEP;
+    
 	this->camera->getBasis(&basis);
 	this->octree->initBasis(&basis);
 	
-    glNewList(1, GL_COMPILE);
-    glBegin(GL_POINTS);
-        do
+    do
+    {
+        // Generates ray coordinates from current the pixel
+        Vec3<float> ray = math::vecxscl(basis.i, curpix.x);
+        math::vecadd(math::vecxscl(basis.j, curpix.y), &ray);
+        // Reajusts the ray
+        this->camera->reajust(&ray);
+        this->octree->setRay(&ray);
+        // Display a pixel if the ray hits a voxel.
+        vector<DynamicVoxel> voxels;
+        if(this->octree->rayTrace(&voxels))
         {
-            // Generates ray coordinates from current the pixel
-            Vec3<float> ray = math::vecxscl(basis.i, curpix.x);
-            math::vecadd(math::vecxscl(basis.j, curpix.y), &ray);
-            // Reajusts the ray
-            this->camera->reajust(&ray);
-            this->octree->setRay(&ray);
-            // Display a pixel if the ray hits a voxel.
-            vector<DynamicVoxel> voxels;
-            if(this->octree->rayTrace(&voxels))
+            UC i = voxels.size();
+            while(i-- > 0)
             {
-                UC i = voxels.size();
-                while(i-- > 0)
-                {
-                    const Color color = this->octree->getColorDepth(&voxels[i]);
-                        glColor4ub(color.r, color.g, color.b, color.a);
-                        glVertex2i(curpix.x, curpix.y);
-                }   
-            }
-            if(!this->nextPixel(&curpix)) break;
+                const Color color = this->octree->getColorDepth(&voxels[i]);
+                    glColor4ub(color.r, color.g, color.b, color.a);
+                    glBegin(GL_QUADS);
+                    glVertex2i(curpix.x - step, curpix.y - step);
+                    glVertex2i(curpix.x + step, curpix.y - step);
+                    glVertex2i(curpix.x + step, curpix.y + step);
+                    glVertex2i(curpix.x - step, curpix.y + step);
+                    glEnd();
+            }   
         }
-        while(true);
-    glEnd();
-    glEndList();
+        if(!this->nextPixel(&curpix)) break;
+    }
+    while(true);
 }

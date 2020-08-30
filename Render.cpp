@@ -7,6 +7,8 @@
 #include "./headers/Render.h"
 #include "./headers/Core.h"
 
+UC Render::PIXEL_STEP = 1;
+float Render::CAM_Y_ROTATION = 0.0f;
 
 static Render *render = NULL;
 
@@ -27,15 +29,65 @@ Render::~Render()
     glDeleteLists(this->list, 1);
 }
 
-
+    
 /*
  * 
  */
+#ifndef PSP
 void Render::timer(int value)
 {
 	glutPostRedisplay();
 	glutTimerFunc(Options::MAX_FRAME_TIME/1000, Render::timer, value);
 }
+#else
+static int loop(unsigned int args, void *argp)
+{
+    while(true)
+    {
+        glutPostRedisplay();
+        sceKernelDelayThread(10);
+    }
+}
+
+static int key(unsigned int args, void *argp)
+{
+    const float step = 0.01745f;
+    while(true)
+    {
+        SceCtrlData pad;
+        sceCtrlReadBufferPositive(&pad, 1);
+        Render::PIXEL_STEP = 1;
+        Render::CAM_Y_ROTATION = 0.0f;
+        
+        if(pad.Buttons & PSP_CTRL_LEFT)
+        {
+            Render::PIXEL_STEP = 4;
+            Render::CAM_Y_ROTATION = -step;
+        }
+        if(pad.Buttons & PSP_CTRL_RIGHT)
+        {
+            Render::PIXEL_STEP = 4;
+            Render::CAM_Y_ROTATION = step;
+        }
+        
+        sceKernelDelayThread(100000);
+    }
+}
+
+void Render::timer(int value)
+{
+    SceUID id = sceKernelCreateThread("cov_loop", loop, 0x0A, 0x10000, 0, 0);
+    if (id >= 0)
+    {
+        sceKernelStartThread(id, 0, 0);
+    }
+    
+    id = sceKernelCreateThread("cov_key", key, 0x10, 0x10000, 0, 0);
+	if (id >= 0){
+		sceKernelStartThread(id, 0, 0);
+	}
+}
+#endif
 
 
 /*
@@ -44,9 +96,7 @@ void Render::timer(int value)
 void Render::initBoard()
 {
     glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glEnable(GL_POINT_SMOOTH);
-    glPointSize(Options::PIXEL_STEP*1.5f);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);    
     this->list = glGenLists(1);
     this->ready = false;
 }
@@ -58,24 +108,26 @@ void Render::initBoard()
 void Render::init(int argc, char **argv, Core* const core)
 {
     this->core = core;
-    
-	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_RGBA | GLUT_ALPHA | GLUT_SINGLE);
-	glutInitWindowSize(Options::SCR_WIDTH, Options::SCR_HEIGHT);
-
-	glutInitWindowPosition(10, 10);
-	glutCreateWindow("Cloud of Voxels");
-
-	glutReshapeFunc(Render::reshape);
+	
+    glutInit(&argc, argv);
+	glutInitDisplayMode(GLUT_RGBA | GLUT_ALPHA | GLUT_DOUBLE);
+	glutInitWindowSize(Options::WIN_WIDTH, Options::WIN_HEIGHT);
+	glutInitWindowPosition(0, 0);
+	glutCreateWindow("CloudOfVoxels");
+	
     glutDisplayFunc(Render::display);
-    glutIdleFunc(Render::idle);
+    #ifndef PSP
+    glutReshapeFunc(Render::reshape);
+    #endif
+	glutIdleFunc(Render::idle);
     
-	this->initBoard();
-
+    this->initBoard();
+    #ifdef PSP
+    Render::reshape(Options::WIN_WIDTH, Options::WIN_HEIGHT);
+    #endif
+    
     Render::timer(0);
-	glutMainLoop();
-    
-	printf("Renderer initialized\n");
+    glutMainLoop();
 }
 
 
@@ -89,7 +141,7 @@ void Render::reshape(int width, int height)
     glViewport(0, 0, width, height);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluOrtho2D(-halfw, halfw, halfh, -halfh);
+    glOrtho(-halfw, halfw, halfh, -halfh, -1, 1);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 }
@@ -121,12 +173,17 @@ void Render::process()
 {
     if(!this->ready)
     {
+        #ifdef PSP
+        Options::PIXEL_STEP = Render::PIXEL_STEP;
+        Options::CAM_Y_ROTATION = Render::CAM_Y_ROTATION;
+        #endif
         this->core->transform();
+        glNewList(this->list, GL_COMPILE);
         this->core->process();
+        glEndList();
         this->ready = true;
     }
 }
-
 
 /*
  * 
@@ -134,12 +191,16 @@ void Render::process()
 void Render::draw()
 {
     glClear(GL_COLOR_BUFFER_BIT);
-    glCallList(1);
-    glFlush();
-
+    glCallList(this->list);
+    glutSwapBuffers();
+    
     // Make sure that the core process is sync
     if(this->ready)
     {
         this->ready = false;
-    }
+        #ifdef PSP
+        glDeleteLists(this->list, 1);
+        this->list = glGenLists(1);
+        #endif
+    }    
 }

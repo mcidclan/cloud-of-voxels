@@ -18,15 +18,23 @@ model. Start Blender from command line and open the file from which you want to
 
 export the model. If your mesh has been transformed, make sure to apply Location,
 
-Rotation & Scale (CTRL+A). Put your mesh in "vertex paint" mode, then run the
+Rotation & Scale (CTRL+A). In the middle of the scene add a lattice, then on your
 
-Python script. Once it's done, replace the voxelmodels.cpp and voxelmodels.h by
+mesh add a "Remesh" modifier. Change the octree depth value, util the size of the
 
-the generated files. Note that the provided example contains gaps. From blender,
+blocks fits with the lattice, modify the scale value in the modifier if needed.
 
-before exporting, you could subdivide your mesh, until you don't see gaps anymore
+Apply the modifier. Edit the mesh, select all the faces and choose "Shade Smooth"
 
-between its vertices.
+from the Faces menu (CTRL+F). Then, add the modifiers "Triangulate" and "Smooth".
+
+Increase the values in smooth if necessary. In bake, select "Bake to Vertex Color".
+
+Put your mesh in "Vertex Paint" mode then run Bake in "Full Render" mode. Disable
+
+the modifiers before running the Python script. Once it's done, replace the
+
+voxelmodels.cpp and voxelmodels.h by the generated files.
 
 <br/>
 
@@ -42,23 +50,23 @@ Launch the program with: ./bin/cov no-motion no-logs or with
 
 Available options:
 
-no-logs             => Disable useless log
-no-motion           => Disable the default motion
-accelerate          => Enable the pre-searching process
-transparency        => Enable transparency
-hard-siblings       => Force additionnal voxels arround each voxel.
-mooth-siblings      => Force smoother additionnal voxels arround each voxel.
-avoid-scan-glitches => Try to avoid glitches in real-time
-w:                  => Sets the view render width
-h:                  => Sets the view render height
-z:                  => Sets the camera z position
-r:                  => Changes the default value of the camera step angle
-ray:                => Set the max ray length
-fps:                => Changes the default max fps value
-step:               => Changes the default scan x and y step pixel 
-octree-size:        => Changes the default octree size
-voxel-shell-type:   => Activates transparent voxel shell (xl, normal)
-voxel-shell-rgba:   => Affects a specific RGBA color to the voxel shell (0xFFFFFFFF). 
+no-logs .............. Disable useless log
+no-motion ............ Disable the default motion
+accelerate ........... Enable the pre-searching process
+transparency ......... Enable transparency
+hard-siblings ........ Force additionnal voxels arround each voxel.
+mooth-siblings ....... Force smoother additionnal voxels arround each voxel.
+avoid-scan-glitches .. Try to avoid glitches in real-time
+w: ................... Sets the view render width
+h: ................... Sets the view render height
+z: ................... Sets the camera z position
+r: ................... Changes the default value of the camera step angle
+ray: ................. Set the max ray length
+fps:  ................ Changes the default max fps value
+step: ................ Changes the default scan x and y step pixel 
+octree-size: ......... Changes the default octree size
+voxel-shell-type: .... Activates transparent voxel shell (xl, normal, lite)
+voxel-shell-rgba: .... Affects a specific RGBA color to the voxel shell (0xFFFFFFFF). 
 
 <br/>
 
