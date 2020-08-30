@@ -1,4 +1,5 @@
-*.EBOOT
+*.PBP
 *.o
 *.prx
 *.elf
+*.SFO
