@@ -20,6 +20,8 @@ bool Options::SMOOTH_SIBLINGS = false;
 bool Options::AVOID_SCAN_GLITCHES = false;
 bool Options::TRANSPARENCY = false;
 
+SUI Options::WIN_WIDTH = 256;
+SUI Options::WIN_HEIGHT = 256;
 SUI Options::SCR_WIDTH = 256;
 SUI Options::SCR_HEIGHT = 256;
 SUI Options::OCTREE_SIZE = 0;
@@ -33,6 +35,7 @@ Color Options::SHELL_COLOR = {0, 0, 0, 0};
 
 void Options::process(int argc, char **argv)
 {
+    #ifndef PSP
     int i = 1;
     bool ztrans = false;
     map<string, bool> options;
@@ -70,7 +73,10 @@ void Options::process(int argc, char **argv)
             if(type == "xl")
             {
                 Options::VOXEL_SHELL_TYPE = 2;
-            } else Options::VOXEL_SHELL_TYPE = 1;
+            } else if(type == "lite")
+            {
+                Options::VOXEL_SHELL_TYPE = 3;
+            } else Options::VOXEL_SHELL_TYPE = 1;   
         } else if(name.find("voxel-shell-rgba:") == 0)
         {   
             UI color = stoll(name.substr(17), 0 , 16);
@@ -113,6 +119,8 @@ void Options::process(int argc, char **argv)
         Options::CAM_Z_TRANSLATION = -(SI)(Options::OCTREE_SIZE/2);
     }
     
+    Options::WIN_WIDTH = Options::SCR_WIDTH;
+    Options::WIN_HEIGHT = Options::SCR_HEIGHT;
     Options::SCR_HALF_WIDTH = Options::SCR_WIDTH/2;
     Options::SCR_HALF_HEIGHT = Options::SCR_HEIGHT/2;  
     
@@ -139,4 +147,31 @@ void Options::process(int argc, char **argv)
         default:
             printf("Voxel shell: Off\n");
     }
+    #else
+        Options::nologs = true;
+        Options::nomotion = true;
+        Options::ACCELERATED = false;
+        Options::HARD_SIBLINGS = false;
+        Options::SMOOTH_SIBLINGS = false;
+        Options::AVOID_SCAN_GLITCHES = false;
+        Options::TRANSPARENCY = true;
+        Options::PIXEL_STEP = 1;
+        Options::WIN_WIDTH = 480;
+        Options::WIN_HEIGHT = 272;
+        Options::SCR_WIDTH = 128;
+        Options::SCR_HEIGHT = 128;
+        Options::OCTREE_SIZE = 128;
+        Options::SCR_HALF_WIDTH = Options::SCR_WIDTH / 2;
+        Options::SCR_HALF_HEIGHT = Options::SCR_HEIGHT / 2;
+        Options::MAX_RAY_LENGTH = 64;
+        Options::MAX_FRAME_TIME = (LUI)(1000000.0f*(1.0f/60.0f));
+        Options::CAM_Z_TRANSLATION = -Options::MAX_RAY_LENGTH;
+        Options::CAM_Y_ROTATION = 0.0f;
+        
+        //Options::VOXEL_SHELL_TYPE = 3;
+        //Options::SHELL_COLOR = {0xFF, 0xFF, 0, 0x08};
+        
+        pspDebugScreenInit();
+        scePowerSetClockFrequency(333, 333, 166);
+    #endif
 }

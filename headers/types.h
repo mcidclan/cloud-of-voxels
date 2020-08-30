@@ -17,7 +17,10 @@
 	#define SUI short unsigned int
 	#define LUI long unsigned int
 
-
+    #ifdef PSP
+    #define M_PI 3.14159265358979323846
+    #endif
+    
 	/*
 	 * Vec2
 	 */

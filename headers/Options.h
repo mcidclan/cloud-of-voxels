@@ -12,8 +12,16 @@
     #include <map>
     #include <string>
     
-    using namespace std;
+    #ifdef PSP
+    #include <pspctrl.h>
+    #include <pspkernel.h>
+    #include <pspdisplay.h>
+    #include <psppower.h>
+    #define printf pspDebugScreenPrintf
+    #endif
     
+    using namespace std;
+        
     class Options {
         public:
             static float CAM_Y_ROTATION;
@@ -29,6 +37,8 @@
             static UC VOXEL_SHELL_TYPE;
             static UC PIXEL_STEP;
             
+            static SUI WIN_WIDTH;
+            static SUI WIN_HEIGHT;
             static SUI SCR_WIDTH;
             static SUI SCR_HEIGHT;
             static SUI OCTREE_SIZE;

@@ -18,7 +18,11 @@
     
     class Core;
 	class Render
-	{       
+	{
+        public:
+            static UC PIXEL_STEP;
+            static float CAM_Y_ROTATION;
+            
         private:
             bool ready;
             Core* core;

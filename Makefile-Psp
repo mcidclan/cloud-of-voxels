@@ -1,0 +1,34 @@
+BINOUT = ./psp/bin/
+TARGET = $(BINOUT)CoV
+
+PATHOBJS = ./psp/bin/
+
+OBJ = Options.o Core.o Camera.o math.o Render.o \
+    Octree.o Octant.o main.o \
+    voxeldisplays.o voxelmodels.o
+OBJS = $(strip $(sort $(OBJ:%.o=$(PATHOBJS)%.o)))
+
+
+CFLAGS = -fsingle-precision-constant -Wall -O2 -g0 -DPSP -fno-exceptions \
+    -I$(PSPSDK)/../include
+CXXFLAGS = $(CFLAGS) -fno-rtti -std=c++11
+
+PSPBIN = $(PSPSDK)/../bin
+
+LIBS +=  -lglut -lGLU -lGL \
+    -lpspgum_vfpu -lpspgu -lpthread-psp -lpsphprm \
+	-lz -lm -lpspvfpu -lpsprtc -lpsppower -lstdc++
+
+LDFLAGS += ./psp/backthreads.c
+
+PSP_EBOOT_SFO = $(BINOUT)PARAM.SFO
+EXTRA_TARGETS = $(BINOUT)EBOOT.PBP
+PSP_EBOOT = $(EXTRA_TARGETS)
+PSP_EBOOT_ICON = ./psp/icon.png
+PSP_EBOOT_TITLE = CoV by mcidclan
+
+PSPSDK = $(shell psp-config --pspsdk-path)
+include $(PSPSDK)/lib/build.mak
+
+$(PATHOBJS)%.o: %.cpp
+	$(CC) -o $@ -c $< $(CXXFLAGS)

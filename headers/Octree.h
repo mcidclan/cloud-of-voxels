@@ -120,6 +120,11 @@
 
 
             /*
+             * addShellLite
+             */
+             void addShellLite(const Voxel voxel);
+            
+            /*
              * addShell
              */
             void addShell(const Voxel voxel);

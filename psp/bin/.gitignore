@@ -1,0 +1,4 @@
+*.EBOOT
+*.o
+*.prx
+*.elf
