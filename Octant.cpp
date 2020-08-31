@@ -1,7 +1,8 @@
 /*
- * Cloud of voxels (COV) project
+ * Cloud of Voxels (CoV) project
  * Author: mcidclan, m.cid.clan@gmail.com
- * Date: 2011
+ * Creation Date: 2011
+ * Modification Date: 2020
  */
 
 #include "./headers/Octant.h"
@@ -10,185 +11,130 @@
 /*
  * Constructor
  */
-Octant::Octant()
+void OctantManager::init(Octant* const octant)
 {
-	this->pos.x =
-	this->pos.y =
-	this->pos.z = 0;
-	this->depth = 0;
-	this->voxel.active = 0;
-    this->voxel.color.a = 0;
-	this->children = NULL;
-    this->optimized = NULL;
-	this->isparent = false;
-    this->frame = 0;
-}
-
-
-/*
- * Destructor
- */
-Octant::~Octant()
-{
-	this->removeChildren();
-	delete [] this->facescenter;
+	octant->pos.x =
+	octant->pos.y =
+	octant->pos.z = 0;
+	octant->depth = 0;
+	octant->voxel.active = 0;
+    octant->voxel.color.a = 0;
+    octant->children = NULL;
+	octant->isparent = false;
 }
 
 
 /*
  * Add children to the current octant
  */
-void Octant::addChildren()
+void OctantManager::addChildren(Octant* const octant)
 {
-    if(Options::OPTIMIZE_MEMORY)
-    {
-        UC i = 0;
-        this->optimized = new Octant*[8];
-        while(i < 8) {
-            this->optimized[i] = new Octant();
-            this->initChild(i % 2, (i / 2) % 2, i / 4);
-            i++;
-        }
-    } else
-    {
-        UC
-        i = 0,
-        j = 0;
-        this->children = new Octant**[2];
-        while(i < 2)
-        {
-            this->children[i] = new Octant*[2];
-            j = 0;
-            while(j < 2)
-            {
-                this->children[i][j] = new Octant[2];
-                this->initChild(i, j, 0);
-                this->initChild(i, j, 1);
-                j++;
-            }
-            i++;
-        }
+    UC i = 0;
+    octant->children = new Octant[8];
+    while(i < 8) {
+        OctantManager::init(&octant->children[i]);
+        OctantManager::initChild(octant, i % 2, (i / 2) % 2, i / 4);
+        i++;
     }
-    this->isparent = true;
+    octant->isparent = true;
 }
 
 
 /*
  * Remove children from the current octant
  */
-void Octant::removeChildren() {
-    if(Options::OPTIMIZE_MEMORY)
+void OctantManager::removeChildren(Octant* const octant) {
+    if(octant->children != NULL)
     {
-        UC i = 0;
-        while(i < 8)
-        {
-            delete this->optimized[i];
-            i++;
-        }
-        delete [] this->optimized;
-    } else 
-    {
-        UI
-        i = 0,
-        j = 0;
-        while(i < 2)
-        {
-            j = 0;
-            while(j < 2)
-            {
-                delete [] this->children[i][j];
-                j++;
-            }
-            delete [] this->children[i];
-            i++;
-        }
-        delete [] this->children;
-    }
+        delete [] octant->children;
+        delete [] octant->facescenter;
+    }    
 }
 
 
 /*
  * initChild
  */
-Octant* Octant::getChildren(const UC i, const UC j , const UC k)
+Octant* OctantManager::getChildren(Octant* const octant,
+const UC i, const UC j , const UC k)
 {
-    if(Options::OPTIMIZE_MEMORY)
-    {
-        return this->optimized[i + j * 2 + k * 4];
-    }
-    return &(this->children[i][j][k]);
+    return &octant->children[i + j * 2 + k * 4];
 }
 
 
 /*
  * initChild
  */
-void Octant::initChild(const SUI i, const SUI j, const SUI k)
+void OctantManager::initChild(Octant* const octant,
+const SUI i, const SUI j, const SUI k)
 {   
-	Octant* const child = this->getChildren(i, j, k);
-    child->parent = this;
-	child->depth = this->depth - 1;
-	child->size = this->size / 2;
+	Octant* const child = OctantManager::getChildren(octant, i, j, k);
+    child->parent = octant;
+	child->depth = octant->depth - 1;
+    
+	//child->size = octant->size / 2;
 	
-    math::cpvec(this->pos, &child->pos);
-    child->pos.x += i * child->size;
-	child->pos.y += j * child->size;
-	child->pos.z += k * child->size;
+    math::cpvec(octant->pos, &child->pos);
+    child->pos.x += i * octant->half;
+	child->pos.y += j * octant->half;
+	child->pos.z += k * octant->half;
 	
     math::cpvec(child->pos, &child->center);
-    child->half = ((float)child->size) / 2.0f;
+    child->half = ((float)octant->half) / 2.0f;
 	child->center.x += child->half;
 	child->center.y += child->half;
 	child->center.z += child->half;
     
-	child->setFacesCenter();
+	OctantManager::setFacesCenter(child);
 }
 
 
 /*
  * setFacesCenter
  */
-void Octant::setFacesCenter()
+void OctantManager::setFacesCenter(Octant* const octant)
 {
-	this->facescenter = new Vec3<SI>[6];
-    math::vecadd(-this->half, 0, 0, this->center, &this->facescenter[0]);
-	math::vecadd(this->half, 0, 0, this->center, &this->facescenter[1]);
-	math::vecadd(0, -this->half, 0, this->center, &this->facescenter[2]);
-	math::vecadd(0, this->half, 0, this->center, &this->facescenter[3]);
-	math::vecadd(0, 0, -this->half, this->center, &this->facescenter[4]);
-	math::vecadd(0, 0, this->half, this->center, &this->facescenter[5]);
+	octant->facescenter = new Vec3<SI>[6];
+    math::vecadd(-octant->half, 0, 0, octant->center, &octant->facescenter[0]);
+	math::vecadd(octant->half, 0, 0, octant->center, &octant->facescenter[1]);
+	math::vecadd(0, -octant->half, 0, octant->center, &octant->facescenter[2]);
+	math::vecadd(0, octant->half, 0, octant->center, &octant->facescenter[3]);
+	math::vecadd(0, 0, -octant->half, octant->center, &octant->facescenter[4]);
+	math::vecadd(0, 0, octant->half, octant->center, &octant->facescenter[5]);
 }
 
 
 /*
  * Set the bit space corresponding to the current voxel
  */
-void Octant::setBit(const Voxel voxel)
+void OctantManager::setBit(Octant* const octant, const Voxel voxel)
 {
     if(math::absf(voxel.coordinates.x) >= (Octree::half - 2) ||
         math::absf(voxel.coordinates.y) >= (Octree::half - 2) ||
         math::absf(voxel.coordinates.z) >= (Octree::half - 2)) return;
             
-    if(this->depth == 0)
+    if(octant->depth == 0)
     {
-        if(!this->voxel.active || voxel.color.a == 255) {
-            this->voxel = voxel;
+        if(!octant->voxel.active || voxel.color.a == 255) {
+            octant->voxel = voxel;
             if(!Options::nologs)
             {
-                printf("Add voxel at: %i %i %i\n", this->pos.x,this->pos.y,this->pos.z);
+                printf("Add voxel at: %i %i %i\n",
+                octant->pos.x, octant->pos.y, octant->pos.z);
             }
         }            
     } else
     {
-        if(this->isparent == false)
+        if(octant->isparent == false)
         {
-            this->addChildren();
+            OctantManager::addChildren(octant);
             if(!Options::nologs)
             {
-                printf("children added in level %i\n", depth);
+                printf("children added in level %i\n", octant->depth);
             }
         }
-        this->getChildAt(voxel.coordinates)->setBit(voxel);
+        OctantManager::setBit(OctantManager::getChildAt(
+        octant, voxel.coordinates), voxel);
     }
 }
 
@@ -196,25 +142,26 @@ void Octant::setBit(const Voxel voxel)
 /*
  * getBit
  */
-Octant* Octant::getBit(const Vec3<SI> coordinates)
+Octant* OctantManager::getBit(Octant* const octant, const Vec3<SI> coordinates)
 {
-	if(this->children != NULL || this->optimized != NULL)
+	if(octant->children != NULL)
 	{
-		return this->getChildAt(coordinates)->getBit(coordinates);
+		return OctantManager::getBit(OctantManager::getChildAt(
+        octant, coordinates), coordinates);
 	}
-    return this;
+    return octant;
 }
 
 
 /*
  * getChildAt
  */
-Octant* Octant::getChildAt(const Vec3<SI> coordinates)
+Octant* OctantManager::getChildAt(Octant* const octant, const Vec3<SI> coordinates)
 {
     const Vec3<UC> r = {
-        (UC)(coordinates.x < this->center.x ? 0 : 1),
-        (UC)(coordinates.y < this->center.y ? 0 : 1),
-        (UC)(coordinates.z < this->center.z ? 0 : 1)
+        (UC)(coordinates.x < octant->center.x ? 0 : 1),
+        (UC)(coordinates.y < octant->center.y ? 0 : 1),
+        (UC)(coordinates.z < octant->center.z ? 0 : 1)
     };
-	return this->getChildren(r.x, r.y, r.z);
+	return OctantManager::getChildren(octant, r.x, r.y, r.z);
 }

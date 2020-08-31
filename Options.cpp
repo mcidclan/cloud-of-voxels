@@ -1,8 +1,8 @@
 /*
- * Cloud of voxels (COV) project
+ * Cloud of Voxels (CoV) project
  * Author: mcidclan, m.cid.clan@gmail.com
- * Project date: 2011
- * File creation date: 2020
+ * Creation Date: 2020
+ * Modification Date: 2020
  */
  
 #include "./headers/Options.h"
@@ -19,7 +19,6 @@ bool Options::HARD_SIBLINGS = false;
 bool Options::SMOOTH_SIBLINGS = false;
 bool Options::AVOID_SCAN_GLITCHES = false;
 bool Options::TRANSPARENCY = false;
-bool Options::OPTIMIZE_MEMORY = false;
 
 SUI Options::WIN_WIDTH = 256;
 SUI Options::WIN_HEIGHT = 256;
@@ -97,7 +96,6 @@ void Options::process(int argc, char **argv)
     Options::TRANSPARENCY = options.find("transparency") != options.end();
     Options::HARD_SIBLINGS = options.find("hard-siblings") != options.end();
     Options::SMOOTH_SIBLINGS = options.find("smooth-siblings") != options.end();
-    Options::OPTIMIZE_MEMORY = options.find("optimize-memory") != options.end();
     
     if(Options::VOXEL_SHELL_TYPE)
     {
@@ -171,7 +169,7 @@ void Options::process(int argc, char **argv)
         Options::CAM_Y_ROTATION = 0.0f;
         
         //Options::VOXEL_SHELL_TYPE = 3;
-        //Options::SHELL_COLOR = {0xFF, 0xFF, 0, 0x08};
+        //Options::SHELL_COLOR = {0xFF, 0xFF, 0, 0x10};        
         
         pspDebugScreenInit();
         scePowerSetClockFrequency(333, 333, 166);

@@ -1,8 +1,8 @@
 /*
- * Cloud of voxels (COV) project
+ * Cloud of Voxels (CoV) project
  * Author: mcidclan, m.cid.clan@gmail.com
- * Project date: 2011
- * File creation date: 2020
+ * Creation Date: 2020
+ * Modification Date: 2020
  */
 
 #include "./headers/Core.h"

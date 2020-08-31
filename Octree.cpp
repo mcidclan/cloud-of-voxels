@@ -1,7 +1,8 @@
 /*
- * Cloud of voxels (COV) project
+ * Cloud of Voxels (CoV) project
  * Author: mcidclan, m.cid.clan@gmail.com
- * Date: 2011
+ * Creation Date: 2011
+ * Modification Date: 2020
  */
 
 #include "./headers/Octree.h"
@@ -10,8 +11,8 @@ extern Vec3<SI> atom[18];
 extern Vec3<SI> shell[54];
 extern Vec3<SI> shellxl[150];
 
+float Octree::size;
 float Octree::half;
-UI Octree::frame;
 
 Octree::Octree() {
     this->accelerated = false;
@@ -87,7 +88,8 @@ void Octree::fillAccelerator()
             while(k < Options::OCTREE_SIZE)
             {
                 const SI z = k - OCTREE_HALF_SIZE;
-                this->accelerator[i][j][k] = this->root->getBit({x, y, z});
+                this->accelerator[i][j][k] =
+                OctantManager::getBit(this->root, {x, y, z});
                 k++;
             }
             j++;
@@ -111,9 +113,10 @@ void Octree::initAccelerator()
 void Octree::initRoot(SUI size, SUI maxdepth, const SI raylength)
 {
     this->root = new Octant();
+    OctantManager::init(this->root);
     this->root->parent = NULL;
 	this->root->depth = maxdepth;
-	this->root->size = size;
+//	this->root->size = size;
 	this->root->half = size/2;
 
     this->root->pos.x =
@@ -123,14 +126,14 @@ void Octree::initRoot(SUI size, SUI maxdepth, const SI raylength)
     this->root->center.x =
 	this->root->center.y =
 	this->root->center.z = 0.0f;
-    this->root->setFacesCenter();
+    OctantManager::setFacesCenter(this->root);
     
 	this->ray = NULL;
     this->raylength = raylength;
 	this->colordepthstep = (1.0f/(float)raylength);
     
-    Octree::frame = 0;
     Octree::half = this->root->half;
+    Octree::size = Octree::half*2.0f;
 }
 
 /*
@@ -169,7 +172,7 @@ Octant* Octree::getBit()
             return this->accelerator[x][y][z];
         }
     }
-    return this->root->getBit({
+    return OctantManager::getBit(this->root, {
         (SI)this->ray->x,
         (SI)this->ray->y,
         (SI)this->ray->z
@@ -272,7 +275,7 @@ void Octree::getNextEntryDot(Octant* octant)
 {
     if(this->ray != NULL)
     {
-        this->raystep = ((float)this->root->size);
+        this->raystep = Octree::size;
         rayToBorder(this->ray->x, octant->facescenter[
         (this->kbase->x > 0.0f) ? 1 : 0].x, this->kbase->x);
         rayToBorder(this->ray->y, octant->facescenter[
@@ -336,7 +339,7 @@ void Octree::addVoxels(Voxel* voxels, const UI nvoxel)
  */
 void Octree::addSingleVoxel(const Voxel voxel)
 {
-    this->root->setBit(voxel);
+    OctantManager::setBit(this->root, voxel);
 }
 
 /*
@@ -352,10 +355,10 @@ void Octree::addSmooths(const Voxel voxel)
         v.coordinates.y += atom[i].y;
         v.coordinates.z += atom[i].z;
         v.color.a = 255;
-        this->root->setBit(v);
+        OctantManager::setBit(this->root, v);
         i++;
     }
-    this->root->setBit(voxel);
+    OctantManager::setBit(this->root, voxel);
 }
 
 /*
@@ -373,7 +376,7 @@ void Octree::addShellLite(const Voxel voxel)
             v.color = Options::SHELL_COLOR;
         }
         else v.color.a = 16;
-        this->root->setBit(v);
+        OctantManager::setBit(this->root, v);
         i++;
     }
 }
@@ -396,7 +399,7 @@ void Octree::addShellXL(const Voxel voxel)
             v.color = Options::SHELL_COLOR;
         }
         else v.color.a = 16;
-        this->root->setBit(v);
+        OctantManager::setBit(this->root, v);
         i++;
     }
 }
@@ -419,7 +422,7 @@ void Octree::addShell(const Voxel voxel)
             v.color = Options::SHELL_COLOR;
         }
         else v.color.a = 16;
-        this->root->setBit(v);
+        OctantManager::setBit(this->root, v);
         i++;
     }
 }
@@ -443,7 +446,7 @@ void Octree::addSiblings(const Voxel voxel)
                 v.coordinates.x += i;
                 v.coordinates.y += j;
                 v.coordinates.z += k;
-                this->root->setBit(v);
+                OctantManager::setBit(this->root, v);
                 k++;
             }
             j++;

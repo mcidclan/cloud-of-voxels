@@ -1,7 +1,8 @@
 /*
- * Cloud of voxels (COV) project
+ * Cloud of Voxels (CoV) project
  * Author: mcidclan, m.cid.clan@gmail.com
- * Date: 2011
+ * Creation Date: 2011
+ * Modification Date: 2020
  */
  
 #include "./headers/Render.h"
@@ -61,12 +62,12 @@ static int key(unsigned int args, void *argp)
         
         if(pad.Buttons & PSP_CTRL_LEFT)
         {
-            Render::PIXEL_STEP = 4;
+            Render::PIXEL_STEP = 3;
             Render::CAM_Y_ROTATION = -step;
         }
         if(pad.Buttons & PSP_CTRL_RIGHT)
         {
-            Render::PIXEL_STEP = 4;
+            Render::PIXEL_STEP = 3;
             Render::CAM_Y_ROTATION = step;
         }
         
