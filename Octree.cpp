@@ -297,19 +297,14 @@ void Octree::getNextEntryDot(Octant* octant)
 void Octree::addVoxels(Voxel* voxels, const UI nvoxel)
 {    
 	UI i = 0;
-    
-    #ifdef PSP
     UC percent = 0;
     const UI step = nvoxel / 100;
-    #endif
 	while(i < nvoxel)
 	{
-        #ifdef PSP
         if(i % (step * 10) == 0) {
             printf(">%d ", percent);
             percent+=10;
         }
-        #endif
         if(Options::SMOOTH_SIBLINGS)
         {
             this->addSmooths(voxels[i]);

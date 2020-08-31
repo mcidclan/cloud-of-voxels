@@ -19,6 +19,7 @@ bool Options::HARD_SIBLINGS = false;
 bool Options::SMOOTH_SIBLINGS = false;
 bool Options::AVOID_SCAN_GLITCHES = false;
 bool Options::TRANSPARENCY = false;
+bool Options::OPTIMIZE_MEMORY = false;
 
 SUI Options::WIN_WIDTH = 256;
 SUI Options::WIN_HEIGHT = 256;
@@ -96,6 +97,7 @@ void Options::process(int argc, char **argv)
     Options::TRANSPARENCY = options.find("transparency") != options.end();
     Options::HARD_SIBLINGS = options.find("hard-siblings") != options.end();
     Options::SMOOTH_SIBLINGS = options.find("smooth-siblings") != options.end();
+    Options::OPTIMIZE_MEMORY = options.find("optimize-memory") != options.end();
     
     if(Options::VOXEL_SHELL_TYPE)
     {
