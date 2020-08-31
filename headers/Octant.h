@@ -1,7 +1,8 @@
 /*
- * Cloud of voxels (COV) project
+ * Cloud of Voxels (CoV) project
  * Author: mcidclan, m.cid.clan@gmail.com
- * Date: 2011
+ * Creation Date: 2011
+ * Modification Date: 2020
  */
 
 #ifndef OCTANT_H
@@ -10,87 +11,79 @@
 	#include "math.h"
     #include "options.h"
     
-	class Octant
-	{
+    typedef struct Octant
+    {
+        SUI depth;
+        Vec3<SI> pos;
+        Vec3<SI> center;
+        Vec3<SI>* facescenter;
+        SI half;
+        bool isparent;
+        Voxel voxel;
+        Octant* children;
+        Octant* parent;
+    } Octant __attribute__ ((aligned (16)));
+    
+    
+	class OctantManager
+	{            
 		public:
-			SUI size;
-			SUI depth;
-
-			Vec3<SI> pos;
-			Vec3<SI> center;
-			Vec3<SI>* facescenter;
-
-			SI half;
-
-            UC frame;
-			bool isparent;
-
-			Voxel voxel;
-            Octant** optimized;
-			Octant*** children;
-            Octant* parent;
+            /*
+			 * Adds children to the current octant
+			 */
+			static void init(Octant* const octant);
             
             
-		public:
-			/*
-			 * Constructor
-			 */
-			Octant();
-
-
-			/*
-			 * Destructor
-			 */
-			~Octant();
-
-
 			/*
 			 * Adds children to the current octant
 			 */
-			void addChildren();
+			static void addChildren(Octant* const octant);
             
             
             /*
 			 * Removes children from the current octant
 			 */
-			void removeChildren();
+			static void removeChildren(Octant* const octant);
             
 
 			/*
 			 * initChild
 			 */
-			void initChild(const SUI i, const SUI j, const SUI k);
+			static void initChild(Octant* const octant,
+            const SUI i, const SUI j, const SUI k);
 
 
             /*
 			 * setFacesCenter
 			 */
-			void setFacesCenter();
+			static void setFacesCenter(Octant* const octant);
 
             
 			/*
 			 * Set bit space, corresponding to the current voxel
 			 */
-			void setBit(const Voxel voxel);
+			static void setBit(Octant* const octant, const Voxel voxel);
 
 
 			/*
 			 * get the bit space corresponding to the current coordinates
 			 */
-			Octant* getBit(const Vec3<SI> coordinates);
+			static Octant* getBit(Octant* const octant,
+            const Vec3<SI> coordinates);
 
 
 			/*
 			 * getChildAt
 			 */
-			Octant* getChildAt(const Vec3<SI> coordinates);
+			static Octant* getChildAt(Octant* const octant,
+            const Vec3<SI> coordinates);
             
-            private:
-
+            
             /*
-            * getChildAt
-            */
-            Octant* getChildren(const UC i, const UC j , const UC k);
+			 * getChildren
+			 */
+            static Octant* getChildren(Octant* const octant,
+            const UC i, const UC j , const UC k);
 	};
 
 #endif

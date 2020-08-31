@@ -1,4 +1,11 @@
-#include "./headers/types.h"
+/*
+ * Cloud of Voxels (CoV) project
+ * Author: mcidclan, m.cid.clan@gmail.com
+ * Creation Date: 2020
+ * Modification Date: 2020
+ */
+ 
+ #include "./headers/types.h"
 
 Vec3<SI> atom[18] = {
     {0, -1, -1},

@@ -1,7 +1,8 @@
 /*
- * Cloud of voxels (COV) project
+ * Cloud of Voxels (CoV) project
  * Author: mcidclan, m.cid.clan@gmail.com
- * Date: 2011
+ * Creation Date: 2011
+ * Modification Date: 2020
  */
 
 #ifndef OCTREE_H
@@ -14,8 +15,8 @@
 	class Octree
 	{
         public:
+           static float size;
            static float half;
-           static UI frame;
            
 		private:
             Vec3<float>* ray;
