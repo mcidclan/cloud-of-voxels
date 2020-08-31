@@ -19,6 +19,7 @@ Octant::Octant()
 	this->voxel.active = 0;
     this->voxel.color.a = 0;
 	this->children = NULL;
+    this->optimized = NULL;
 	this->isparent = false;
     this->frame = 0;
 }
@@ -39,24 +40,36 @@ Octant::~Octant()
  */
 void Octant::addChildren()
 {
-	UC
-	i = 0,
-	j = 0;
-	this->children = new Octant**[2];
-	while(i < 2)
-	{
-		this->children[i] = new Octant*[2];
-		j = 0;
-		while(j < 2)
-		{
-			this->children[i][j] = new Octant[2];
-			this->initChild(i, j, 0);
-			this->initChild(i, j, 1);
-			this->isparent = true;
-			j++;
-		}
-		i++;
-	}
+    if(Options::OPTIMIZE_MEMORY)
+    {
+        UC i = 0;
+        this->optimized = new Octant*[8];
+        while(i < 8) {
+            this->optimized[i] = new Octant();
+            this->initChild(i % 2, (i / 2) % 2, i / 4);
+            i++;
+        }
+    } else
+    {
+        UC
+        i = 0,
+        j = 0;
+        this->children = new Octant**[2];
+        while(i < 2)
+        {
+            this->children[i] = new Octant*[2];
+            j = 0;
+            while(j < 2)
+            {
+                this->children[i][j] = new Octant[2];
+                this->initChild(i, j, 0);
+                this->initChild(i, j, 1);
+                j++;
+            }
+            i++;
+        }
+    }
+    this->isparent = true;
 }
 
 
@@ -64,21 +77,46 @@ void Octant::addChildren()
  * Remove children from the current octant
  */
 void Octant::removeChildren() {
-	UI
-	i = 0,
-	j = 0;
-	while(i < 2)
-	{
-		j = 0;
-		while(j < 2)
-		{
-			delete [] this->children[i][j];
-			j++;
-		}
-		delete [] this->children[i];
-		i++;
-	}
-	delete [] this->children;
+    if(Options::OPTIMIZE_MEMORY)
+    {
+        UC i = 0;
+        while(i < 8)
+        {
+            delete this->optimized[i];
+            i++;
+        }
+        delete [] this->optimized;
+    } else 
+    {
+        UI
+        i = 0,
+        j = 0;
+        while(i < 2)
+        {
+            j = 0;
+            while(j < 2)
+            {
+                delete [] this->children[i][j];
+                j++;
+            }
+            delete [] this->children[i];
+            i++;
+        }
+        delete [] this->children;
+    }
+}
+
+
+/*
+ * initChild
+ */
+Octant* Octant::getChildren(const UC i, const UC j , const UC k)
+{
+    if(Options::OPTIMIZE_MEMORY)
+    {
+        return this->optimized[i + j * 2 + k * 4];
+    }
+    return &(this->children[i][j][k]);
 }
 
 
@@ -86,8 +124,8 @@ void Octant::removeChildren() {
  * initChild
  */
 void Octant::initChild(const SUI i, const SUI j, const SUI k)
-{
-	Octant* const child = &(this->children[i][j][k]);
+{   
+	Octant* const child = this->getChildren(i, j, k);
     child->parent = this;
 	child->depth = this->depth - 1;
 	child->size = this->size / 2;
@@ -160,7 +198,7 @@ void Octant::setBit(const Voxel voxel)
  */
 Octant* Octant::getBit(const Vec3<SI> coordinates)
 {
-	if(this->children != NULL)
+	if(this->children != NULL || this->optimized != NULL)
 	{
 		return this->getChildAt(coordinates)->getBit(coordinates);
 	}
@@ -178,5 +216,5 @@ Octant* Octant::getChildAt(const Vec3<SI> coordinates)
         (UC)(coordinates.y < this->center.y ? 0 : 1),
         (UC)(coordinates.z < this->center.z ? 0 : 1)
     };
-	return &this->children[r.x][r.y][r.z];
+	return this->getChildren(r.x, r.y, r.z);
 }

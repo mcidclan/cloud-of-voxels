@@ -26,6 +26,7 @@
 			bool isparent;
 
 			Voxel voxel;
+            Octant** optimized;
 			Octant*** children;
             Octant* parent;
             
@@ -83,6 +84,13 @@
 			 * getChildAt
 			 */
 			Octant* getChildAt(const Vec3<SI> coordinates);
+            
+            private:
+
+            /*
+            * getChildAt
+            */
+            Octant* getChildren(const UC i, const UC j , const UC k);
 	};
 
 #endif
