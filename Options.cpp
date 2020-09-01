@@ -29,6 +29,8 @@ SUI Options::SCR_HALF_WIDTH = 128;
 SUI Options::SCR_HALF_HEIGHT = 128;
 SUI Options::MAX_RAY_LENGTH = 0;
 SUI Options::MAX_VOXELS_BY_RAY = 1;
+SUI Options::SHELL_LITE_THICKNESS = 3;
+
 LUI Options::MAX_FRAME_TIME = 25;
 SI Options::CAM_Z_TRANSLATION = 0;
 
@@ -173,8 +175,10 @@ void Options::process(int argc, char **argv)
         Options::CAM_Y_ROTATION = 0.0f;
         
         Options::VOXEL_SHELL_TYPE = 3;
-        Options::SHELL_COLOR = 0xFF000008;
+        //Options::SHELL_COLOR = 0xC0FF900B;
+        Options::SHELL_COLOR = 0xFF000030;
         Options::MAX_VOXELS_BY_RAY = 2;
+        Options::SHELL_LITE_THICKNESS = 2;
         
         pspDebugScreenInit();
         scePowerSetClockFrequency(333, 333, 166);

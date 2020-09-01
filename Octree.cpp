@@ -364,12 +364,12 @@ void Octree::addSmooths(const Voxel voxel)
  * addSmooths
  */
 void Octree::addShellLite(const Voxel voxel)
-{   
-    UC i = 2;
-    while(i < 6)
+{
+    UC i = 1;
+    while(i < Options::SHELL_LITE_THICKNESS + 1)
     {
         Voxel v = voxel;
-        math::vecxscl(&v.coordinates, 1.0f + i / 60.0f);
+        math::vecxscl(&v.coordinates, 1.0f + i * 0.04f);
         if(Options::SHELL_COLOR > 0)
         {
             v.color = Options::SHELL_COLOR;
@@ -378,6 +378,7 @@ void Octree::addShellLite(const Voxel voxel)
         OctantManager::setBit(this->root, v);
         i++;
     }
+
 }
 
 
