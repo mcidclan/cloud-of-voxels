@@ -13,9 +13,6 @@
  */
 void OctantManager::init(Octant* const octant)
 {
-	octant->pos.x =
-	octant->pos.y =
-	octant->pos.z = 0;
 	octant->depth = 0;
     octant->voxel.color = 0;
     octant->children = NULL;
@@ -66,17 +63,12 @@ void OctantManager::initChild(Octant* const octant,
 const SUI i, const SUI j, const SUI k)
 {   
 	Octant* const child = OctantManager::getChildren(octant, i, j, k);
-    child->parent = octant;
 	child->depth = octant->depth - 1;
     
-	//child->size = octant->size / 2;
-	
-    math::cpvec(octant->pos, &child->pos);
-    child->pos.x += i * octant->half;
-	child->pos.y += j * octant->half;
-	child->pos.z += k * octant->half;
-	
-    math::cpvec(child->pos, &child->center);
+    child->center.x = i ? octant->center.x : octant->center.x - octant->half;
+	child->center.y = j ? octant->center.y : octant->center.y - octant->half;
+	child->center.z = k ? octant->center.z : octant->center.z - octant->half;
+        
     child->half = ((float)octant->half) / 2.0f;
 	child->center.x += child->half;
 	child->center.y += child->half;
@@ -116,8 +108,10 @@ void OctantManager::setBit(Octant* const octant, const Voxel voxel)
             octant->voxel = voxel;
             if(!Options::nologs)
             {
-                printf("Add voxel at: %i %i %i\n",
-                octant->pos.x, octant->pos.y, octant->pos.z);
+                const SI x = octant->center.x - octant->half;
+                const SI y = octant->center.x - octant->half;
+                const SI z = octant->center.x - octant->half;
+                printf("Add voxel at: %i %i %i\n", x, y, z);
             }
         }            
     } else

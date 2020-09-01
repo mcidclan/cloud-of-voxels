@@ -114,14 +114,8 @@ void Octree::initRoot(SUI size, SUI maxdepth, const SI raylength)
 {
     this->root = new Octant();
     OctantManager::init(this->root);
-    this->root->parent = NULL;
 	this->root->depth = maxdepth;
-//	this->root->size = size;
 	this->root->half = size/2;
-
-    this->root->pos.x =
-	this->root->pos.y =
-	this->root->pos.z = -this->root->half;
 	
     this->root->center.x =
 	this->root->center.y =
