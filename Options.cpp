@@ -31,7 +31,7 @@ SUI Options::MAX_RAY_LENGTH = 0;
 LUI Options::MAX_FRAME_TIME = 25;
 SI Options::CAM_Z_TRANSLATION = 0;
 
-Color Options::SHELL_COLOR = {0, 0, 0, 0};
+UI Options::SHELL_COLOR = 0x00;
 
 void Options::process(int argc, char **argv)
 {
@@ -80,10 +80,11 @@ void Options::process(int argc, char **argv)
         } else if(name.find("voxel-shell-rgba:") == 0)
         {   
             UI color = stoll(name.substr(17), 0 , 16);
-            Options::SHELL_COLOR.r = (color & 0xFF000000) >> 24;
+            Options::SHELL_COLOR = color;
+            /*Options::SHELL_COLOR.r = (color & 0xFF000000) >> 24;
             Options::SHELL_COLOR.g = (color & 0x00FF0000) >> 16;
             Options::SHELL_COLOR.b = (color & 0x0000FF00) >> 8;
-            Options::SHELL_COLOR.a = (color & 0x000000FF);
+            Options::SHELL_COLOR.a = (color & 0x000000FF);*/
         } else options[name] = true;
         i++;
     }
@@ -154,7 +155,7 @@ void Options::process(int argc, char **argv)
         Options::HARD_SIBLINGS = false;
         Options::SMOOTH_SIBLINGS = false;
         Options::AVOID_SCAN_GLITCHES = false;
-        Options::TRANSPARENCY = true;
+        Options::TRANSPARENCY = false;
         Options::PIXEL_STEP = 1;
         Options::WIN_WIDTH = 480;
         Options::WIN_HEIGHT = 272;
@@ -169,7 +170,7 @@ void Options::process(int argc, char **argv)
         Options::CAM_Y_ROTATION = 0.0f;
         
         //Options::VOXEL_SHELL_TYPE = 3;
-        //Options::SHELL_COLOR = {0xFF, 0xFF, 0, 0x10};        
+        //Options::SHELL_COLOR = 0xFF000010;
         
         pspDebugScreenInit();
         scePowerSetClockFrequency(333, 333, 166);

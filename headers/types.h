@@ -49,32 +49,32 @@
 	{
 		Vec3<float> i, j, k;
 	} Mat3f;
-
-    typedef struct
-    {
-        Vec2<int> l, r;
-    } Scan;
     
+
+	/*
+	 * Color
+	 */
     typedef struct
     {
         UC r, g, b, a;
     } Color;
+
 
 	/*
 	 * Voxel
 	 */
 	typedef struct
 	{
-        UC active;
-		Color color;
-		Vec3<SI> coordinates;
+		UC active;
+        Vec3<SI> coordinates;
+        UI color;        
 	} Voxel;
 
 
 	typedef struct
 	{
-        Voxel voxel;
         float depth;
+        Voxel* voxel;
 	} DynamicVoxel;
 
 #endif

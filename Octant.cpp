@@ -18,7 +18,7 @@ void OctantManager::init(Octant* const octant)
 	octant->pos.z = 0;
 	octant->depth = 0;
 	octant->voxel.active = 0;
-    octant->voxel.color.a = 0;
+    octant->voxel.color = 0;
     octant->children = NULL;
 	octant->isparent = false;
 }
@@ -93,14 +93,14 @@ const SUI i, const SUI j, const SUI k)
  * setFacesCenter
  */
 void OctantManager::setFacesCenter(Octant* const octant)
-{
-	octant->facescenter = new Vec3<SI>[6];
-    math::vecadd(-octant->half, 0, 0, octant->center, &octant->facescenter[0]);
-	math::vecadd(octant->half, 0, 0, octant->center, &octant->facescenter[1]);
-	math::vecadd(0, -octant->half, 0, octant->center, &octant->facescenter[2]);
-	math::vecadd(0, octant->half, 0, octant->center, &octant->facescenter[3]);
-	math::vecadd(0, 0, -octant->half, octant->center, &octant->facescenter[4]);
-	math::vecadd(0, 0, octant->half, octant->center, &octant->facescenter[5]);
+{    
+	octant->facescenter = new SI[6];
+    octant->facescenter[0] = -octant->half + octant->center.x;
+    octant->facescenter[1] = octant->half + octant->center.x;
+    octant->facescenter[2] = -octant->half + octant->center.y;
+    octant->facescenter[3] = octant->half + octant->center.y;
+    octant->facescenter[4] = -octant->half + octant->center.z;
+    octant->facescenter[5] = octant->half + octant->center.z;    
 }
 
 
@@ -115,7 +115,7 @@ void OctantManager::setBit(Octant* const octant, const Voxel voxel)
             
     if(octant->depth == 0)
     {
-        if(!octant->voxel.active || voxel.color.a == 255) {
+        if(!octant->voxel.active || (voxel.color & 0x000000FF) == 255) { //
             octant->voxel = voxel;
             if(!Options::nologs)
             {

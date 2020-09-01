@@ -237,9 +237,9 @@ bool Octree::rayTrace(vector<DynamicVoxel>* const voxels)
             this->avoidScanGlitches(&curbit);
             if(curbit->voxel.active)
             {
-                voxels->push_back({curbit->voxel, depthray});
+                voxels->push_back({depthray, &curbit->voxel});
                 if(!Options::TRANSPARENCY ||
-                    curbit->voxel.color.a == 0xFF) return true;
+                    (curbit->voxel.color & 0x000000FF) == 0xFF) return true;
             }
             // Calculates the new ray position
             this->getNextEntryDot(curbit);
@@ -277,11 +277,11 @@ void Octree::getNextEntryDot(Octant* octant)
     {
         this->raystep = Octree::size;
         rayToBorder(this->ray->x, octant->facescenter[
-        (this->kbase->x > 0.0f) ? 1 : 0].x, this->kbase->x);
+        (this->kbase->x > 0.0f) ? 1 : 0], this->kbase->x);
         rayToBorder(this->ray->y, octant->facescenter[
-        (this->kbase->y > 0.0f) ? 3 : 2].y, this->kbase->y);
+        (this->kbase->y > 0.0f) ? 3 : 2], this->kbase->y);
         rayToBorder(this->ray->z, octant->facescenter[
-        (this->kbase->z > 0.0f) ? 5 : 4].z, this->kbase->z);
+        (this->kbase->z > 0.0f) ? 5 : 4], this->kbase->z);
          
         if(this->raystep < RAYSTEP_MIN_UNIT)
         {
@@ -354,7 +354,6 @@ void Octree::addSmooths(const Voxel voxel)
         v.coordinates.x += atom[i].x;
         v.coordinates.y += atom[i].y;
         v.coordinates.z += atom[i].z;
-        v.color.a = 255;
         OctantManager::setBit(this->root, v);
         i++;
     }
@@ -366,16 +365,16 @@ void Octree::addSmooths(const Voxel voxel)
  */
 void Octree::addShellLite(const Voxel voxel)
 {   
-    UC i = 1;
+    UC i = 2;
     while(i < 6)
     {
         Voxel v = voxel;
-        math::vecxscl(&v.coordinates, 1.0f + i / 120.0f);
-        if(Options::SHELL_COLOR.a > 0)
+        math::vecxscl(&v.coordinates, 1.0f + i / 60.0f);
+        if(Options::SHELL_COLOR > 0)
         {
             v.color = Options::SHELL_COLOR;
         }
-        else v.color.a = 16;
+        else v.color = (v.color & 0xFFFFFF00) | 0x0F;
         OctantManager::setBit(this->root, v);
         i++;
     }
@@ -394,11 +393,11 @@ void Octree::addShellXL(const Voxel voxel)
         v.coordinates.x += shellxl[i].x;
         v.coordinates.y += shellxl[i].y;
         v.coordinates.z += shellxl[i].z;
-        if(Options::SHELL_COLOR.a > 0)
+        if(Options::SHELL_COLOR > 0)
         {
             v.color = Options::SHELL_COLOR;
         }
-        else v.color.a = 16;
+        else v.color = (v.color & 0xFFFFFF00) | 0x0F;
         OctantManager::setBit(this->root, v);
         i++;
     }
@@ -417,11 +416,11 @@ void Octree::addShell(const Voxel voxel)
         v.coordinates.x += shell[i].x;
         v.coordinates.y += shell[i].y;
         v.coordinates.z += shell[i].z;
-        if(Options::SHELL_COLOR.a > 0)
+        if(Options::SHELL_COLOR > 0)
         {
             v.color = Options::SHELL_COLOR;
         }
-        else v.color.a = 16;
+        else v.color = (v.color & 0xFFFFFF00) | 0x0F;
         OctantManager::setBit(this->root, v);
         i++;
     }
@@ -463,9 +462,9 @@ Color Octree::getColorDepth(const DynamicVoxel* const dynamic)
 {
     const float darkness = 1.0f - dynamic->depth*this->colordepthstep;
 	return {
-        (UC)(dynamic->voxel.color.r * darkness),
-        (UC)(dynamic->voxel.color.g * darkness),
-        (UC)(dynamic->voxel.color.b * darkness),
-        dynamic->voxel.color.a
+        (UC)(((dynamic->voxel->color & 0xFF000000) >> 24) * darkness),
+        (UC)(((dynamic->voxel->color & 0x00FF0000) >> 16) * darkness),
+        (UC)(((dynamic->voxel->color & 0x0000FF00) >> 8) * darkness),
+        (UC)(dynamic->voxel->color & 0x000000FF)
     };
 }

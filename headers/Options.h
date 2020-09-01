@@ -48,7 +48,7 @@
             static LUI MAX_FRAME_TIME;            
             static SI CAM_Z_TRANSLATION;
             
-            static Color SHELL_COLOR;
+            static UI SHELL_COLOR;
             
             static void process(int argc, char **argv);
     };

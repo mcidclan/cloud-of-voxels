@@ -141,13 +141,13 @@ void Core::process()
             while(i-- > 0)
             {
                 const Color color = this->octree->getColorDepth(&voxels[i]);
-                    glColor4ub(color.r, color.g, color.b, color.a);
-                    glBegin(GL_QUADS);
-                    glVertex2i(curpix.x - step, curpix.y - step);
-                    glVertex2i(curpix.x + step, curpix.y - step);
-                    glVertex2i(curpix.x + step, curpix.y + step);
-                    glVertex2i(curpix.x - step, curpix.y + step);
-                    glEnd();
+                glColor4ub(color.r, color.g, color.b, color.a);
+                glBegin(GL_QUADS);
+                glVertex2i(curpix.x - step, curpix.y - step);
+                glVertex2i(curpix.x + step, curpix.y - step);
+                glVertex2i(curpix.x + step, curpix.y + step);
+                glVertex2i(curpix.x - step, curpix.y + step);
+                glEnd();
             }   
         }
         if(!this->nextPixel(&curpix)) break;
