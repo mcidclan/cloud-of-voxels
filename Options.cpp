@@ -28,6 +28,7 @@ SUI Options::OCTREE_SIZE = 0;
 SUI Options::SCR_HALF_WIDTH = 128;
 SUI Options::SCR_HALF_HEIGHT = 128;
 SUI Options::MAX_RAY_LENGTH = 0;
+SUI Options::MAX_VOXELS_BY_RAY = 1;
 LUI Options::MAX_FRAME_TIME = 25;
 SI Options::CAM_Z_TRANSLATION = 0;
 
@@ -67,6 +68,9 @@ void Options::process(int argc, char **argv)
         } else if(name.find("octree-size:") == 0)
         {
             Options::OCTREE_SIZE = stoi(name.substr(12));
+        } else if(name.find("max-voxels-by-ray:") == 0)
+        {
+            Options::MAX_VOXELS_BY_RAY = stoi(name.substr(18));
         } else if(name.find("voxel-shell-type:") == 0)
         {
             const string type = name.substr(17);
@@ -81,10 +85,6 @@ void Options::process(int argc, char **argv)
         {   
             UI color = stoll(name.substr(17), 0 , 16);
             Options::SHELL_COLOR = color;
-            /*Options::SHELL_COLOR.r = (color & 0xFF000000) >> 24;
-            Options::SHELL_COLOR.g = (color & 0x00FF0000) >> 16;
-            Options::SHELL_COLOR.b = (color & 0x0000FF00) >> 8;
-            Options::SHELL_COLOR.a = (color & 0x000000FF);*/
         } else options[name] = true;
         i++;
     }
@@ -114,7 +114,10 @@ void Options::process(int argc, char **argv)
     {
         Options::MAX_RAY_LENGTH = (Options::OCTREE_SIZE/2)*2;
     }
-    
+    if(Options::TRANSPARENCY && Options::MAX_VOXELS_BY_RAY == 1)
+    {
+        Options::MAX_VOXELS_BY_RAY = Options::MAX_RAY_LENGTH;
+    }
     if(!ztrans)
     {
         Options::CAM_Z_TRANSLATION = -(SI)(Options::OCTREE_SIZE/2);
@@ -155,7 +158,7 @@ void Options::process(int argc, char **argv)
         Options::HARD_SIBLINGS = false;
         Options::SMOOTH_SIBLINGS = false;
         Options::AVOID_SCAN_GLITCHES = false;
-        Options::TRANSPARENCY = false;
+        Options::TRANSPARENCY = true;
         Options::PIXEL_STEP = 1;
         Options::WIN_WIDTH = 480;
         Options::WIN_HEIGHT = 272;
@@ -169,8 +172,9 @@ void Options::process(int argc, char **argv)
         Options::CAM_Z_TRANSLATION = -Options::MAX_RAY_LENGTH;
         Options::CAM_Y_ROTATION = 0.0f;
         
-        //Options::VOXEL_SHELL_TYPE = 3;
-        //Options::SHELL_COLOR = 0xFF000010;
+        Options::VOXEL_SHELL_TYPE = 3;
+        Options::SHELL_COLOR = 0xFF000008;
+        Options::MAX_VOXELS_BY_RAY = 2;
         
         pspDebugScreenInit();
         scePowerSetClockFrequency(333, 333, 166);

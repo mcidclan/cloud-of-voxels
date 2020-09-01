@@ -96,6 +96,8 @@ void Render::timer(int value)
  */
 void Render::initBoard()
 {
+    glEnable(GL_CULL_FACE);
+    glFrontFace(GL_CW);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);    
     this->list = glGenLists(1);
@@ -198,10 +200,10 @@ void Render::draw()
     // Make sure that the core process is sync
     if(this->ready)
     {
-        this->ready = false;
         #ifdef PSP
         glDeleteLists(this->list, 1);
         this->list = glGenLists(1);
         #endif
+        this->ready = false;
     }    
 }
