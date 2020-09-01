@@ -200,22 +200,22 @@ void Octree::avoidScanGlitches(Octant** const curbit)
 {
     if(Options::AVOID_SCAN_GLITCHES)
     {
-        if(!(*curbit)->voxel.active) {
+        if((*curbit)->voxel.color == 0) {
             *curbit = getNextBit(&this->ray->x, 1.0f);
         }
-        if(!(*curbit)->voxel.active) {
+        if((*curbit)->voxel.color == 0) {
             *curbit = getNextBit(&this->ray->y, 1.0f);
         }
-        if(!(*curbit)->voxel.active) {
+        if((*curbit)->voxel.color == 0) {
             *curbit = getNextBit(&this->ray->z, 1.0f);
         }
-        if(!(*curbit)->voxel.active) {
+        if((*curbit)->voxel.color == 0) {
             *curbit = getNextBit(&this->ray->x, -1.0f);
         }
-        if(!(*curbit)->voxel.active) {
+        if((*curbit)->voxel.color == 0) {
             *curbit = getNextBit(&this->ray->y, -1.0f);
         }
-        if(!(*curbit)->voxel.active) {
+        if((*curbit)->voxel.color == 0) {
             *curbit = getNextBit(&this->ray->z, -1.0f);
         }
     }
@@ -235,7 +235,7 @@ bool Octree::rayTrace(vector<DynamicVoxel>* const voxels)
             // corresponding to the current ray position
             Octant* curbit = this->getBit();
             this->avoidScanGlitches(&curbit);
-            if(curbit->voxel.active)
+            if(curbit->voxel.color > 0)
             {
                 voxels->push_back({depthray, &curbit->voxel});
                 if(!Options::TRANSPARENCY ||

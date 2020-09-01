@@ -13,7 +13,6 @@
     
     typedef struct Octant
     {
-        bool isparent;
         SI half;
         SUI depth;
         Vec3<SI> pos;

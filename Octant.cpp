@@ -17,10 +17,8 @@ void OctantManager::init(Octant* const octant)
 	octant->pos.y =
 	octant->pos.z = 0;
 	octant->depth = 0;
-	octant->voxel.active = 0;
     octant->voxel.color = 0;
     octant->children = NULL;
-	octant->isparent = false;
 }
 
 
@@ -36,7 +34,6 @@ void OctantManager::addChildren(Octant* const octant)
         OctantManager::initChild(octant, i % 2, (i / 2) % 2, i / 4);
         i++;
     }
-    octant->isparent = true;
 }
 
 
@@ -115,7 +112,7 @@ void OctantManager::setBit(Octant* const octant, const Voxel voxel)
             
     if(octant->depth == 0)
     {
-        if(!octant->voxel.active || (voxel.color & 0x000000FF) == 255) { //
+        if(octant->voxel.color == 0 || (voxel.color & 0x000000FF) == 255) { //
             octant->voxel = voxel;
             if(!Options::nologs)
             {
@@ -125,7 +122,7 @@ void OctantManager::setBit(Octant* const octant, const Voxel voxel)
         }            
     } else
     {
-        if(octant->isparent == false)
+        if(octant->children == NULL)
         {
             OctantManager::addChildren(octant);
             if(!Options::nologs)

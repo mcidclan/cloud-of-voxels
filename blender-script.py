@@ -1,7 +1,6 @@
 import bpy
 import math
 
-
 obj = bpy.context.active_object.data
 vertices = obj.vertices
 
@@ -29,15 +28,14 @@ for poly in obj.polygons:
             g = math.floor(c.g*255)
             b = math.floor(c.b*255)
         
-            color = str((r << 24) + (g << 16) + (b << 8) + 255)
+            color = str(hex((r << 24) + (g << 16) + (b << 8) + 255))
 
-            out += "\t{1,{" + str(x) + "," + str(y) + "," + str(z) + "}," + color + "},\n";
+            out += "\t{{" + str(x) + "," + str(y) + "," + str(z) + "}," + color + "},\n";
         
         i += 1
         
 
 out = out[:-2] + "\n};\n";
-
 
 filename = "./voxelmodels.cpp";
 f = open(filename, "w");
@@ -48,7 +46,7 @@ f = open(filename, "w");
 out = "/*\n"
 out += "* Cloud of voxels (COV) project\n"
 out += "* Author: mcidclan, m.cid.clan@gmail.com\n"
-out += "* Date: 2011\n"
+out += "* Date: 2020\n"
 out += "*/\n\n"
 out += "#ifndef VOXELMODELS_H\n"
 out += "#define VOXELMODELS_H\n\n"
