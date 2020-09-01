@@ -1,7 +1,7 @@
 /*
 * Cloud of voxels (COV) project
 * Author: mcidclan, m.cid.clan@gmail.com
-* Date: 2011
+* Date: 2020
 */
 
 #ifndef VOXELMODELS_H

@@ -65,7 +65,6 @@
 	 */
 	typedef struct
 	{
-		UC active;
         Vec3<SI> coordinates;
         UI color;        
 	} Voxel;
