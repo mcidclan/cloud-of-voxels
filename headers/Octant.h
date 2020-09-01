@@ -13,15 +13,15 @@
     
     typedef struct Octant
     {
+        bool isparent;
+        SI half;
         SUI depth;
         Vec3<SI> pos;
         Vec3<SI> center;
-        Vec3<SI>* facescenter;
-        SI half;
-        bool isparent;
-        Voxel voxel;
         Octant* children;
         Octant* parent;
+        SI* facescenter;
+        Voxel voxel;
     } Octant __attribute__ ((aligned (16)));
     
     
