@@ -13,15 +13,13 @@
     
     typedef struct Octant
     {
-        SI half;
-        SUI depth;
-        Vec3<SI> pos;
-        Vec3<SI> center;
         Octant* children;
-        Octant* parent;
         SI* facescenter;
+        Vec3<SI> center;
+        SI half;
+        UC depth;
         Voxel voxel;
-    } Octant __attribute__ ((aligned (16)));
+    } Octant;
     
     
 	class OctantManager

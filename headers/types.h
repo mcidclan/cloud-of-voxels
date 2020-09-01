@@ -66,7 +66,7 @@
 	typedef struct
 	{
         Vec3<SI> coordinates;
-        UI color;        
+        UI color;
 	} Voxel;
 
 
@@ -75,7 +75,7 @@
         float depth;
         Voxel* voxel;
 	} DynamicVoxel;
-
+    
 #endif
 
 

@@ -175,10 +175,9 @@ void Options::process(int argc, char **argv)
         Options::CAM_Y_ROTATION = 0.0f;
         
         Options::VOXEL_SHELL_TYPE = 3;
-        //Options::SHELL_COLOR = 0xC0FF900B;
-        Options::SHELL_COLOR = 0xFF000030;
+        Options::SHELL_COLOR = 0xC0FF900B;
         Options::MAX_VOXELS_BY_RAY = 2;
-        Options::SHELL_LITE_THICKNESS = 2;
+        Options::SHELL_LITE_THICKNESS = 1;
         
         pspDebugScreenInit();
         scePowerSetClockFrequency(333, 333, 166);
