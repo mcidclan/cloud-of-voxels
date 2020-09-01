@@ -137,8 +137,12 @@ void Core::process()
         vector<DynamicVoxel> voxels;
         if(this->octree->rayTrace(&voxels))
         {
-            UC i = voxels.size();
-            while(i-- > 0)
+            UC i = voxels.size(), end = 0;
+            if(i > Options::MAX_VOXELS_BY_RAY)
+            {
+                end = i - Options::MAX_VOXELS_BY_RAY;
+            }
+            while(i-- > end)
             {
                 const Color color = this->octree->getColorDepth(&voxels[i]);
                 glColor4ub(color.r, color.g, color.b, color.a);
@@ -148,7 +152,7 @@ void Core::process()
                 glVertex2i(curpix.x + step, curpix.y + step);
                 glVertex2i(curpix.x - step, curpix.y + step);
                 glEnd();
-            }   
+            }
         }
         if(!this->nextPixel(&curpix)) break;
     }
