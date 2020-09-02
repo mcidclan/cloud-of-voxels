@@ -26,7 +26,7 @@
 		 */
 		template<typename Ta, typename Tb, typename Tc, typename T1, typename T2>
 		void vecadd(const Ta x, const Tb y, const Tc z,
-		const Vec3<T1> v2, Vec3<T2> *v3)
+		const Vec3<T1> v2, Vec3<T2>* const v3)
 		{
 			v3->x = x + v2.x;
 			v3->y = y + v2.y;
@@ -38,8 +38,7 @@
 		 * vecadd
 		 */
 		template<typename T1, typename T2, typename T3>
-		//void vecadd(const T1 v1, const T2 v2, T3 *v3)
-		void vecadd(T1 *v1, T2 *v2, T3 *v3)
+		void vecadd(T1* const v1, T2* const v2, T3* const v3)
 		{
 			v3->x = v1->x + v2->x;
 			v3->y = v1->y + v2->y;
@@ -64,7 +63,7 @@
 		 * vecadd
 		 */
 		template<typename T1, typename T2>
-		void vecadd(const T1 v1, T2 *v2)
+		void vecadd(const T1 v1, T2* const v2)
 		{
 			v2->x += v1.x;
 			v2->y += v1.y;
@@ -76,8 +75,7 @@
 		 * vecsub
 		 */
 		template<typename T1, typename T2, typename T3>
-		//void vecsub(const T1 v1, const T2 v2, T3 *v3)
-		void vecsub(T1 *v1, T2 *v2, T3 *v3)
+		void vecsub(T1* const v1, T2* const v2, T3* const v3)
 		{
 			v3->x = v1->x - v2->x;
 			v3->y = v1->y - v2->y;
@@ -89,7 +87,7 @@
 		 * vecsub
 		 */
 		template<typename T1, typename T2>
-		void vecsub(const T1 v1, T2 *v2)
+		void vecsub(const T1 v1, T2* const v2)
 		{
 			v2->x -= v1.x;
 			v2->y -= v1.y;
@@ -114,7 +112,7 @@
 		 * vecxscl
 		 */
 		template <typename T1, typename T2>
-		void vecxscl(Vec3<T1> *v, const T2 s)
+		void vecxscl(Vec3<T1>* const v, const T2 s)
 		{
 			v->x *= s;
 			v->y *= s;
@@ -126,7 +124,7 @@
 		 * vecxscl
 		 */
 		template <typename T1, typename T2, typename T3>
-		void vecxscl(Vec3<T1> *v1, const T2 s, Vec3<T3> *v3)
+		void vecxscl(Vec3<T1>* const v1, const T2 s, Vec3<T3>* const v3)
 		{
 			v3->x = v1->x * s;
 			v3->y = v1->y * s;
@@ -137,7 +135,7 @@
 		 * cpvec
 		 */
 		template <typename T1, typename T2>
-		void cpvec(const T1 v1, T2 *v2)
+		void cpvec(const T1 v1, T2* const v2)
 		{
 			v2->x = v1.x;
 			v2->y = v1.y;
@@ -146,51 +144,39 @@
 
 
 		/*
-		 * getMax
-		 */
-		/*template<typename T>
-		T getwidest(Vec3<T> v)
-		{
-			if(fabs(v.x) < fabs(v.y)) v.x = v.y;
-			if(fabs(v.x) < fabs(v.z)) v.x = v.z;
-			return v.x;
-		}*/
-
-
-		/*
 		 * mat4xmat4
 		 */
-		void mat4xmat4(float *m1, float *m2, float *m3);
+		void mat4xmat4(float* const m1, float* const m2, float* const m3);
 
 
 		/*
 		 * getnorm
 		 */
-		float getnorm(Vec3<float> *v);
+		float getnorm(Vec3<float>* const v);
 
 
 		/*
 		 * normalize
 		 */
-		void normalize(Vec3<float> *v);
+		void normalize(Vec3<float>* const v);
 
 
 		/*
 		 * eulerorientation
 		 */
-		void eulerorientation(Vec3<float> axis, const float angle, float *m);
+		void eulerorientation(Vec3<float> axis, const float angle, float* const m);
 
 
 		/*
 		 * translate
 		 */
-		void translate(const Vec3<float> v, float *m);
+		void translate(const Vec3<float> v, float* const m);
 
 
 		/*
 		 * dotproduct
 		 */
-		float dotproduct(Vec3<float> *v1, Vec3<float> *v2);
+		float dotproduct(Vec3<float>* const v1, Vec3<float>* const v2);
 
 
 	}

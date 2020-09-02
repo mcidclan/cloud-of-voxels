@@ -11,7 +11,7 @@
 /*
  * midentity
  */
-const float midentity[16] __attribute__ ((aligned (32))) =
+const float midentity[16] __attribute__ ((aligned (__BIGGEST_ALIGNMENT__))) =
 {
 	1.0f, 0.0f, 0.0f, 0.0f,
 	0.0f, 1.0f, 0.0f, 0.0f,
@@ -34,7 +34,7 @@ namespace math
 	/*
 	 * mat4xmat4
 	 */
-	void mat4xmat4(float *m1, float *m2, float *m3)
+	void mat4xmat4(float* const m1, float* const m2, float* const m3)
 	{
 		unsigned char
 		i = 0,
@@ -63,7 +63,7 @@ namespace math
 	/*
 	 * getnorm
 	 */
-	float getnorm(Vec3<float> *v)
+	float getnorm(Vec3<float>* const v)
 	{
 		return sqrtf((v->x * v->x) + (v->y * v->y) + (v->z * v->z));
 	}
@@ -72,7 +72,7 @@ namespace math
 	/*
 	 * normalize
 	 */
-	void normalize(Vec3<float> *v)
+	void normalize(Vec3<float>* const v)
 	{
 		const float norm = getnorm(v);
 
@@ -88,7 +88,7 @@ namespace math
 	/*
 	 * eulerorientation
 	 */
-	void eulerorientation(Vec3<float> axis, const float angle, float *m)
+	void eulerorientation(Vec3<float> axis, const float angle, float* const m)
 	{
 		float
 		h = sinf(angle),
@@ -119,7 +119,7 @@ namespace math
 	/*
 	 * translate
 	 */
-	void translate(const Vec3<float> v, float *m)
+	void translate(const Vec3<float> v, float* const m)
 	{
 		m[12] = m[0] * v.x + m[4] * v.y + m[8] * v.z + m[12];
 		m[13] = m[1] * v.x + m[5] * v.y + m[9] * v.z + m[13];
@@ -128,7 +128,7 @@ namespace math
 	}
 
 
-	float dotproduct(Vec3<float> *v1, Vec3<float> *v2)
+	float dotproduct(Vec3<float>* const v1, Vec3<float>* const v2)
 	{
 		return (v1->x * v2->x) + (v1->y * v2->y) + (v1->z * v2->z);
 	}
