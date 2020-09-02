@@ -72,12 +72,12 @@ voxel-shell-rgba: .... Affects a specific RGBA color to the voxel shell (0xFFFFF
 
 With the given voxelmodels.cpp, once compiled on linux test the program with:
 ./bin/cov no-motion step:1 w:128 h:128 octree-size:128 z:-64 ray:64 fps:60 \
-    no-logs accelerate voxel-shell-type:normal voxel-shell-rgba:0xFFF8F00B \
-    max-voxels-by-ray:5
+    no-logs accelerate voxel-shell-type:normal voxel-shell-rgba:0xFF808020 \
+    max-voxels-by-ray:2
     
 or width powershell:
 ./bin/cov no-motion step:1 w:128 h:128 octree-size:128 z:-64 ray:64 fps:60 `
-    no-logs accelerate voxel-shell-type:normal voxel-shell-rgba:0xFFF8F00B `
-    max-voxels-by-ray:5
+    no-logs accelerate voxel-shell-type:normal voxel-shell-rgba:0xFF808020 `
+    max-voxels-by-ray:2
 
 Enjoy!

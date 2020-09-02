@@ -77,13 +77,13 @@ static int key(unsigned int args, void *argp)
 
 void Render::timer(int value)
 {
-    SceUID id = sceKernelCreateThread("cov_loop", loop, 0x0A, 0x10000, 0, 0);
+    SceUID id = sceKernelCreateThread("cov_loop", loop, 0x0A, 0x1000, 0, 0);
     if (id >= 0)
     {
         sceKernelStartThread(id, 0, 0);
     }
     
-    id = sceKernelCreateThread("cov_key", key, 0x10, 0x10000, 0, 0);
+    id = sceKernelCreateThread("cov_key", key, 0x10, 0x1000, 0, 0);
 	if (id >= 0){
 		sceKernelStartThread(id, 0, 0);
 	}

@@ -1,7 +1,8 @@
 /*
- * Cloud of voxels (COV) project
+ * Cloud of voxels (CoV) project
  * Author: mcidclan, m.cid.clan@gmail.com
- * Date: 2011
+ * Creation Date: 2011
+ * Modification Date: 2020
  */
 
 #include <string.h>
@@ -12,25 +13,19 @@
  * extern midentity
  */
 extern const float midentity[16];
- 
- 
-/*
- * projection matrix
- */
-static float matprj[16] __attribute__ ((aligned (16)));
 
 
 /*
  * rotation matrix
  */
-static float matrot[16] __attribute__ ((aligned (16)));
+static float matrot[16] __attribute__ ((aligned (__BIGGEST_ALIGNMENT__)));
 
 
 /*
  * temporaries matrix
  */
-static float mattmp_1[16] __attribute__ ((aligned (16)));
-static float mattmp_2[16] __attribute__ ((aligned (16)));
+static float mattmp_1[16] __attribute__ ((aligned (__BIGGEST_ALIGNMENT__)));
+static float mattmp_2[16] __attribute__ ((aligned (__BIGGEST_ALIGNMENT__)));
 
 
 /*
@@ -38,7 +33,7 @@ static float mattmp_2[16] __attribute__ ((aligned (16)));
  */
 Camera::Camera()
 {
-	reset();
+	this->resetTransformation();
 	this->nearcenter.x =
 	this->nearcenter.y = 
 	this->nearcenter.z = 0.0f;
@@ -54,49 +49,9 @@ Camera::~Camera()
 
 
 /*
- * setPerspective
- */
-void Camera::setPerspective(const float fovy, const float aspect,
-const float znear, const float zfar)
-{
-    const float vc = znear * tanf(fovy * M_PI / 360.0f);
-    const float hc = fovy * aspect;
-    this->setFrustum(-hc, hc, -vc, vc, znear, zfar);
-}
-
-
-/*
- * setFrustum
- */
-void Camera::setFrustum(const float left, const float right, const float bottom,
-const float top, const float znear, const float zfar)
-{
-	float
-	width = right - left,
-	height = top - bottom,
-	depth = zfar - znear;
-	
-    this->znear = znear;
-	
-    memset(matprj, 0x0, sizeof(matprj));
-	
-    matprj[0] = (2.0f * znear) / width;//E
-	matprj[5] = (2.0f * znear) / height;//F
-	matprj[8] = (right + left) / width;//A
-	matprj[9] = (top + bottom) / height;//B
-	matprj[10] = -(zfar + znear) / depth;//C
-	matprj[11] = -1.0f;
-	matprj[14] = -(2.0f * zfar * znear) / depth;//D
-	matprj[15] = 1.0f;
-    
-	this->updateNearInfo(matprj);
-}
-
-
-/*
  * updateNearInfo
  */
-void Camera::updateNearInfo(float *m)
+void Camera::updateNearInfo(float* const m)
 {
 	memcpy(&(this->basis.i), &m[0], sizeof(Vec3<float>));
 	memcpy(&(this->basis.j), &m[4], sizeof(Vec3<float>));
@@ -109,15 +64,6 @@ void Camera::updateNearInfo(float *m)
 
 
 /*
- * orientation
- */
-void Camera::setOrientation()
-{
-	
-}
-
-
-/*
  * position
  */
 void Camera::setPosition(const float x, const float y , const float z)
@@ -125,21 +71,6 @@ void Camera::setPosition(const float x, const float y , const float z)
 	this->nearcenter.x = x;
 	this->nearcenter.y = y;
 	this->nearcenter.z = z;
-}
-
-
-/*
- * reset
- */
-void Camera::reset()
-{
-	memset(matprj, 0x0, sizeof(matprj));
-	matprj[0] =
-	matprj[5] =
-	matprj[10] =
-	matprj[15] = 1.0f;
-
-	resetTransformation();
 }
 
 /*
@@ -183,7 +114,7 @@ void Camera::translate(const Vec3<float> v)
 /*
  * getBasis
  */
-void Camera::getBasis(Mat3f *basis)
+void Camera::getBasis(Mat3f* const basis)
 {
 	*basis = this->basis;
 }

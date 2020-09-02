@@ -1,7 +1,8 @@
 /*
- * Cloud of voxels (COV) project
+ * Cloud of voxels (CoV) project
  * Author: mcidclan, m.cid.clan@gmail.com
- * Date: 2011
+ * Creation Date: 2011
+ * Modification Date: 2020
  */
 
 #ifndef CAMERA_H
@@ -26,35 +27,9 @@
 
 
 			/*
-			 * setPerspective
-			 */
-			void setPerspective(const float fovy, const float aspect,
-			const float znear, const float zfar);
-
-
-			/*
-			 * setFrustum
-			 */
-			void setFrustum(const float a, const float b, const float c,
-			const float d, const float e, const float g);
-
-
-			/*
-			 * orientation
-			 */
-			void setOrientation();
-
-
-			/*
 			 * setPosition
 			 */
 			void setPosition(const float x, const float y , const float z);
-
-
-			/*
-			 * reset
-			 */
-			void reset();
 
 
 			/*
@@ -78,7 +53,7 @@
 			/*
 			 * getBasis
 			 */
-			void getBasis(Mat3f *basis);
+			void getBasis(Mat3f* const basis);
 
 
             /*
@@ -88,7 +63,6 @@
 
 
 		private:
-			float znear;
 			Mat3f basis;
             Vec3<float> nearcenter;
 
@@ -97,7 +71,7 @@
 			/*
 			 * updateNearInfo
 			 */
-			void updateNearInfo(float *m);
+			void updateNearInfo(float* const m);
 
 	};
 
