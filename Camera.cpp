@@ -5,7 +5,6 @@
  * Modification Date: 2020
  */
 
-#include <string.h>
 #include "./headers/Camera.h"
 
 

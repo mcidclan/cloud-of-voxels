@@ -71,7 +71,7 @@ static int key(unsigned int args, void *argp)
             Render::CAM_Y_ROTATION = step;
         }
         
-        sceKernelDelayThread(100000);
+        sceKernelDelayThread(10000);
     }
 }
 

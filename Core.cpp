@@ -142,16 +142,53 @@ void Core::process()
             {
                 end = i - Options::MAX_VOXELS_BY_RAY;
             }
-            while(i-- > end)
+            
+            if(Options::INTERNAL_BLENDING)
             {
-                const Color color = this->octree->getColorDepth(&voxels[i]);
+                i--;
+                Voxel voxel = *(voxels[i].voxel);
+                const float depth = voxels[i].depth;
+                
+                UC ro = (voxels[i].voxel->color & 0xFF000000) >> 24;
+                UC go = (voxels[i].voxel->color & 0x00FF0000) >> 16;
+                UC bo = (voxels[i].voxel->color & 0x0000FF00) >> 8;
+                    
+                while(i-- > end)
+                {
+                    const UI r = (voxels[i].voxel->color & 0xFF000000) >> 24;
+                    const UI g = (voxels[i].voxel->color & 0x00FF0000) >> 16;
+                    const UI b = (voxels[i].voxel->color & 0x0000FF00) >> 8;
+                    const float a = (voxels[i].voxel->color & 0x000000FF) / 255.0f;
+                    
+                    ro = (UC)(r * a + (1.0f - a) * ro);
+                    go = (UC)(g * a + (1.0f - a) * go);
+                    bo = (UC)(b * a + (1.0f - a) * bo);
+                }
+                
+                voxel.color = (ro << 24) | (go << 16) | (bo << 8 ) | (voxel.color & 0x000000FF);
+                DynamicVoxel dynamic = {depth, &voxel};
+                
+                const Color color = this->octree->getColorDepth(&dynamic);
                 glColor4ub(color.r, color.g, color.b, color.a);
-                glBegin(GL_QUADS);
-                glVertex2i(curpix.x - step, curpix.y - step);
-                glVertex2i(curpix.x + step, curpix.y - step);
-                glVertex2i(curpix.x + step, curpix.y + step);
-                glVertex2i(curpix.x - step, curpix.y + step);
+                    glBegin(GL_QUADS);
+                    glVertex2i(curpix.x - step, curpix.y - step);
+                    glVertex2i(curpix.x + step, curpix.y - step);
+                    glVertex2i(curpix.x + step, curpix.y + step);
+                    glVertex2i(curpix.x - step, curpix.y + step);
                 glEnd();
+            } else
+            {
+                while(i-- > end)
+                {
+                    const Color color = this->octree->getColorDepth(&voxels[i]);
+                    glColor4ub(color.r, color.g, color.b, color.a);
+                    glBegin(GL_QUADS);
+                    glVertex2i(curpix.x - step, curpix.y - step);
+                    glVertex2i(curpix.x + step, curpix.y - step);
+                    glVertex2i(curpix.x + step, curpix.y + step);
+                    glVertex2i(curpix.x - step, curpix.y + step);
+                    glEnd();
+                }
             }
         }
         if(!this->nextPixel(&curpix)) break;

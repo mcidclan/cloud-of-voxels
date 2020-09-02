@@ -19,6 +19,7 @@ bool Options::HARD_SIBLINGS = false;
 bool Options::SMOOTH_SIBLINGS = false;
 bool Options::AVOID_SCAN_GLITCHES = false;
 bool Options::TRANSPARENCY = false;
+bool Options::INTERNAL_BLENDING = true;
 
 SUI Options::WIN_WIDTH = 256;
 SUI Options::WIN_HEIGHT = 256;
@@ -29,7 +30,7 @@ SUI Options::SCR_HALF_WIDTH = 128;
 SUI Options::SCR_HALF_HEIGHT = 128;
 SUI Options::MAX_RAY_LENGTH = 0;
 SUI Options::MAX_VOXELS_BY_RAY = 1;
-SUI Options::SHELL_LITE_THICKNESS = 5;
+SUI Options::SHELL_LITE_THICKNESS = 2;
 
 LUI Options::MAX_FRAME_TIME = 25;
 SI Options::CAM_Z_TRANSLATION = 0;
@@ -175,9 +176,9 @@ void Options::process(int argc, char **argv)
         Options::CAM_Y_ROTATION = 0.0f;
         
         Options::VOXEL_SHELL_TYPE = 3;
-        Options::SHELL_COLOR = 0xFF808020;
+        Options::SHELL_COLOR = 0xFF905030;
         Options::MAX_VOXELS_BY_RAY = 2;
-        Options::SHELL_LITE_THICKNESS = 1;
+        Options::SHELL_LITE_THICKNESS = 2;
         
         pspDebugScreenInit();
         scePowerSetClockFrequency(333, 333, 166);
