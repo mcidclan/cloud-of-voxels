@@ -363,7 +363,7 @@ void Octree::addShellLite(const Voxel voxel)
     while(i < Options::SHELL_LITE_THICKNESS)
     {
         Voxel v = voxel;
-        math::vecxscl(&v.coordinates, 1.1f + i * 0.02f);
+        math::vecxscl(&v.coordinates, 1.05f + i * 0.02f);
         if(Options::SHELL_COLOR > 0)
         {
             v.color = Options::SHELL_COLOR;

@@ -10,6 +10,7 @@
 
 	#include <stdio.h>
     #include <vector>
+    #include <string.h>
     using namespace std;
     
 	#define UC unsigned char
