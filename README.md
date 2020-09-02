@@ -32,34 +32,34 @@ Launch the program with: ./bin/cov no-motion no-logs or with<br/>
 
 Available options:
 <br/>
-no-logs .............. Disable useless log<br/>
-no-motion ............ Disable the default motion
-accelerate ........... Enable the pre-searching process<br/>
-transparency ......... Enable transparency<br/>
-hard-siblings ........ Force additionnal voxels arround each voxel.<br/>
-mooth-siblings ....... Force smoother additionnal voxels arround each voxel.<br/>
-avoid-scan-glitches .. Try to avoid glitches in real-time<br/>
-w: ................... Sets the view render width<br/>
-h: ................... Sets the view render height<br/>
-z: ................... Sets the camera z position<br/>
-r: ................... Changes the default value of the camera step angle<br/>
-ray: ................. Set the max ray length<br/>
-fps:  ................ Changes the default max fps value<br/>
-step: ................ Changes the default scan x and y step pixel<br/>
-octree-size: ......... Changes the default octree size<br/>
-voxel-shell-type: .... Activates transparent voxel shell (xl, normal, lite)<br/>
-voxel-shell-rgba: .... Affects a specific RGBA color to the voxel shell (0xFFFFFFFF).<br/>
+no-logs &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Disable useless log<br/>
+no-motion &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Disable the default motion<br/>
+accelerate &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Enable the pre-searching process<br/>
+transparency &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Enable transparency<br/>
+hard-siblings &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Force additionnal voxels arround each voxel.<br/>
+mooth-siblings:_________Force smoother additionnal voxels arround each voxel.<br/>
+avoid-scan-glitches:___Try to avoid glitches in real-time<br/>
+w:_____________________Sets the view render width<br/>
+h:_____________________Sets the view render height<br/>
+z:_____________________Sets the camera z position<br/>
+r:_____________________Changes the default value of the camera step angle<br/>
+ray:___________________Set the max ray length<br/>
+fps:___________________Changes the default max fps value<br/>
+step:__________________Changes the default scan x and y step pixel<br/>
+octree-size:___________Changes the default octree size<br/>
+voxel-shell-type:______Activates transparent voxel shell (xl, normal, lite)<br/>
+voxel-shell-rgba:______Affects a specific RGBA color to the voxel shell (0xFFFFFFFF).<br/>
 
 <br/>
 
-With the given voxelmodels.cpp, once compiled on linux test the program with:<br/>
-./bin/cov no-motion step:1 w:128 h:128 octree-size:128 z:-64 ray:64 fps:60 \<br/>
-    no-logs accelerate voxel-shell-type:normal voxel-shell-rgba:0xFF808020 \<br/>
+With the given voxelmodels.cpp, once compiled on linux test the program with: <br/>
+./bin/cov no-motion step:1 w:128 h:128 octree-size:128 z:-64 ray:64 fps:60 \ <br/>
+    no-logs accelerate voxel-shell-type:normal voxel-shell-rgba:0xFF808020 \ <br/>
     max-voxels-by-ray:2<br/>
 <br/>
 or width powershell:<br/>
-./bin/cov no-motion step:1 w:128 h:128 octree-size:128 z:-64 ray:64 fps:60 `<br/>
-    no-logs accelerate voxel-shell-type:normal voxel-shell-rgba:0xFF808020 `<br/>
+./bin/cov no-motion step:1 w:128 h:128 octree-size:128 z:-64 ray:64 fps:60 &grave;<br/>
+    no-logs accelerate voxel-shell-type:normal voxel-shell-rgba:0xFF808020 &grave;<br/>
     max-voxels-by-ray:2<br/>
 <br/>
 Enjoy!
