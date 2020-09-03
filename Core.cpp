@@ -193,7 +193,7 @@ void Core::process(UC* const pixels)
                     pixels[offset] = color.r;
                     pixels[offset+1] = color.g;
                     pixels[offset+2] = color.b;
-                    pixels[offset+4] = 0x00;
+                    pixels[offset+3] = (UC)(voxel.color & 0x000000FF);
                 }
             } else
             {

@@ -63,12 +63,12 @@ static int key(unsigned int args, void *argp)
         
         if(pad.Buttons & PSP_CTRL_LEFT)
         {
-            Render::PIXEL_STEP = 4;
+            Render::PIXEL_STEP = 2;
             Render::CAM_Y_ROTATION = -step;
         }
         if(pad.Buttons & PSP_CTRL_RIGHT)
         {
-            Render::PIXEL_STEP = 4;
+            Render::PIXEL_STEP = 2;
             Render::CAM_Y_ROTATION = step;
         }
         
@@ -97,15 +97,15 @@ void Render::timer(int value)
  */
 void Render::initRender()
 {
-    glEnable(GL_CULL_FACE);    
+    glEnable(GL_CULL_FACE);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     if(Options::QUADS_AS_PIXELS)
     {
         glFrontFace(GL_CW);
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);    
         this->list = glGenLists(1);
     } else initSurface();
-    
     this->ready = false;
 }
 
@@ -119,8 +119,16 @@ void Render::initSurface()
     
     glGenTextures(1, &this->texture);
     glBindTexture(GL_TEXTURE_2D, this->texture);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    
+    if(Options::SMOOTH_PIXELS)
+    {
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    } else
+    {
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    }
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, SCR_WIDTH, SCR_HEIGHT,
     0, GL_RGBA, GL_UNSIGNED_BYTE, this->pixels);
     
