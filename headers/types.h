@@ -8,9 +8,10 @@
 #ifndef ADDITIONAL_TYPE_H
 #define ADDITIONAL_TYPE_H
 
-	#include <stdio.h>
+	//#include <stdio.h>
     #include <vector>
     #include <string.h>
+    #include <cstdlib>
     using namespace std;
     
 	#define UC unsigned char

@@ -13,12 +13,12 @@
     
     typedef struct Octant
     {
+        UC depth;
+        Voxel* voxel;
         Octant* children;
         SI* facescenter;
         Vec3<SI> center;
         SI half;
-        UC depth;
-        Voxel voxel;
     } Octant;
     
     
@@ -55,11 +55,17 @@
 			 */
 			static void setFacesCenter(Octant* const octant);
 
+
+            /*
+			 * initBit
+			 */
+            static void initBit(Octant* const octant, const Voxel voxel);
+
             
 			/*
 			 * Set bit space, corresponding to the current voxel
 			 */
-			static void setBit(Octant* const octant, const Voxel voxel);
+			static void setBit(Octant* const octant, Voxel* const voxel);
 
 
 			/*

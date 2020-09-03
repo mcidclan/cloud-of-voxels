@@ -14,7 +14,7 @@
 void OctantManager::init(Octant* const octant)
 {
 	octant->depth = 0;
-    octant->voxel.color = 0;
+    octant->voxel = NULL;
     octant->children = NULL;
 }
 
@@ -96,15 +96,27 @@ void OctantManager::setFacesCenter(Octant* const octant)
 /*
  * Set the bit space corresponding to the current voxel
  */
-void OctantManager::setBit(Octant* const octant, const Voxel voxel)
+void OctantManager::initBit(Octant* const octant, const Voxel voxel)
 {
-    if(math::absf(voxel.coordinates.x) >= (Octree::half - 2) ||
-        math::absf(voxel.coordinates.y) >= (Octree::half - 2) ||
-        math::absf(voxel.coordinates.z) >= (Octree::half - 2)) return;
+    Voxel* v = new Voxel();
+    v->coordinates = voxel.coordinates;
+    v->color = voxel.color;
+    OctantManager::setBit(octant, v);
+}
+
+
+/*
+ * Set the bit space corresponding to the current voxel
+ */
+void OctantManager::setBit(Octant* const octant, Voxel* const voxel)
+{
+    if(math::absf(voxel->coordinates.x) >= (Octree::half - 2) ||
+        math::absf(voxel->coordinates.y) >= (Octree::half - 2) ||
+        math::absf(voxel->coordinates.z) >= (Octree::half - 2)) return;
             
     if(octant->depth == 0)
     {
-        if(octant->voxel.color == 0 || (voxel.color & 0x000000FF) == 255) { //
+        if(octant->voxel == NULL || (voxel->color & 0x000000FF) == 255) { //Todo
             octant->voxel = voxel;
             if(!Options::nologs)
             {
@@ -113,7 +125,7 @@ void OctantManager::setBit(Octant* const octant, const Voxel voxel)
                 const SI z = octant->center.x - octant->half;
                 printf("Add voxel at: %i %i %i\n", x, y, z);
             }
-        }            
+        } else delete voxel; //  
     } else
     {
         if(octant->children == NULL)
@@ -125,7 +137,7 @@ void OctantManager::setBit(Octant* const octant, const Voxel voxel)
             }
         }
         OctantManager::setBit(OctantManager::getChildAt(
-        octant, voxel.coordinates), voxel);
+        octant, voxel->coordinates), voxel);
     }
 }
 

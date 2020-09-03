@@ -38,24 +38,24 @@ Core::~Core()
  * init
  */
 void Core::init()
-{
-    bool warning = false;
-    this->octree = new Octree();
-    
+{    
     SUI level = 0;
-    unsigned int n = Options::OCTREE_SIZE;
-    do
-    {
-        level += 1;
-        if((n & 1) != 0) {
-            warning = true;
-        }
-    } while((n >>= 1) != 1);
+    bool warning[2] = {
+        !math::isPowerOfTwo(Options::OCTREE_SIZE, &level),
+        (!math::isPowerOfTwo(Options::SCR_WIDTH, NULL) ||
+        !math::isPowerOfTwo(Options::SCR_HEIGHT, NULL)) &&
+        !Options::QUADS_AS_PIXELS
+    };
     printf("Number of level in the octree: %i\n", level);
-    if(warning) {
-        printf("!!!Warning octree size not a power of 2!!!\n");
+    
+    if(warning[0]) {
+        printf("!!!Warning!!! Octree size is not a power of 2\n");
+    }
+    if(warning[1]) {
+        printf("!!!Warning!!! Texture rendering size is not a power of 2\n");
     }
     
+    this->octree = new Octree();   
 	this->camera = new Camera();
     printf("Adding voxels, please wait...\n");
     this->octree->initRoot(Options::OCTREE_SIZE, level, Options::MAX_RAY_LENGTH);
@@ -105,10 +105,25 @@ bool Core::nextPixel(Vec2<SI>* const curpix)
     return true;
 }
 
+
+void Core::setPixel(Vec2<SI>* const curpix, DynamicVoxel* const voxel)
+{
+    const UC step = Options::PIXEL_STEP;
+    const Color color = this->octree->getColorDepth(voxel);                
+    glColor4ub(color.r, color.g, color.b, color.a);
+    glBegin(GL_QUADS);
+    glVertex2i(curpix->x - step, curpix->y - step);
+    glVertex2i(curpix->x + step, curpix->y - step);
+    glVertex2i(curpix->x + step, curpix->y + step);
+    glVertex2i(curpix->x - step, curpix->y + step);
+    glEnd();
+}
+ 
+ 
 /*
  * process
  */
-void Core::process()
+void Core::process(UC* const pixels)
 {
     Mat3f basis = {
         {1.0f, 0.0f, 0.0f},
@@ -119,8 +134,6 @@ void Core::process()
         (SI)-Options::SCR_HALF_WIDTH,
         (SI)-Options::SCR_HALF_HEIGHT
     };
-    
-    const UC step = Options::PIXEL_STEP;
     
 	this->camera->getBasis(&basis);
 	this->octree->initBasis(&basis);
@@ -143,7 +156,7 @@ void Core::process()
                 end = i - Options::MAX_VOXELS_BY_RAY;
             }
             
-            if(Options::INTERNAL_BLENDING)
+            if(Options::INTERNAL_BLENDING || !Options::QUADS_AS_PIXELS)
             {
                 i--;
                 Voxel voxel = *(voxels[i].voxel);
@@ -165,29 +178,28 @@ void Core::process()
                     bo = (UC)(b * a + (1.0f - a) * bo);
                 }
                 
-                voxel.color = (ro << 24) | (go << 16) | (bo << 8 ) | (voxel.color & 0x000000FF);
-                DynamicVoxel dynamic = {depth, &voxel};
-                
-                const Color color = this->octree->getColorDepth(&dynamic);
-                glColor4ub(color.r, color.g, color.b, color.a);
-                    glBegin(GL_QUADS);
-                    glVertex2i(curpix.x - step, curpix.y - step);
-                    glVertex2i(curpix.x + step, curpix.y - step);
-                    glVertex2i(curpix.x + step, curpix.y + step);
-                    glVertex2i(curpix.x - step, curpix.y + step);
-                glEnd();
+                if(pixels == NULL)
+                {
+                    voxel.color = (ro << 24) | (go << 16) | (bo << 8 ) | (voxel.color & 0x000000FF);
+                    DynamicVoxel dynamic = {depth, &voxel};
+                    this->setPixel(&curpix, &dynamic);
+                } else
+                {   
+                    const Color color = this->octree->getColorDepth(ro, go, bo, depth);
+                    const SUI x = (curpix.x / Options::PIXEL_STEP) + Options::SCR_HALF_WIDTH;
+                    const SUI y = (curpix.y / Options::PIXEL_STEP) + Options::SCR_HALF_HEIGHT;
+                    const UI offset = COLOR_BYTES_NUMBER * (x + y * Options::SCR_WIDTH);
+                    
+                    pixels[offset] = color.r;
+                    pixels[offset+1] = color.g;
+                    pixels[offset+2] = color.b;
+                    pixels[offset+4] = 0x00;
+                }
             } else
             {
                 while(i-- > end)
                 {
-                    const Color color = this->octree->getColorDepth(&voxels[i]);
-                    glColor4ub(color.r, color.g, color.b, color.a);
-                    glBegin(GL_QUADS);
-                    glVertex2i(curpix.x - step, curpix.y - step);
-                    glVertex2i(curpix.x + step, curpix.y - step);
-                    glVertex2i(curpix.x + step, curpix.y + step);
-                    glVertex2i(curpix.x - step, curpix.y + step);
-                    glEnd();
+                    this->setPixel(&curpix, &voxels[i]);
                 }
             }
         }

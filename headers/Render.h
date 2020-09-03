@@ -13,9 +13,14 @@
     #else
         #include <GL/freeglut.h>
 	#endif
-    #include <string.h>
-	#include "options.h"
-    #include <math.h>
+	#include <math.h>
+    #include "options.h"
+    
+    #define SCR_WIDTH Options::SCR_WIDTH
+    #define SCR_HEIGHT Options::SCR_HEIGHT
+    #define SCR_HALF_WIDTH Options::SCR_HALF_WIDTH
+    #define SCR_HALF_HEIGHT Options::SCR_HALF_HEIGHT
+    #define COLOR_BYTES_NUMBER 4
     
     class Core;
 	class Render
@@ -26,8 +31,11 @@
             
         private:
             bool ready;
+            UC* pixels;
             Core* core;
             GLuint list;
+            GLuint surface;
+            GLuint texture;
             
         public:
             /*
@@ -88,7 +96,26 @@
             /*
              * initBoard
              */
-            void initBoard();
+            void initRender();
+            
+            
+            /*
+             * initBoard
+             */
+            void initSurface();
+
+
+            /*
+             * drawAsQuads
+             */            
+            void drawAsQuads();
+
+
+            /*
+             * drawAsQuads
+             */
+            void drawAsPixels();
+
 	};
 
 

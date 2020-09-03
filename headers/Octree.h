@@ -82,6 +82,7 @@
 			 * getColorDepth
 			 */
 			Color getColorDepth(const DynamicVoxel* const dynamic);
+            Color getColorDepth(const UC r, const UC g, const UC b, const float depth);
 
             
             /*
