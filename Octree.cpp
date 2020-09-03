@@ -304,11 +304,8 @@ void Octree::addVoxels(Voxel* voxels, const UI nvoxel)
         }
         if(Options::SMOOTH_SIBLINGS)
         {
-            this->addSmooths(voxels[i]);
-        } else if(Options::HARD_SIBLINGS)
-        {
-            this->addSiblings(voxels[i]);
-        } else this->addSingleVoxel(voxels[i]);
+            this->addSmooths(&voxels[i]);
+        } else this->addSingleVoxel(&voxels[i]);
             
         switch(Options::VOXEL_SHELL_TYPE)
         {
@@ -331,7 +328,7 @@ void Octree::addVoxels(Voxel* voxels, const UI nvoxel)
 /*
  * add single voxel
  */
-void Octree::addSingleVoxel(const Voxel voxel)
+void Octree::addSingleVoxel(Voxel* const voxel)
 {
     OctantManager::initBit(this->root, voxel);
 }
@@ -339,12 +336,12 @@ void Octree::addSingleVoxel(const Voxel voxel)
 /*
  * addSmooths
  */
-void Octree::addSmooths(const Voxel voxel)
+void Octree::addSmooths(Voxel* const voxel)
 {
     UC i = 0;
     while(i < 18)
     {
-        Voxel v = voxel;
+        Voxel v = *voxel;
         v.coordinates.x += atom[i].x;
         v.coordinates.y += atom[i].y;
         v.coordinates.z += atom[i].z;
@@ -417,34 +414,6 @@ void Octree::addShell(const Voxel voxel)
         }
         else v.color = (v.color & 0xFFFFFF00) | 0x0F;
         OctantManager::initBit(this->root, v);
-        i++;
-    }
-}
-   
-
-/*
- * addSiblings
- */
-void Octree::addSiblings(const Voxel voxel)
-{
-    SI i = - 1;
-    while(i < 2)
-    {
-        SI j = - 1;
-        while(j < 2)
-        {
-            SI k = - 1;
-            while(k < 2)
-            {
-                Voxel v = voxel;
-                v.coordinates.x += i;
-                v.coordinates.y += j;
-                v.coordinates.z += k;
-                OctantManager::initBit(this->root, v);
-                k++;
-            }
-            j++;
-        }
         i++;
     }
 }

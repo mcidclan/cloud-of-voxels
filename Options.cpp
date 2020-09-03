@@ -15,7 +15,6 @@ float Options::CAM_Y_ROTATION = 0.01745f;
 bool Options::nologs = false;
 bool Options::nomotion = false;
 bool Options::ACCELERATED = false;
-bool Options::HARD_SIBLINGS = false;
 bool Options::SMOOTH_SIBLINGS = false;
 bool Options::AVOID_SCAN_GLITCHES = false;
 bool Options::TRANSPARENCY = false;
@@ -99,7 +98,6 @@ void Options::process(int argc, char **argv)
     Options::nomotion = options.find("no-motion") != options.end();
     Options::ACCELERATED = options.find("accelerate") != options.end();
     Options::TRANSPARENCY = options.find("transparency") != options.end();
-    Options::HARD_SIBLINGS = options.find("hard-siblings") != options.end();
     Options::SMOOTH_SIBLINGS = options.find("smooth-siblings") != options.end();
     
     if(Options::VOXEL_SHELL_TYPE)
@@ -140,7 +138,6 @@ void Options::process(int argc, char **argv)
 
     printf("Avoid glitches: %s\n", Options::AVOID_SCAN_GLITCHES ? "On" : "Off");
     printf("Smooth siblings: %s\n", Options::SMOOTH_SIBLINGS ? "On" : "Off");
-    printf("Hard siblings: %s\n", Options::HARD_SIBLINGS ? "On" : "Off");
     printf("Transparency: %s\n", Options::TRANSPARENCY ? "On" : "Off");
     printf("Acceleration: %s\n", Options::ACCELERATED ? "On" : "Off");
     
@@ -159,7 +156,6 @@ void Options::process(int argc, char **argv)
         Options::nologs = true;
         Options::nomotion = true;
         Options::ACCELERATED = false;
-        Options::HARD_SIBLINGS = false;
         Options::SMOOTH_SIBLINGS = false;
         Options::AVOID_SCAN_GLITCHES = false;
         Options::TRANSPARENCY = false;
@@ -176,11 +172,14 @@ void Options::process(int argc, char **argv)
         Options::CAM_Z_TRANSLATION = -Options::MAX_RAY_LENGTH;
         Options::CAM_Y_ROTATION = 0.0f;
         
-        //Options::VOXEL_SHELL_TYPE = 3;
-        //Options::SHELL_COLOR = 0xFF905030;
-        //Options::MAX_VOXELS_BY_RAY = 2;
-        //Options::SHELL_LITE_THICKNESS = 2;
+        Options::VOXEL_SHELL_TYPE = 3;
+        Options::SHELL_COLOR = 0xFF905030;
+        Options::MAX_VOXELS_BY_RAY = 2;
+        Options::SHELL_LITE_THICKNESS = 1;
         
+        Options::INTERNAL_BLENDING = true;
+        Options::QUADS_AS_PIXELS = false;
+
         pspDebugScreenInit();
         scePowerSetClockFrequency(333, 333, 166);
     #endif

@@ -60,12 +60,13 @@
 			 * initBit
 			 */
             static void initBit(Octant* const octant, const Voxel voxel);
-
+            static void initBit(Octant* const octant, Voxel* const voxel);
             
 			/*
 			 * Set bit space, corresponding to the current voxel
 			 */
-			static void setBit(Octant* const octant, Voxel* const voxel);
+			static void setBit(Octant* const octant,
+            Voxel* const voxel, const bool dynamic = true);
 
 
 			/*

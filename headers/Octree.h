@@ -100,19 +100,13 @@
             /*
 			 * add a single voxel
 			 */
-			void addSingleVoxel(const Voxel voxel);
-            
-            
-            /*
-             * addSiblings
-             */
-            void addSiblings(const Voxel voxel);
+			void addSingleVoxel(Voxel* const voxel);
 
 
             /*
              * addSiblings
              */
-            void addSmooths(const Voxel voxel);
+            void addSmooths(Voxel* const voxel);
 
 
             /*
