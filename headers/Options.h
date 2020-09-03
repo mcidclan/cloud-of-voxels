@@ -34,7 +34,7 @@
             static bool TRANSPARENCY;
             static bool INTERNAL_BLENDING;
             static bool QUADS_AS_PIXELS;
-
+            static bool SMOOTH_PIXELS;
 
             static UC VOXEL_SHELL_TYPE;
             static UC PIXEL_STEP;

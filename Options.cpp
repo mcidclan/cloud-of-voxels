@@ -20,6 +20,7 @@ bool Options::AVOID_SCAN_GLITCHES = false;
 bool Options::TRANSPARENCY = false;
 bool Options::INTERNAL_BLENDING = true;
 bool Options::QUADS_AS_PIXELS = false;
+bool Options::SMOOTH_PIXELS = true;
 
 SUI Options::WIN_WIDTH = 256;
 SUI Options::WIN_HEIGHT = 256;
@@ -30,7 +31,7 @@ SUI Options::SCR_HALF_WIDTH = 128;
 SUI Options::SCR_HALF_HEIGHT = 128;
 SUI Options::MAX_RAY_LENGTH = 0;
 SUI Options::MAX_VOXELS_BY_RAY = 1;
-SUI Options::SHELL_LITE_THICKNESS = 2;
+SUI Options::SHELL_LITE_THICKNESS = 3;
 
 LUI Options::MAX_FRAME_TIME = 25;
 SI Options::CAM_Z_TRANSLATION = 0;
@@ -158,27 +159,28 @@ void Options::process(int argc, char **argv)
         Options::ACCELERATED = false;
         Options::SMOOTH_SIBLINGS = false;
         Options::AVOID_SCAN_GLITCHES = false;
-        Options::TRANSPARENCY = false;
+        Options::TRANSPARENCY = true;
         Options::PIXEL_STEP = 1;
         Options::WIN_WIDTH = 480;
         Options::WIN_HEIGHT = 272;
-        Options::SCR_WIDTH = 256;
-        Options::SCR_HEIGHT = 256;
+        Options::SCR_WIDTH = 128;
+        Options::SCR_HEIGHT = 128;
         Options::OCTREE_SIZE = 256;
         Options::SCR_HALF_WIDTH = Options::SCR_WIDTH / 2;
         Options::SCR_HALF_HEIGHT = Options::SCR_HEIGHT / 2;
-        Options::MAX_RAY_LENGTH = 100;
+        Options::MAX_RAY_LENGTH = 70;
         Options::MAX_FRAME_TIME = (LUI)(1000000.0f*(1.0f/60.0f));
         Options::CAM_Z_TRANSLATION = -Options::MAX_RAY_LENGTH;
         Options::CAM_Y_ROTATION = 0.0f;
         
         Options::VOXEL_SHELL_TYPE = 3;
-        Options::SHELL_COLOR = 0xFF905030;
-        Options::MAX_VOXELS_BY_RAY = 2;
-        Options::SHELL_LITE_THICKNESS = 1;
+        Options::SHELL_COLOR = 0xFFFFFF0B;
+        Options::MAX_VOXELS_BY_RAY = 5;
+        Options::SHELL_LITE_THICKNESS = 3;
         
         Options::INTERNAL_BLENDING = true;
         Options::QUADS_AS_PIXELS = false;
+        Options::SMOOTH_PIXELS = true;
 
         pspDebugScreenInit();
         scePowerSetClockFrequency(333, 333, 166);
