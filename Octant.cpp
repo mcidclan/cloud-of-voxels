@@ -105,10 +105,17 @@ void OctantManager::initBit(Octant* const octant, const Voxel voxel)
 }
 
 
+void OctantManager::initBit(Octant* const octant, Voxel* const voxel)
+{
+    OctantManager::setBit(octant, voxel, false);
+}
+
+
 /*
  * Set the bit space corresponding to the current voxel
  */
-void OctantManager::setBit(Octant* const octant, Voxel* const voxel)
+void OctantManager::setBit(Octant* const octant, Voxel* const voxel,
+const bool dynamic)
 {
     if(math::absf(voxel->coordinates.x) >= (Octree::half - 2) ||
         math::absf(voxel->coordinates.y) >= (Octree::half - 2) ||
@@ -125,7 +132,10 @@ void OctantManager::setBit(Octant* const octant, Voxel* const voxel)
                 const SI z = octant->center.x - octant->half;
                 printf("Add voxel at: %i %i %i\n", x, y, z);
             }
-        } else delete voxel; //  
+        } else if(dynamic)
+        {
+            delete voxel;
+        }
     } else
     {
         if(octant->children == NULL)

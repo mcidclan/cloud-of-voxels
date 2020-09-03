@@ -29,7 +29,6 @@
             static bool nologs;
             static bool nomotion;
             static bool ACCELERATED;
-            static bool HARD_SIBLINGS;            
             static bool SMOOTH_SIBLINGS;
             static bool AVOID_SCAN_GLITCHES;
             static bool TRANSPARENCY;
