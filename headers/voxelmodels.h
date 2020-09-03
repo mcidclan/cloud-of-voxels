@@ -9,6 +9,6 @@
 
 	#include "types.h"
 
-	const UI MESH_SIZE  = 69296;
+	const UI MESH_SIZE  = 162828;
 
 #endif

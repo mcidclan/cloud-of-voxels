@@ -14,6 +14,9 @@
 
 	namespace math
 	{
+        bool isPowerOfTwo(UI value, SUI* const level);
+        
+        
 		/*
 		 * getdecimal
 		 */

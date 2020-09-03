@@ -47,7 +47,7 @@
 			/*
 			 * process
 			 */
-			void process();
+			void process(UC* const pixels = NULL);
             
             
             /*
@@ -61,6 +61,11 @@
              * Jump to next pixel
              */
             bool nextPixel(Vec2<SI>* const curpix);
+            
+            /*
+             * set pixel
+             */
+            void setPixel(Vec2<SI>* const curpix, DynamicVoxel* const voxel);
 	};
 
 

@@ -21,6 +21,23 @@ const float midentity[16] __attribute__ ((aligned (__BIGGEST_ALIGNMENT__))) =
 
 namespace math
 {
+    bool isPowerOfTwo(UI value, SUI* const level)
+    {
+        bool yes = true;
+        do
+        {
+            if(level != NULL)
+            {
+                (*level)++;
+            }
+            if((value & 1) != 0) {
+                yes = false;
+            }
+        } while((value >>= 1) != 1);
+        return yes;
+    }
+    
+    
 	/*
 	 * getdecimal
 	 */

@@ -18,6 +18,7 @@ static Render *render = NULL;
  */
 Render::Render()
 {
+    this->pixels = NULL;
 	render = this;
 }
 
@@ -62,12 +63,12 @@ static int key(unsigned int args, void *argp)
         
         if(pad.Buttons & PSP_CTRL_LEFT)
         {
-            Render::PIXEL_STEP = 3;
+            Render::PIXEL_STEP = 4;
             Render::CAM_Y_ROTATION = -step;
         }
         if(pad.Buttons & PSP_CTRL_RIGHT)
         {
-            Render::PIXEL_STEP = 3;
+            Render::PIXEL_STEP = 4;
             Render::CAM_Y_ROTATION = step;
         }
         
@@ -94,17 +95,47 @@ void Render::timer(int value)
 /*
  * 
  */
-void Render::initBoard()
+void Render::initRender()
 {
-    glEnable(GL_CULL_FACE);
-    glFrontFace(GL_CW);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);    
-    this->list = glGenLists(1);
+    glEnable(GL_CULL_FACE);    
+    if(Options::QUADS_AS_PIXELS)
+    {
+        glFrontFace(GL_CW);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);    
+        this->list = glGenLists(1);
+    } else initSurface();
+    
     this->ready = false;
 }
 
 
+void Render::initSurface()
+{
+    
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    this->pixels = (UC*)malloc(SCR_WIDTH * SCR_HEIGHT * COLOR_BYTES_NUMBER);
+    memset(this->pixels, 0, SCR_WIDTH * SCR_HEIGHT * COLOR_BYTES_NUMBER);
+    
+    glGenTextures(1, &this->texture);
+    glBindTexture(GL_TEXTURE_2D, this->texture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, SCR_WIDTH, SCR_HEIGHT,
+    0, GL_RGBA, GL_UNSIGNED_BYTE, this->pixels);
+    
+    this->surface = glGenLists(1);
+    glNewList(this->surface, GL_COMPILE);
+    glBegin(GL_QUADS);
+    glTexCoord2d(0, 0); glVertex2i(-SCR_HALF_WIDTH, -SCR_HALF_HEIGHT);
+    glTexCoord2d(0, 1); glVertex2i(-SCR_HALF_WIDTH, SCR_HALF_HEIGHT);
+    glTexCoord2d(1, 1); glVertex2i(SCR_HALF_WIDTH, SCR_HALF_HEIGHT);
+    glTexCoord2d(1, 0); glVertex2i(SCR_HALF_WIDTH, -SCR_HALF_HEIGHT);
+    glEnd();
+    glEndList();
+}
+
+    
 /*
  * 
  */
@@ -113,21 +144,21 @@ void Render::init(int argc, char **argv, Core* const core)
     this->core = core;
 	
     glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_RGBA | GLUT_ALPHA | GLUT_DOUBLE);
-	glutInitWindowSize(Options::WIN_WIDTH, Options::WIN_HEIGHT);
 	glutInitWindowPosition(0, 0);
 	glutCreateWindow("CloudOfVoxels");
+	glutInitDisplayMode(GLUT_RGBA | GLUT_ALPHA | GLUT_DOUBLE);
+	glutInitWindowSize(Options::WIN_WIDTH, Options::WIN_HEIGHT);
 	
+    this->initRender();
+    #ifdef PSP
+    Render::reshape(Options::WIN_WIDTH, Options::WIN_HEIGHT);
+    #endif
+    
     glutDisplayFunc(Render::display);
     #ifndef PSP
     glutReshapeFunc(Render::reshape);
     #endif
 	glutIdleFunc(Render::idle);
-    
-    this->initBoard();
-    #ifdef PSP
-    Render::reshape(Options::WIN_WIDTH, Options::WIN_HEIGHT);
-    #endif
     
     Render::timer(0);
     glutMainLoop();
@@ -174,29 +205,44 @@ void Render::idle()
  */
 void Render::process()
 {
+    #ifdef PSP
+    Options::PIXEL_STEP = Render::PIXEL_STEP;
+    Options::CAM_Y_ROTATION = Render::CAM_Y_ROTATION;
+    #endif
     if(!this->ready)
     {
-        #ifdef PSP
-        Options::PIXEL_STEP = Render::PIXEL_STEP;
-        Options::CAM_Y_ROTATION = Render::CAM_Y_ROTATION;
-        #endif
         this->core->transform();
-        glNewList(this->list, GL_COMPILE);
-        this->core->process();
-        glEndList();
+        if(Options::QUADS_AS_PIXELS)
+        {
+            glNewList(this->list, GL_COMPILE);
+            this->core->process();
+            glEndList();
+        } else
+        {
+            memset(this->pixels, 0, SCR_WIDTH * SCR_HEIGHT * COLOR_BYTES_NUMBER);
+            this->core->process(this->pixels);
+        }
         this->ready = true;
     }
 }
+
 
 /*
  * 
  */
 void Render::draw()
 {
+    if(Options::QUADS_AS_PIXELS)
+    {
+        this->drawAsQuads();
+    } else this->drawAsPixels();
+}
+
+void Render::drawAsQuads()
+{
     glClear(GL_COLOR_BUFFER_BIT);
     glCallList(this->list);
     glutSwapBuffers();
-    
     // Make sure that the core process is sync
     if(this->ready)
     {
@@ -205,5 +251,25 @@ void Render::draw()
         this->list = glGenLists(1);
         #endif
         this->ready = false;
-    }    
+    }
+}
+
+
+void Render::drawAsPixels()
+{
+    glClear(GL_COLOR_BUFFER_BIT);
+    glBindTexture(GL_TEXTURE_2D, this->texture);
+    glEnable(GL_TEXTURE_2D);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, SCR_WIDTH, SCR_HEIGHT,
+    GL_RGBA, GL_UNSIGNED_BYTE, this->pixels);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glScaled(Options::PIXEL_STEP, Options::PIXEL_STEP, 1);
+    glCallList(this->surface);
+    glutSwapBuffers();
+    // Make sure that the core process is sync
+    if(this->ready)
+    {
+        this->ready = false;
+    }
 }
