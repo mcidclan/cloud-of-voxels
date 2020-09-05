@@ -153,19 +153,14 @@ void Render::init(int argc, char **argv, Core* const core)
 	
     glutInit(&argc, argv);
 	glutInitWindowPosition(0, 0);
-	glutCreateWindow("CloudOfVoxels");
 	glutInitDisplayMode(GLUT_RGBA | GLUT_ALPHA | GLUT_DOUBLE);
 	glutInitWindowSize(Options::WIN_WIDTH, Options::WIN_HEIGHT);
-	
+    glutCreateWindow("CloudOfVoxels");
+    
     this->initRender();
-    #ifdef PSP
-    Render::reshape(Options::WIN_WIDTH, Options::WIN_HEIGHT);
-    #endif
     
     glutDisplayFunc(Render::display);
-    #ifndef PSP
     glutReshapeFunc(Render::reshape);
-    #endif
 	glutIdleFunc(Render::idle);
     
     Render::timer(0);
