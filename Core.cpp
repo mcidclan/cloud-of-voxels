@@ -160,27 +160,33 @@ void Core::process(UC* const pixels)
             {
                 i--;
                 Voxel voxel = *(voxels[i].voxel);
-                const float depth = voxels[i].depth;
+                const float depth = voxels[0].depth;
                 
-                UC ro = (voxels[i].voxel->color & 0xFF000000) >> 24;
-                UC go = (voxels[i].voxel->color & 0x00FF0000) >> 16;
-                UC bo = (voxels[i].voxel->color & 0x0000FF00) >> 8;
-                    
+                UC ro = (voxel.color & 0xFF000000) >> 24;
+                UC go = (voxel.color & 0x00FF0000) >> 16;
+                UC bo = (voxel.color & 0x0000FF00) >> 8;
+                UC alpha = voxel.color & 0x000000FF;
+                
                 while(i-- > end)
                 {
                     const UI r = (voxels[i].voxel->color & 0xFF000000) >> 24;
                     const UI g = (voxels[i].voxel->color & 0x00FF0000) >> 16;
                     const UI b = (voxels[i].voxel->color & 0x0000FF00) >> 8;
-                    const float a = (voxels[i].voxel->color & 0x000000FF) / 255.0f;
+                    float a = (voxels[i].voxel->color & 0x000000FF);
+                    if(a > alpha) {
+                        alpha = a;
+                    }
+                    a /= 255.0f;
+                    const float d = this->octree->getDarkness(voxels[i].depth);
                     
-                    ro = (UC)(r * a + (1.0f - a) * ro);
-                    go = (UC)(g * a + (1.0f - a) * go);
-                    bo = (UC)(b * a + (1.0f - a) * bo);
+                    ro = (UC)(r * a + (1.0f - a) * ro * d);
+                    go = (UC)(g * a + (1.0f - a) * go * d);
+                    bo = (UC)(b * a + (1.0f - a) * bo * d);
                 }
                 
                 if(pixels == NULL)
                 {
-                    voxel.color = (ro << 24) | (go << 16) | (bo << 8 ) | (voxel.color & 0x000000FF);
+                    voxel.color = (ro << 24) | (go << 16) | (bo << 8 ) | alpha;
                     DynamicVoxel dynamic = {depth, &voxel};
                     this->setPixel(&curpix, &dynamic);
                 } else
@@ -193,7 +199,7 @@ void Core::process(UC* const pixels)
                     pixels[offset] = color.r;
                     pixels[offset+1] = color.g;
                     pixels[offset+2] = color.b;
-                    pixels[offset+3] = (UC)(voxel.color & 0x000000FF);
+                    pixels[offset+3] = alpha;
                 }
             } else
             {
