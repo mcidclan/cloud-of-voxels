@@ -45,13 +45,13 @@ voxel-shell-type: ...... Activates transparent voxel shell (xl, normal, lite)
 voxel-shell-rgba: ...... Affects a specific RGBA color to the voxel shell (0xFFFFFFFF)
 
 With the given voxelmodels.cpp, once compiled on linux test the program with:
-./bin/cov no-motion step:1 w:128 h:128 octree-size:128 z:-64 ray:64 fps:60 \
-    no-logs accelerate voxel-shell-type:normal voxel-shell-rgba:0xFF808020 \
-    max-voxels-by-ray:2
+./bin/cov no-motion step:1 w:128 h:128 octree-size:256 z:-70 ray:80 no-logs \
+    voxel-shell-type:normal voxel-shell-rgba:0xFF00F020 min-voxels-proximity:4 \
+    max-voxels-by-ray:5 accelerate fps:30
     
 or width powershell:
-./bin/cov no-motion step:1 w:128 h:128 octree-size:128 z:-64 ray:64 fps:60 `
-    no-logs accelerate voxel-shell-type:normal voxel-shell-rgba:0xFF808020 `
-    max-voxels-by-ray:2
-    
+./bin/cov no-motion step:1 w:128 h:128 octree-size:256 z:-70 ray:80 no-logs `
+    voxel-shell-type:normal voxel-shell-rgba:0xFF00F020 min-voxels-proximity:4 `
+    max-voxels-by-ray:5 accelerate fps:30
+
 Enjoy!
