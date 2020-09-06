@@ -158,14 +158,10 @@ void Core::process(UC* const pixels)
             
             if(Options::INTERNAL_BLENDING || !Options::QUADS_AS_PIXELS)
             {
-                i--;
-                Voxel voxel = *(voxels[i].voxel);
+                Voxel voxel = *(voxels[i-1].voxel);
                 const float depth = voxels[0].depth;
                 
-                UC ro = (voxel.color & 0xFF000000) >> 24;
-                UC go = (voxel.color & 0x00FF0000) >> 16;
-                UC bo = (voxel.color & 0x0000FF00) >> 8;
-                UC alpha = voxel.color & 0x000000FF;
+                UC ro = 0, go = 0, bo = 0, alpha = 0;
                 
                 while(i-- > end)
                 {
@@ -176,12 +172,13 @@ void Core::process(UC* const pixels)
                     if(a > alpha) {
                         alpha = a;
                     }
-                    a /= 255.0f;
-                    const float d = this->octree->getDarkness(voxels[i].depth);
                     
-                    ro = (UC)(r * a + (1.0f - a) * ro * d);
-                    go = (UC)(g * a + (1.0f - a) * go * d);
-                    bo = (UC)(b * a + (1.0f - a) * bo * d);
+                    const float d = this->octree->getDarkness(voxels[i].depth);
+                    a = (a / 255.0f) * d;
+                    
+                    ro = (UC)(r * a + (1.0f - a) * ro);
+                    go = (UC)(g * a + (1.0f - a) * go);
+                    bo = (UC)(b * a + (1.0f - a) * bo);
                 }
                 
                 if(pixels == NULL)
