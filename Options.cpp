@@ -32,6 +32,7 @@ SUI Options::SCR_HALF_HEIGHT = 128;
 SUI Options::MAX_RAY_LENGTH = 0;
 SUI Options::MAX_VOXELS_BY_RAY = 1;
 SUI Options::SHELL_LITE_THICKNESS = 4;
+SUI Options::MIN_VOXELS_PROXIMITY = 0;
 
 LUI Options::MAX_FRAME_TIME = 25;
 SI Options::CAM_Z_TRANSLATION = 0;
@@ -75,6 +76,9 @@ void Options::process(int argc, char **argv)
         } else if(name.find("max-voxels-by-ray:") == 0)
         {
             Options::MAX_VOXELS_BY_RAY = stoi(name.substr(18));
+        } else if(name.find("min-voxels-proximity:") == 0)
+        {
+            Options::MIN_VOXELS_PROXIMITY = stoi(name.substr(21));
         } else if(name.find("voxel-shell-type:") == 0)
         {
             const string type = name.substr(17);
