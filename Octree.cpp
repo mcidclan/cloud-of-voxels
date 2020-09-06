@@ -424,7 +424,7 @@ void Octree::addShell(const Voxel voxel)
  */
 Color Octree::getColorDepth(const DynamicVoxel* const dynamic)
 {
-    const float darkness = 1.0f - dynamic->depth * this->colordepthstep;
+    const float darkness = getDarkness(dynamic->depth);//1.0f - dynamic->depth * this->colordepthstep;
 	return {
         (UC)(((dynamic->voxel->color & 0xFF000000) >> 24) * darkness),
         (UC)(((dynamic->voxel->color & 0x00FF0000) >> 16) * darkness),
@@ -436,6 +436,11 @@ Color Octree::getColorDepth(const DynamicVoxel* const dynamic)
 
 Color Octree::getColorDepth(const UC r, const UC g, const UC b, const float depth)
 {
-    const float darkness = 1.0f - depth * this->colordepthstep;
+    const float darkness = getDarkness(depth);//1.0f - depth * this->colordepthstep;
     return {(UC)(r * darkness), (UC)(g * darkness), (UC)(b * darkness), 0};
+}
+
+float Octree::getDarkness(const float depth)
+{
+   return 1.0f - depth * this->colordepthstep;
 }
