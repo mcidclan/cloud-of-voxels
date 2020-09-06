@@ -188,14 +188,13 @@ void Core::process(UC* const pixels)
                     this->setPixel(&curpix, &dynamic);
                 } else
                 {   
-                    const Color color = this->octree->getColorDepth(ro, go, bo, depth);
                     const SUI x = (curpix.x / Options::PIXEL_STEP) + Options::SCR_HALF_WIDTH;
                     const SUI y = (curpix.y / Options::PIXEL_STEP) + Options::SCR_HALF_HEIGHT;
                     const UI offset = COLOR_BYTES_NUMBER * (x + y * Options::SCR_WIDTH);
                     
-                    pixels[offset] = color.r;
-                    pixels[offset+1] = color.g;
-                    pixels[offset+2] = color.b;
+                    pixels[offset] = ro;
+                    pixels[offset+1] = go;
+                    pixels[offset+2] = bo;
                     pixels[offset+3] = alpha;
                 }
             } else
