@@ -128,8 +128,8 @@ const bool dynamic)
             if(!Options::nologs)
             {
                 const SI x = octant->center.x - octant->half;
-                const SI y = octant->center.x - octant->half;
-                const SI z = octant->center.x - octant->half;
+                const SI y = octant->center.y - octant->half;
+                const SI z = octant->center.z - octant->half;
                 printf("Add voxel at: %i %i %i\n", x, y, z);
             }
         } else if(dynamic)
@@ -147,7 +147,7 @@ const bool dynamic)
             }
         }
         OctantManager::setBit(OctantManager::getChildAt(
-        octant, voxel->coordinates), voxel);
+        octant, voxel->coordinates), voxel, dynamic);
     }
 }
 
