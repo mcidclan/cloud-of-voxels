@@ -49,6 +49,8 @@
             static SUI MAX_RAY_LENGTH;
             static SUI MAX_VOXELS_BY_RAY;
             static SUI SHELL_LITE_THICKNESS;
+            static SUI MIN_VOXELS_PROXIMITY;
+
             static LUI MAX_FRAME_TIME;            
             static SI CAM_Z_TRANSLATION;
             

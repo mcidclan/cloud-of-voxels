@@ -231,9 +231,19 @@ bool Octree::rayTrace(vector<DynamicVoxel>* const voxels)
             this->avoidScanGlitches(&curbit);
             if(curbit->voxel != NULL)
             {
-                voxels->push_back({depthray, curbit->voxel});
-                if(!Options::TRANSPARENCY ||
-                    (curbit->voxel->color & 0x000000FF) == 0xFF) return true;
+                if(!Options::TRANSPARENCY || (curbit->voxel->color & 0x000000FF) == 0xFF)
+                {
+                    voxels->push_back({depthray, curbit->voxel});
+                    return true;
+                }
+                if(Options::TRANSPARENCY)
+                {
+                    if(voxels->size() == 0 || (voxels->size() > 0 && (depthray -
+                    (*voxels)[voxels->size()-1].depth) >= Options::MIN_VOXELS_PROXIMITY))
+                    {
+                        voxels->push_back({depthray, curbit->voxel});
+                    }
+                }
             }
             // Calculates the new ray position
             this->getNextEntryDot(curbit);
