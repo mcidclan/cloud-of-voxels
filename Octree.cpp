@@ -194,22 +194,22 @@ void Octree::avoidScanGlitches(Octant** const curbit)
 {
     if(Options::AVOID_SCAN_GLITCHES)
     {
-        if((*curbit)->voxel->color == 0) {
+        if((*curbit)->voxel == NULL) {
             *curbit = getNextBit(&this->ray->x, 1.0f);
         }
-        if((*curbit)->voxel->color == 0) {
+        if((*curbit)->voxel == NULL) {
             *curbit = getNextBit(&this->ray->y, 1.0f);
         }
-        if((*curbit)->voxel->color == 0) {
+        if((*curbit)->voxel == NULL) {
             *curbit = getNextBit(&this->ray->z, 1.0f);
         }
-        if((*curbit)->voxel->color == 0) {
+        if((*curbit)->voxel == NULL) {
             *curbit = getNextBit(&this->ray->x, -1.0f);
         }
-        if((*curbit)->voxel->color == 0) {
+        if((*curbit)->voxel == NULL) {
             *curbit = getNextBit(&this->ray->y, -1.0f);
         }
-        if((*curbit)->voxel->color == 0) {
+        if((*curbit)->voxel == NULL) {
             *curbit = getNextBit(&this->ray->z, -1.0f);
         }
     }
