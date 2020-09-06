@@ -168,13 +168,13 @@ void Options::process(int argc, char **argv)
         Options::OCTREE_SIZE = 256;
         Options::SCR_HALF_WIDTH = Options::SCR_WIDTH / 2;
         Options::SCR_HALF_HEIGHT = Options::SCR_HEIGHT / 2;
-        Options::MAX_RAY_LENGTH = 70;
+        Options::MAX_RAY_LENGTH = 128;
         Options::MAX_FRAME_TIME = (LUI)(1000000.0f*(1.0f/60.0f));
-        Options::CAM_Z_TRANSLATION = -Options::MAX_RAY_LENGTH;
+        Options::CAM_Z_TRANSLATION = -70;//-Options::MAX_RAY_LENGTH;
         Options::CAM_Y_ROTATION = 0.0f;
         
         Options::VOXEL_SHELL_TYPE = 3;
-        Options::SHELL_COLOR = 0xFF907020
+        Options::SHELL_COLOR = 0xFF907020;
         Options::MAX_VOXELS_BY_RAY = 3;
         Options::SHELL_LITE_THICKNESS = 4;
         
