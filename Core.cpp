@@ -195,7 +195,7 @@ void Core::process(UC* const pixels)
                     pixels[offset] = ro;
                     pixels[offset+1] = go;
                     pixels[offset+2] = bo;
-                    pixels[offset+3] = alpha;
+                    pixels[offset+3] = 0xFF;//alpha;
                 }
             } else
             {
