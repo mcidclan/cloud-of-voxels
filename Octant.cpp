@@ -9,7 +9,7 @@
 #include "./headers/Octree.h"
 
 /*
- * Constructor
+ * init
  */
 void OctantManager::init(Octant* const octant)
 {
@@ -27,7 +27,6 @@ void OctantManager::addChildren(Octant* const octant)
     UC i = 0;
     octant->children = new Octant[8];
     while(i < 8) {
-        OctantManager::init(&octant->children[i]);
         OctantManager::initChild(octant, i % 2, (i / 2) % 2, i / 4);
         i++;
     }
@@ -47,7 +46,7 @@ void OctantManager::removeChildren(Octant* const octant) {
 
 
 /*
- * initChild
+ * getChildren
  */
 Octant* OctantManager::getChildren(Octant* const octant,
 const UC i, const UC j , const UC k)
@@ -63,6 +62,8 @@ void OctantManager::initChild(Octant* const octant,
 const SUI i, const SUI j, const SUI k)
 {   
 	Octant* const child = OctantManager::getChildren(octant, i, j, k);
+    OctantManager::init(child);
+
 	child->depth = octant->depth - 1;
     
     child->center.x = i ? octant->center.x : octant->center.x - octant->half;

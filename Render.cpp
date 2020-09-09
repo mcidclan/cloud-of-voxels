@@ -63,12 +63,12 @@ static int key(unsigned int args, void *argp)
         
         if(pad.Buttons & PSP_CTRL_LEFT)
         {
-            Render::PIXEL_STEP = 2;
+            Render::PIXEL_STEP = 8;
             Render::CAM_Y_ROTATION = -step;
         }
         if(pad.Buttons & PSP_CTRL_RIGHT)
         {
-            Render::PIXEL_STEP = 2;
+            Render::PIXEL_STEP = 8;
             Render::CAM_Y_ROTATION = step;
         }
         
@@ -268,7 +268,10 @@ void Render::drawAsPixels()
     GL_RGBA, GL_UNSIGNED_BYTE, this->pixels);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    glScaled(Options::PIXEL_STEP, Options::PIXEL_STEP, 1);
+    const float scale = Options::SCR_WIDTH / (float)((SI)(Options::
+    SCR_WIDTH / Options::PIXEL_STEP));
+    glTranslatef(-scale/2.0f, -scale/2.0f, 0.0f);
+    glScalef(scale, scale, 1.0f);
     glCallList(this->surface);
     glutSwapBuffers();
     // Make sure that the core process is sync

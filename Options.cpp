@@ -73,6 +73,9 @@ void Options::process(int argc, char **argv)
         } else if(name.find("octree-size:") == 0)
         {
             Options::OCTREE_SIZE = stoi(name.substr(12));
+        } else if(name.find("shell-lite-thickness:") == 0)
+        {
+            Options::SHELL_LITE_THICKNESS = stoi(name.substr(21));
         } else if(name.find("max-voxels-by-ray:") == 0)
         {
             Options::MAX_VOXELS_BY_RAY = stoi(name.substr(18));
@@ -172,16 +175,16 @@ void Options::process(int argc, char **argv)
         Options::OCTREE_SIZE = 256;
         Options::SCR_HALF_WIDTH = Options::SCR_WIDTH / 2;
         Options::SCR_HALF_HEIGHT = Options::SCR_HEIGHT / 2;
-        Options::MAX_RAY_LENGTH = 140;
+        Options::MAX_RAY_LENGTH = 80;
         Options::MAX_FRAME_TIME = (LUI)(1000000.0f*(1.0f/60.0f));
         Options::CAM_Z_TRANSLATION = -70;
         Options::CAM_Y_ROTATION = 0.0f;
         
-        Options::VOXEL_SHELL_TYPE = 3;
-        Options::SHELL_COLOR = 0xFF907020;
-        //Options::MAX_VOXELS_BY_RAY = Options::MAX_RAY_LENGTH;
-        Options::MAX_VOXELS_BY_RAY = 3;
-        Options::SHELL_LITE_THICKNESS = 4;
+        Options::VOXEL_SHELL_TYPE = 1;
+        Options::SHELL_COLOR = 0xFF30E048;
+        Options::MAX_VOXELS_BY_RAY = Options::MAX_RAY_LENGTH;
+        //Options::SHELL_LITE_THICKNESS = 2;
+        Options::MIN_VOXELS_PROXIMITY = 5;
         
         Options::INTERNAL_BLENDING = true;
         Options::QUADS_AS_PIXELS = false;
