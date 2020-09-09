@@ -43,6 +43,10 @@ step: .................. Changes the default scan x and y step pixel
 octree-size: ........... Changes the default octree size
 voxel-shell-type: ...... Activates transparent voxel shell (xl, normal, lite)
 voxel-shell-rgba: ...... Affects a specific RGBA color to the voxel shell (0xFFFFFFFF)
+min-voxels-proximity: .. Minimum distance between the voxels for blending effect.
+max-voxels-by-ray: ..... Maximum of voxels used for blending effect in one ray.
+                         The default value is 1, and corresponds to max ray length.
+
 
 With the given voxelmodels.cpp, once compiled on linux test the program with:
 ./bin/cov no-motion step:1 w:128 h:128 octree-size:256 z:-70 ray:80 no-logs \
