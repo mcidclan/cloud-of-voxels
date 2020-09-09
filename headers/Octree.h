@@ -100,6 +100,11 @@
 			 */
 			void getNextEntryDot(Octant* octant);
             
+            
+            template<typename T>
+            void initBit(T voxel);
+
+
             /*
 			 * add a single voxel
 			 */

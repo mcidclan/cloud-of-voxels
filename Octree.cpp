@@ -14,14 +14,20 @@ extern Vec3<SI> shellxl[150];
 float Octree::size;
 float Octree::half;
 
-Octree::Octree() {
+Octree::Octree()
+{
     this->accelerated = false;
 }
 
 
-Octree::~Octree() {
+Octree::~Octree()
+{
+    delete [] this->root->facescenter;
     delete this->root;
-    this->destroyAccelerator();
+    if(Options::ACCELERATED)
+    {
+        this->destroyAccelerator();
+    }
 }
 
 
@@ -308,10 +314,12 @@ void Octree::addVoxels(Voxel* voxels, const UI nvoxel)
     const UI step = nvoxel / 100;
 	while(i < nvoxel)
 	{
-        if(i % (step * 10) == 0) {
+        if((step > 0) && (i % (step * 10) == 0))
+        {
             printf(">%d ", percent);
             percent+=10;
         }
+        
         if(Options::SMOOTH_SIBLINGS)
         {
             this->addSmooths(&voxels[i]);
@@ -334,13 +342,19 @@ void Octree::addVoxels(Voxel* voxels, const UI nvoxel)
     printf("\n");
 }
 
+template<typename T>
+void Octree::initBit(T voxel)
+{
+    OctantManager::initBit(this->root, voxel);
+}
+
 
 /*
  * add single voxel
  */
 void Octree::addSingleVoxel(Voxel* const voxel)
 {
-    OctantManager::initBit(this->root, voxel);
+    this->initBit(voxel);
 }
 
 /*
@@ -355,10 +369,10 @@ void Octree::addSmooths(Voxel* const voxel)
         v.coordinates.x += atom[i].x;
         v.coordinates.y += atom[i].y;
         v.coordinates.z += atom[i].z;
-        OctantManager::initBit(this->root, v);
+        this->initBit(v);
         i++;
     }
-    OctantManager::initBit(this->root, voxel);
+    this->initBit(voxel);
 }
 
 /*
@@ -376,7 +390,7 @@ void Octree::addShellLite(const Voxel voxel)
             v.color = Options::SHELL_COLOR;
         }
         else v.color = (v.color & 0xFFFFFF00) | 0x0F;
-        OctantManager::initBit(this->root, v);
+        this->initBit(v);
         i++;
     }
 
@@ -400,7 +414,7 @@ void Octree::addShellXL(const Voxel voxel)
             v.color = Options::SHELL_COLOR;
         }
         else v.color = (v.color & 0xFFFFFF00) | 0x0F;
-        OctantManager::initBit(this->root, v);
+        this->initBit(v);
         i++;
     }
 }
@@ -423,7 +437,7 @@ void Octree::addShell(const Voxel voxel)
             v.color = Options::SHELL_COLOR;
         }
         else v.color = (v.color & 0xFFFFFF00) | 0x0F;
-        OctantManager::initBit(this->root, v);
+        this->initBit(v);
         i++;
     }
 }
@@ -434,7 +448,7 @@ void Octree::addShell(const Voxel voxel)
  */
 Color Octree::getColorDepth(const DynamicVoxel* const dynamic)
 {
-    const float darkness = getDarkness(dynamic->depth);//1.0f - dynamic->depth * this->colordepthstep;
+    const float darkness = getDarkness(dynamic->depth);
 	return {
         (UC)(((dynamic->voxel->color & 0xFF000000) >> 24) * darkness),
         (UC)(((dynamic->voxel->color & 0x00FF0000) >> 16) * darkness),
@@ -446,7 +460,7 @@ Color Octree::getColorDepth(const DynamicVoxel* const dynamic)
 
 Color Octree::getColorDepth(const UC r, const UC g, const UC b, const float depth)
 {
-    const float darkness = getDarkness(depth);//1.0f - depth * this->colordepthstep;
+    const float darkness = getDarkness(depth);
     return {(UC)(r * darkness), (UC)(g * darkness), (UC)(b * darkness), 0};
 }
 
