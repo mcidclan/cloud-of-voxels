@@ -181,7 +181,7 @@ void Options::process(int argc, char **argv)
         Options::CAM_Y_ROTATION = 0.0f;
         
         Options::VOXEL_SHELL_TYPE = 1;
-        Options::SHELL_COLOR = 0xFF30E048;
+        Options::SHELL_COLOR = 0xFFD0E080;//0xFF30E070;
         Options::MAX_VOXELS_BY_RAY = Options::MAX_RAY_LENGTH;
         //Options::SHELL_LITE_THICKNESS = 2;
         Options::MIN_VOXELS_PROXIMITY = 5;
