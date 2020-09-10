@@ -12,7 +12,6 @@
     #include <vector>
     #include <string.h>
     #include <cstdlib>
-    using namespace std;
     
 	#define UC unsigned char
 	#define SI short int
