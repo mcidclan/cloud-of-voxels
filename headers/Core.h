@@ -12,63 +12,61 @@
 	#include "Octree.h"
 	#include "Render.h"
     
-	class Core
-	{
+    class Core
+    {
         private:
-            float ztrans;
-            float xlimit;
-            float ytrans;
-            float xsens;
-            float xtrans;
-            float yangle;
+        float ztrans;
+        float xlimit;
+        float ytrans;
+        float xsens;
+        float xtrans;
+        float yangle;
 
-            Octree *octree;
-            Camera *camera;
+        Octree *octree;
+        Camera *camera;
 
-		public:
-			/*
-			 * Constructor
-			 */
-			Core();
-
-
-			/*
-			 * Destructor
-			 */
-			~Core();
+        public:
+        /*
+        * Constructor
+        */
+        Core();
 
 
-			/*
-			 * init core
-			 */
-			void init();
+        /*
+        * Destructor
+        */
+        ~Core();
 
 
-			/*
-			 * process
-			 */
-			void process(UC* const pixels = NULL);
-            
-            
-            /*
-			 * transform
-			 */
-			void transform();
-        
+        /*
+        * init core
+        */
+        void init();
+
+
+        /*
+        * process
+        */
+        void process(UC* const pixels = NULL);
+
+
+        /*
+        * transform
+        */
+        void transform();
+
 
         private:
-            /*
-             * Jump to next pixel
-             */
-            bool nextPixel(Vec2<SI>* const curpix);
-            
-            /*
-             * set pixel
-             */
-            void setPixel(Vec2<SI>* const curpix, DynamicVoxel* const voxel);
-	};
+        /*
+        * Jump to next pixel
+        */
+        bool nextPixel(Vec2<SI>* const curpix);
 
+        /*
+        * set pixel
+        */
+        void setPixel(Vec2<SI>* const curpix, DynamicVoxel* const voxel);
+    };
 
 #endif
-
 
