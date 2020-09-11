@@ -8,9 +8,9 @@
 #ifndef OCTANT_H
 #define OCTANT_H
 
-	#include "math.h"
-    #include "options.h"
-    
+    #include "math.h"
+    #include "Options.h"
+
     typedef struct Octant
     {
         UC depth;
@@ -20,75 +20,75 @@
         Vec3<SI> center;
         SI half;
     } Octant;
-    
-    
-	class OctantManager
-	{            
-		public:
-            /*
-			 * Adds children to the current octant
-			 */
-			static void init(Octant* const octant);
-            
-            
-			/*
-			 * Adds children to the current octant
-			 */
-			static void addChildren(Octant* const octant);
-            
-            
-            /*
-			 * Removes children from the current octant
-			 */
-			static void removeChildren(Octant* const octant);
-            
-
-			/*
-			 * initChild
-			 */
-			static void initChild(Octant* const octant,
-            const SUI i, const SUI j, const SUI k);
 
 
-            /*
-			 * setFacesCenter
-			 */
-			static void setFacesCenter(Octant* const octant);
+    class OctantManager
+    {
+        public:
+        /*
+        * Adds children to the current octant
+        */
+        static void init(Octant* const octant);
 
 
-            /*
-			 * initBit
-			 */
-            static void initBit(Octant* const octant, const Voxel voxel);
-            static void initBit(Octant* const octant, Voxel* const voxel);
+        /*
+        * Adds children to the current octant
+        */
+        static void addChildren(Octant* const octant);
 
 
-			/*
-			 * Set bit space, corresponding to the current voxel
-			 */
-			static void setBit(Octant* const octant,
-            Voxel* const voxel, const bool dynamic = true);
+        /*
+        * Removes children from the current octant
+        */
+        static void removeChildren(Octant* const octant);
 
 
-			/*
-			 * get the bit space corresponding to the current coordinates
-			 */
-			static Octant* getBit(Octant* const octant,
-            const Vec3<SI> coordinates);
+        /*
+        * initChild
+        */
+        static void initChild(Octant* const octant,
+        const SUI i, const SUI j, const SUI k);
 
 
-			/*
-			 * getChildAt
-			 */
-			static Octant* getChildAt(Octant* const octant,
-            const Vec3<SI> coordinates);
-            
-            
-            /*
-			 * getChildren
-			 */
-            static Octant* getChildren(Octant* const octant,
-            const UC i, const UC j , const UC k);
-	};
+        /*
+        * setFacesCenter
+        */
+        static void setFacesCenter(Octant* const octant);
+
+
+        /*
+        * initBit
+        */
+        static void initBit(Octant* const octant, const Voxel voxel);
+        static void initBit(Octant* const octant, Voxel* const voxel);
+
+
+        /*
+        * Set bit space, corresponding to the current voxel
+        */
+        static void setBit(Octant* const octant,
+        Voxel* const voxel, const bool dynamic = true);
+
+
+        /*
+        * get the bit space corresponding to the current coordinates
+        */
+        static Octant* getBit(Octant* const octant,
+        const Vec3<SI> coordinates);
+
+
+        /*
+        * getChildAt
+        */
+        static Octant* getChildAt(Octant* const octant,
+        const Vec3<SI> coordinates);
+
+
+        /*
+        * getChildren
+        */
+        static Octant* getChildren(Octant* const octant,
+        const UC i, const UC j , const UC k);
+    };
 
 #endif

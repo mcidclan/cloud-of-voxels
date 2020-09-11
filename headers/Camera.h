@@ -8,74 +8,71 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-	 #include "math.h"
+    #include "math.h"
+
+    class Camera
+    {
+        public:
+        /*
+        * Constructor
+        */
+        Camera();
 
 
-	class Camera
-	{
-		public:
-			/*
-			 * Constructor
-			 */
-			Camera();
+        /*
+        * Destructor
+        */
+        ~Camera();
 
 
-			/*
-			 * Destructor
-			 */
-			~Camera();
+        /*
+        * setPosition
+        */
+        void setPosition(const float x, const float y , const float z);
 
 
-			/*
-			 * setPosition
-			 */
-			void setPosition(const float x, const float y , const float z);
+        /*
+        * resetTransformation
+        */
+        void resetTransformation();
 
 
-			/*
-			 * resetTransformation
-			 */
-			void resetTransformation();
+        /*
+        * rotate
+        */
+        void rotate(const Vec3<float> axis, float angle);
 
 
-			/*
-			 * rotate
-			 */
-			void rotate(const Vec3<float> axis, float angle);
+        /*
+        * translate
+        */
+        void translate(const Vec3<float> v);
 
 
-			/*
-			 * translate
-			 */
-			void translate(const Vec3<float> v);
+        /*
+        * getBasis
+        */
+        void getBasis(Mat3f* const basis);
 
 
-			/*
-			 * getBasis
-			 */
-			void getBasis(Mat3f* const basis);
+        /*
+        * Apply translation to a given coordinates
+        */
+        void reajust(Vec3<float>* const coordinates);
 
 
-            /*
-             * Apply translation to a given coordinates
-             */
-            void reajust(Vec3<float>* const coordinates);
+        private:
+        Mat3f basis;
+        Vec3<float> nearcenter;
 
 
-		private:
-			Mat3f basis;
-            Vec3<float> nearcenter;
+        private:
+        /*
+        * updateNearInfo
+        */
+        void updateNearInfo(float* const m);
 
-
-		private:
-			/*
-			 * updateNearInfo
-			 */
-			void updateNearInfo(float* const m);
-
-	};
-
+    };
 
 #endif
-
 
