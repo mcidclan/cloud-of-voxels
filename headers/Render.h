@@ -8,7 +8,11 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
-    #include <GL/freeglut.h>
+    #ifdef PSP
+        #include <GL/glut.h>
+    #else
+        #include <GL/freeglut.h>
+    #endif
     #include <math.h>
     #include "Options.h"
 
