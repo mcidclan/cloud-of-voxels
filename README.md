@@ -53,7 +53,7 @@ With the given voxelmodels.cpp, once compiled on linux test the program with:
     voxel-shell-type:xl voxel-shell-rgba:0xFF10F040 min-voxels-proximity:7 \
     accelerate fps:30
     
-or width powershell:
+or with powershell:
 ./bin/cov no-motion step:1 w:128 h:128 octree-size:256 z:-70 ray:80 no-logs `
     voxel-shell-type:xl voxel-shell-rgba:0xFF10F040 min-voxels-proximity:7 `
     accelerate fps:30
