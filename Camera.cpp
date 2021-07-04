@@ -1,6 +1,6 @@
 /*
  * Cloud of voxels (CoV) project
- * Author: mcidclan, m.cid.clan@gmail.com
+ * Author: mcidclan, m [.D'O'T.] cid [.D'O'T.] clan [.A'T.] gmail [.D'O'T.] com
  * Creation Date: 2011
  * Modification Date: 2020
  */
