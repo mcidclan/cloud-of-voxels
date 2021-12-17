@@ -1,10 +1,10 @@
 cloud-of-voxels
 ===============
 ```
-This is a basic Voxels to Pixels rendering (voxel rasterizer) project, using a
-CPU Ray Tracing process over an Octree. For each Pixel a Ray is generated, and
-goes through the Octree searching for the first Voxel on its path. When the Ray
-hits the Voxel, the corresponding Pixel is drawn to the screen.
+This is a basic CPU side Voxels to Pixels rendering (voxel raycaster) project,
+using a process over an Octree to accelerate the ray. For each Pixel a Ray is
+generated, and goes through the Octree searching for the first Voxel on its path.
+When the Ray hits the Voxel, the corresponding Pixel is drawn to the screen.
 
 By default the octree size is set to 256. That size is also the maximun size your
 object could have with this configuration. You need Blender 2.78c to export your
