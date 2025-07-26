@@ -25,6 +25,7 @@
 
         Vec3<SUI> locpos;
         Vec3<float>* kbase;
+        Vec3<float> _kbase;
         Vec3<float> kbsample;
 
         SI raylength;
@@ -65,7 +66,8 @@
         */
         void initBasis(Mat3f* const basis);
 
-
+        void setPerspectiveRay(const float screenX, const float screenY, const float invDist);
+  
         /*
         * rayTrace
         */

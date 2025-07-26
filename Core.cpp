@@ -148,6 +148,12 @@ void Core::process(UC* const pixels)
         this->octree->setRay(&ray);
         // Display a pixel if the ray hits a voxel.
         vector<DynamicVoxel> voxels;
+        
+        if (Options::PERSPECTIVE_FACTOR > 0.0f) {
+          this->octree->setPerspectiveRay(Options::ZOOM_FACTOR * (float)curpix.x,
+            Options::ZOOM_FACTOR * (float)curpix.y, Options::PERSPECTIVE_FACTOR);
+        }
+        
         if(this->octree->rayTrace(&voxels))
         {
             UC i = voxels.size(), end = 0;

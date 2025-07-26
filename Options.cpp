@@ -11,6 +11,8 @@ UC Options::PIXEL_STEP = 1;
 UC Options::VOXEL_SHELL_TYPE = 0;
 
 float Options::CAM_Y_ROTATION = 0.01745f;
+float Options::PERSPECTIVE_FACTOR = 0.0f;
+float Options::ZOOM_FACTOR = 1.0f;
 
 bool Options::nologs = false;
 bool Options::nomotion = false;
@@ -67,6 +69,9 @@ void Options::process(int argc, char **argv)
         } else if(name.find("fps:") == 0)
         {
             Options::MAX_FRAME_TIME = stoi(name.substr(4));
+        } else if(name.find("zoom-factor:") == 0)
+        {
+            Options::ZOOM_FACTOR = 1.0f / (float)stof(name.substr(12));
         } else if(name.find("step:") == 0)
         {
             Options::PIXEL_STEP = stoi(name.substr(5));
@@ -91,11 +96,13 @@ void Options::process(int argc, char **argv)
             } else if(type == "lite")
             {
                 Options::VOXEL_SHELL_TYPE = 3;
-            } else Options::VOXEL_SHELL_TYPE = 1;   
+            } else Options::VOXEL_SHELL_TYPE = 1;
         } else if(name.find("voxel-shell-rgba:") == 0)
-        {   
+        {
             UI color = stoll(name.substr(17), 0 , 16);
             Options::SHELL_COLOR = color;
+        } else if(name.find("perspective-factor:") == 0) {
+            Options::PERSPECTIVE_FACTOR = (float)stof(name.substr(19));
         } else options[name] = true;
         i++;
     }

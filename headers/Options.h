@@ -25,7 +25,9 @@
     class Options {
         public:
         static float CAM_Y_ROTATION;
-
+        static float PERSPECTIVE_FACTOR;
+        static float ZOOM_FACTOR;
+        
         static bool nologs;
         static bool nomotion;
         static bool ACCELERATED;
@@ -50,8 +52,8 @@
         static SUI MAX_VOXELS_BY_RAY;
         static SUI SHELL_LITE_THICKNESS;
         static SUI MIN_VOXELS_PROXIMITY;
-
-        static LUI MAX_FRAME_TIME;            
+        
+        static LUI MAX_FRAME_TIME;
         static SI CAM_Z_TRANSLATION;
 
         static UI SHELL_COLOR;

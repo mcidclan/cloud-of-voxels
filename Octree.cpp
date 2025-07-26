@@ -142,7 +142,8 @@ void Octree::initRoot(SUI size, SUI maxdepth, const SI raylength)
 void Octree::initBasis(Mat3f* const basis)
 {
     this->basis = basis;
-	this->kbase = &(basis->k);
+    this->kbase = &(basis->k);
+    this->_kbase = *this->kbase;
 }
 
 
@@ -221,6 +222,16 @@ void Octree::avoidScanGlitches(Octant** const curbit)
     }
 }
 
+void Octree::setPerspectiveRay(const float x, const float y, const float invDist)
+{
+    *this->kbase = this->_kbase;
+    this->kbase->x += (this->basis->i.x * x + this->basis->j.x * y) * invDist;
+    this->kbase->y += (this->basis->i.y * x + this->basis->j.y * y) * invDist;
+    this->kbase->z += (this->basis->i.z * x + this->basis->j.z * y) * invDist;
+    math::normalize(this->kbase);
+}
+
+
 /*
  * rayTrace
  */
@@ -283,24 +294,36 @@ void Octree::rayToBorder(const float a, const float b, const float c)
  */
 void Octree::getNextEntryDot(Octant* octant)
 {
-    if(this->ray != NULL)
+    if(this->ray == NULL)
     {
-        this->raystep = Octree::size;
-        rayToBorder(this->ray->x, octant->facescenter[
-        (this->kbase->x > 0.0f) ? 1 : 0], this->kbase->x);
-        rayToBorder(this->ray->y, octant->facescenter[
-        (this->kbase->y > 0.0f) ? 3 : 2], this->kbase->y);
-        rayToBorder(this->ray->z, octant->facescenter[
-        (this->kbase->z > 0.0f) ? 5 : 4], this->kbase->z);
-         
-        if(this->raystep < RAYSTEP_MIN_UNIT)
-        {
-            this->raystep = RAYSTEP_MIN_UNIT;
-        }
-        this->ray->x += this->kbase->x * this->raystep;
-        this->ray->y += this->kbase->y * this->raystep;
-        this->ray->z += this->kbase->z * this->raystep;
+      return;
     }
+
+    if(octant->half < 1.0f)
+    {
+      this->raystep = 1.0f;
+      this->ray->x += this->kbase->x;
+      this->ray->y += this->kbase->y;
+      this->ray->z += this->kbase->z;
+      return;
+    }
+    
+    this->raystep = Octree::size;
+    rayToBorder(this->ray->x, octant->facescenter[
+    (this->kbase->x > 0.0f) ? 1 : 0], this->kbase->x);
+    rayToBorder(this->ray->y, octant->facescenter[
+    (this->kbase->y > 0.0f) ? 3 : 2], this->kbase->y);
+    rayToBorder(this->ray->z, octant->facescenter[
+    (this->kbase->z > 0.0f) ? 5 : 4], this->kbase->z);
+    
+    if(this->raystep < RAYSTEP_MIN_UNIT)
+    {
+        this->raystep = RAYSTEP_MIN_UNIT;
+    }
+    
+    this->ray->x += this->kbase->x * this->raystep;
+    this->ray->y += this->kbase->y * this->raystep;
+    this->ray->z += this->kbase->z * this->raystep;
 }
 
 
