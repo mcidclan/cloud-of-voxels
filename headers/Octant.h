@@ -1,8 +1,8 @@
 /*
  * Cloud of Voxels (CoV) project
- * Author: mcidclan, m [.D'O'T.] cid [.D'O'T.] clan [.A'T.] gmail [.D'O'T.] com
+ * Author: m-c/d, mcidclan
  * Creation Date: 2011
- * Modification Date: 2020
+ * Modification Date: 2025
  */
 
 #ifndef OCTANT_H
@@ -20,7 +20,6 @@
         Vec3<SI> center;
         SI half;
     } Octant;
-
 
     class OctantManager
     {

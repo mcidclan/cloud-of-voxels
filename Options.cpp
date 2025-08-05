@@ -1,8 +1,8 @@
 /*
  * Cloud of Voxels (CoV) project
- * Author: mcidclan, m [.D'O'T.] cid [.D'O'T.] clan [.A'T.] gmail [.D'O'T.] com
+ * Author: m-c/d, mcidclan
  * Creation Date: 2020
- * Modification Date: 2020
+ * Modification Date: 2025
  */
  
 #include "./headers/Options.h"
@@ -191,11 +191,12 @@ void Options::process(int argc, char **argv)
         Options::SHELL_COLOR = 0xFFD0E080;//0xFF30E070;
         Options::MAX_VOXELS_BY_RAY = Options::MAX_RAY_LENGTH;
         //Options::SHELL_LITE_THICKNESS = 2;
-        Options::MIN_VOXELS_PROXIMITY = 5;
+        Options::MIN_VOXELS_PROXIMITY = 7;
         
         Options::INTERNAL_BLENDING = true;
         Options::QUADS_AS_PIXELS = false;
         Options::SMOOTH_PIXELS = true;
+        Options::PERSPECTIVE_FACTOR = 0.001f;
 
         pspDebugScreenInit();
         scePowerSetClockFrequency(333, 333, 166);

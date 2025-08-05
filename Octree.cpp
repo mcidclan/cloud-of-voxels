@@ -51,6 +51,7 @@ Octree::~Octree()
 	delete [] this->accelerator;
 }
 
+
 /*
  *
  */
@@ -120,21 +121,19 @@ void Octree::initRoot(SUI size, SUI maxdepth, const SI raylength)
 {
     this->root = new Octant();
     OctantManager::init(this->root);
-	this->root->depth = maxdepth;
-	this->root->half = size/2;
-	
+    this->root->depth = maxdepth;
+    this->root->half = size/2;
     this->root->center.x =
-	this->root->center.y =
-	this->root->center.z = 0.0f;
+    this->root->center.y =
+    this->root->center.z = 0.0f;
     OctantManager::setFacesCenter(this->root);
-    
-	this->ray = NULL;
+    this->ray = NULL;
     this->raylength = raylength;
-	this->colordepthstep = (1.0f/(float)raylength);
-    
+    this->colordepthstep = (1.0f/(float)raylength);
     Octree::half = this->root->half;
     Octree::size = Octree::half*2.0f;
 }
+
 
 /*
  * initBasis
@@ -152,8 +151,10 @@ void Octree::initBasis(Mat3f* const basis)
  */
 void Octree::setRay(Vec3<float>* const ray) {
     this->ray = ray;
+    kNormalizer.x = math::absf(kbase->x) > 0.01f ? 1.0f / kbase->x : Octree::size;
+    kNormalizer.y = math::absf(kbase->y) > 0.01f ? 1.0f / kbase->y : Octree::size;
+    kNormalizer.z = math::absf(kbase->z) > 0.01f ? 1.0f / kbase->z : Octree::size;
 }
-
 
 /*
  * getBit
@@ -222,6 +223,7 @@ void Octree::avoidScanGlitches(Octant** const curbit)
     }
 }
 
+
 void Octree::setPerspectiveRay(const float x, const float y, const float invDist)
 {
     *this->kbase = this->_kbase;
@@ -274,17 +276,13 @@ bool Octree::rayTrace(vector<DynamicVoxel>* const voxels)
 /*
  * rayToBorder
  */
- 
 void Octree::rayToBorder(const float a, const float b, const float c)
 {
-    if(c != 0.0f)
-    {
-        // Distance between the current ray position and
-        // the next potential octant limit position
-        const float d = math::absf(b - a) / math::absf(c);
-        if(d < this->raystep) {
-            this->raystep = d;
-        }
+    // Distance between the current ray position and
+    // the next potential octant limit position
+    const float d = math::absf((b - a) * c);
+    if(d < this->raystep) {
+        this->raystep = d;
     }
 }
 
@@ -299,7 +297,7 @@ void Octree::getNextEntryDot(Octant* octant)
       return;
     }
 
-    if(octant->half < 1.0f)
+    if(octant->half <= 0.5f)
     {
       this->raystep = 1.0f;
       this->ray->x += this->kbase->x;
@@ -310,15 +308,15 @@ void Octree::getNextEntryDot(Octant* octant)
     
     this->raystep = Octree::size;
     rayToBorder(this->ray->x, octant->facescenter[
-    (this->kbase->x > 0.0f) ? 1 : 0], this->kbase->x);
+    (this->kbase->x > 0.0f) ? 1 : 0], this->kNormalizer.x);
     rayToBorder(this->ray->y, octant->facescenter[
-    (this->kbase->y > 0.0f) ? 3 : 2], this->kbase->y);
+    (this->kbase->y > 0.0f) ? 3 : 2], this->kNormalizer.y);
     rayToBorder(this->ray->z, octant->facescenter[
-    (this->kbase->z > 0.0f) ? 5 : 4], this->kbase->z);
+    (this->kbase->z > 0.0f) ? 5 : 4], this->kNormalizer.z);
     
-    if(this->raystep < RAYSTEP_MIN_UNIT)
+    if(this->raystep < RAYSTEP_MIN_VALUE)
     {
-        this->raystep = RAYSTEP_MIN_UNIT;
+        this->raystep = RAYSTEP_MIN_VALUE;
     }
     
     this->ray->x += this->kbase->x * this->raystep;

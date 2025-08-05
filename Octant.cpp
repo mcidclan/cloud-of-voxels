@@ -13,7 +13,7 @@
  */
 void OctantManager::init(Octant* const octant)
 {
-	octant->depth = 0;
+    octant->depth = 0;
     octant->voxel = NULL;
     octant->children = NULL;
 }
@@ -60,37 +60,33 @@ const UC i, const UC j , const UC k)
  */
 void OctantManager::initChild(Octant* const octant,
 const SUI i, const SUI j, const SUI k)
-{   
-	Octant* const child = OctantManager::getChildren(octant, i, j, k);
+{
+    Octant* const child = OctantManager::getChildren(octant, i, j, k);
     OctantManager::init(child);
-
-	child->depth = octant->depth - 1;
-    
+    child->depth = octant->depth - 1;
     child->center.x = i ? octant->center.x : octant->center.x - octant->half;
-	child->center.y = j ? octant->center.y : octant->center.y - octant->half;
-	child->center.z = k ? octant->center.z : octant->center.z - octant->half;
-        
+    child->center.y = j ? octant->center.y : octant->center.y - octant->half;
+    child->center.z = k ? octant->center.z : octant->center.z - octant->half;
     child->half = ((float)octant->half) / 2.0f;
-	child->center.x += child->half;
-	child->center.y += child->half;
-	child->center.z += child->half;
-    
-	OctantManager::setFacesCenter(child);
+    child->center.x += child->half;
+    child->center.y += child->half;
+    child->center.z += child->half;
+    OctantManager::setFacesCenter(child);
 }
-
-
+  
 /*
  * setFacesCenter
  */
+
 void OctantManager::setFacesCenter(Octant* const octant)
-{    
-	octant->facescenter = new SI[6];
+{
+    octant->facescenter = new SI[6];
     octant->facescenter[0] = -octant->half + octant->center.x;
     octant->facescenter[1] = octant->half + octant->center.x;
     octant->facescenter[2] = -octant->half + octant->center.y;
     octant->facescenter[3] = octant->half + octant->center.y;
     octant->facescenter[4] = -octant->half + octant->center.z;
-    octant->facescenter[5] = octant->half + octant->center.z;    
+    octant->facescenter[5] = octant->half + octant->center.z;
 }
 
 

@@ -10,7 +10,9 @@ OBJS = Options.o Core.o Camera.o math.o Render.o \
 OBJS := $(addprefix $(BIN), $(OBJS))
 DATA := $(addprefix $(BIN), $(DATA))
 
-CFLAGS = -W -Wall -Wpadded -Wpacked -pedantic -O0 -g2 -DMINGW -m32
+CFLAGS = -W -Wall -Wpadded -Wpacked -pedantic -O3 -g0 -DMINGW -m32 \
+         -march=native -flto -fdata-sections -ffunction-sections -Wl,--gc-sections
+
 LDFLAGS = -lopengl32 -lglew32 -lfreeglut -lglu32 -lstdc++
 
 

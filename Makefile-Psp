@@ -8,16 +8,19 @@ OBJ = Options.o Core.o Camera.o math.o Render.o \
     voxeldisplays.o voxelmodels.o
 OBJS = $(strip $(sort $(OBJ:%.o=$(PATHOBJS)%.o)))
 
+PSP_LARGE_MEMORY = 1
+PSP_FW_VERSION = 660
 
-CFLAGS = -fsingle-precision-constant -Wall -O2 -g0 -DPSP -fno-exceptions \
-    -I$(PSPSDK)/../include
+CFLAGS = -fsingle-precision-constant -Wall -Ofast -g0 -DPSP -fno-exceptions \
+    -I$(PSPSDK)/../include -flto -fdata-sections -ffunction-sections
+
 CXXFLAGS = $(CFLAGS) -fno-rtti -std=c++11
 
 PSPBIN = $(PSPSDK)/../bin
 
 LIBS +=  -lglut -lGLU -lGL \
     -lpspgum_vfpu -lpspgu -lpthread-psp -lpsphprm \
-	-lz -lm -lpspvfpu -lpsprtc -lpsppower -lstdc++
+    -lz -lm -lpspvfpu -lpsprtc -lpsppower -lstdc++
 
 LDFLAGS += ./psp/backthreads.c
 

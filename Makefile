@@ -9,7 +9,7 @@ OBJS = Options.o Core.o Camera.o math.o Render.o \
 OBJS := $(addprefix $(BIN), $(OBJS))
 DATA := $(addprefix $(BIN), $(DATA))
 
-CFLAGS = -W -Wall -Wpadded -Wpacked -O0 -g2 -std=c++11 -m32 -pedantic
+CFLAGS = -W -Wall -Wpadded -Wpacked -Ofast -g0 -std=c++11 -m32 -pedantic
 LDFLAGS = $(CFLAGS) -lglut -lGL -lGLU -lm -lstdc++
 
 all: $(BIN)$(EXEC)

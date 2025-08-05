@@ -1,16 +1,15 @@
 /*
  * Cloud of Voxels (CoV) project
- * Author: mcidclan, m [.D'O'T.] cid [.D'O'T.] clan [.A'T.] gmail [.D'O'T.] com
+ * Author: m-c/d, mcidclan
  * Creation Date: 2011
- * Modification Date: 2020
+ * Modification Date: 2025
  */
 
 #ifndef OCTREE_H
 #define OCTREE_H
 
     #include "Octant.h"
-    #define RAYSTEP_MIN_UNIT 1.0f
-
+    #define RAYSTEP_MIN_VALUE 1.0f
 
     class Octree
     {
@@ -19,6 +18,7 @@
         static float half;
 
         private:
+        Vec3<float> kNormalizer;
         Vec3<float>* ray;
         Octant* root;
         Mat3f* basis;

@@ -1,8 +1,8 @@
 /*
  * Cloud of Voxels (CoV) project
- * Author: mcidclan, m [.D'O'T.] cid [.D'O'T.] clan [.A'T.] gmail [.D'O'T.] com
+ * Author: m-c/d, mcidclan
  * Creation Date: 2011
- * Modification Date: 2020
+ * Modification Date: 2025
  */
  
 #include "./headers/Render.h"
@@ -51,6 +51,8 @@ static int loop(unsigned int args, void *argp)
     }
 }
 
+#define PIXEL_STEP_DURING_ROTATION 4
+
 static int key(unsigned int args, void *argp)
 {
     const float step = 0.01745f;
@@ -63,12 +65,12 @@ static int key(unsigned int args, void *argp)
         
         if(pad.Buttons & PSP_CTRL_LEFT)
         {
-            Render::PIXEL_STEP = 8;
+            Render::PIXEL_STEP = PIXEL_STEP_DURING_ROTATION;
             Render::CAM_Y_ROTATION = -step;
         }
         if(pad.Buttons & PSP_CTRL_RIGHT)
         {
-            Render::PIXEL_STEP = 8;
+            Render::PIXEL_STEP = PIXEL_STEP_DURING_ROTATION;
             Render::CAM_Y_ROTATION = step;
         }
         
