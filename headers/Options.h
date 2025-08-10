@@ -25,6 +25,7 @@
     class Options {
         public:
         static float CAM_Y_ROTATION;
+        static float CAM_X_ROTATION;
         static float PERSPECTIVE_FACTOR;
         static float ZOOM_FACTOR;
         

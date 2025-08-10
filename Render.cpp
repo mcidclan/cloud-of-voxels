@@ -10,6 +10,7 @@
 
 UC Render::PIXEL_STEP = 1;
 float Render::CAM_Y_ROTATION = 0.0f;
+float Render::CAM_X_ROTATION = 0.0f;
 
 static Render *render = NULL;
 
@@ -38,8 +39,8 @@ Render::~Render()
 #ifndef PSP
 void Render::timer(int value)
 {
-	glutPostRedisplay();
-	glutTimerFunc(Options::MAX_FRAME_TIME/1000, Render::timer, value);
+    glutPostRedisplay();
+    glutTimerFunc(Options::MAX_FRAME_TIME/1000, Render::timer, value);
 }
 #else
 static int loop(unsigned int args, void *argp)
@@ -51,17 +52,18 @@ static int loop(unsigned int args, void *argp)
     }
 }
 
-#define PIXEL_STEP_DURING_ROTATION 4
+#define PIXEL_STEP_DURING_ROTATION 2
 
 static int key(unsigned int args, void *argp)
 {
-    const float step = 0.01745f;
+    const float step = 0.01745f * 10.0f;
     while(true)
     {
         SceCtrlData pad;
         sceCtrlReadBufferPositive(&pad, 1);
         Render::PIXEL_STEP = 1;
         Render::CAM_Y_ROTATION = 0.0f;
+        Render::CAM_X_ROTATION = 0.0f;
         
         if(pad.Buttons & PSP_CTRL_LEFT)
         {
@@ -73,6 +75,16 @@ static int key(unsigned int args, void *argp)
             Render::PIXEL_STEP = PIXEL_STEP_DURING_ROTATION;
             Render::CAM_Y_ROTATION = step;
         }
+        if(pad.Buttons & PSP_CTRL_UP)
+        {
+            Render::PIXEL_STEP = PIXEL_STEP_DURING_ROTATION;
+            Render::CAM_X_ROTATION = -step;
+        }
+        if(pad.Buttons & PSP_CTRL_DOWN)
+        {
+            Render::PIXEL_STEP = PIXEL_STEP_DURING_ROTATION;
+            Render::CAM_X_ROTATION = step;
+        }
         
         sceKernelDelayThread(10000);
     }
@@ -80,16 +92,15 @@ static int key(unsigned int args, void *argp)
 
 void Render::timer(int value)
 {
-    SceUID id = sceKernelCreateThread("cov_loop", loop, 0x0A, 0x1000, 0, 0);
+    SceUID id = sceKernelCreateThread("cov_loop", loop, 0x0A, 0x10000, 0, 0);
     if (id >= 0)
     {
         sceKernelStartThread(id, 0, 0);
-    }
-    
+    }    
     id = sceKernelCreateThread("cov_key", key, 0x10, 0x1000, 0, 0);
-	if (id >= 0){
-		sceKernelStartThread(id, 0, 0);
-	}
+    if (id >= 0){
+        sceKernelStartThread(id, 0, 0);
+    }
 }
 #endif
 
@@ -153,19 +164,15 @@ void Render::initSurface()
 void Render::init(int argc, char **argv, Core* const core)
 {
     this->core = core;
-	
     glutInit(&argc, argv);
-	glutInitWindowPosition(0, 0);
-	glutInitDisplayMode(GLUT_RGBA | GLUT_ALPHA | GLUT_DOUBLE);
-	glutInitWindowSize(Options::WIN_WIDTH, Options::WIN_HEIGHT);
+    glutInitWindowPosition(0, 0);
+    glutInitDisplayMode(GLUT_RGBA | GLUT_ALPHA | GLUT_DOUBLE);
+    glutInitWindowSize(Options::WIN_WIDTH, Options::WIN_HEIGHT);
     glutCreateWindow("CloudOfVoxels");
-    
     this->initRender();
-    
     glutDisplayFunc(Render::display);
     glutReshapeFunc(Render::reshape);
-	glutIdleFunc(Render::idle);
-    
+    glutIdleFunc(Render::idle);
     Render::timer(0);
     glutMainLoop();
 }
@@ -192,7 +199,7 @@ void Render::reshape(int width, int height)
  */
 void Render::display()
 {
-	render->draw();
+    render->draw();
 }
 
 
@@ -214,6 +221,7 @@ void Render::process()
     #ifdef PSP
     Options::PIXEL_STEP = Render::PIXEL_STEP;
     Options::CAM_Y_ROTATION = Render::CAM_Y_ROTATION;
+    Options::CAM_X_ROTATION = Render::CAM_X_ROTATION;
     #endif
     if(!this->ready)
     {

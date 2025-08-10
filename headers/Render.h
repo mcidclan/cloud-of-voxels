@@ -28,6 +28,7 @@
         public:
         static UC PIXEL_STEP;
         static float CAM_Y_ROTATION;
+        static float CAM_X_ROTATION;
 
         private:
         bool ready;

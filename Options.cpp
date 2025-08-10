@@ -11,6 +11,7 @@ UC Options::PIXEL_STEP = 1;
 UC Options::VOXEL_SHELL_TYPE = 0;
 
 float Options::CAM_Y_ROTATION = 0.01745f;
+float Options::CAM_X_ROTATION = 0.0f;
 float Options::PERSPECTIVE_FACTOR = 0.0f;
 float Options::ZOOM_FACTOR = 1.0f;
 
@@ -186,6 +187,7 @@ void Options::process(int argc, char **argv)
         Options::MAX_FRAME_TIME = (LUI)(1000000.0f*(1.0f/60.0f));
         Options::CAM_Z_TRANSLATION = -70;
         Options::CAM_Y_ROTATION = 0.0f;
+        Options::CAM_X_ROTATION = 0.0f;
         
         Options::VOXEL_SHELL_TYPE = 1;
         Options::SHELL_COLOR = 0xFFD0E080;//0xFF30E070;

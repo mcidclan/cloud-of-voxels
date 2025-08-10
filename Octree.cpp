@@ -37,18 +37,18 @@ Octree::~Octree()
  void Octree::destroyAccelerator()
 {
     UI i = 0, j =0;
-	while(i < Options::OCTREE_SIZE)
+    while(i < Options::OCTREE_SIZE)
     {
-		j = 0;
-		while(j < Options::OCTREE_SIZE)
+        j = 0;
+        while(j < Options::OCTREE_SIZE)
         {
-			delete [] this->accelerator[i][j];
+            delete [] this->accelerator[i][j];
             j++;
-		}
-		delete [] this->accelerator[i];
+        }
+        delete [] this->accelerator[i];
         i++;
-	}
-	delete [] this->accelerator;
+    }
+    delete [] this->accelerator;
 }
 
 
@@ -151,9 +151,9 @@ void Octree::initBasis(Mat3f* const basis)
  */
 void Octree::setRay(Vec3<float>* const ray) {
     this->ray = ray;
-    kNormalizer.x = math::absf(kbase->x) > 0.01f ? 1.0f / kbase->x : Octree::size;
-    kNormalizer.y = math::absf(kbase->y) > 0.01f ? 1.0f / kbase->y : Octree::size;
-    kNormalizer.z = math::absf(kbase->z) > 0.01f ? 1.0f / kbase->z : Octree::size;
+    kNormalizer.x = math::absf(kbase->x) > 0.001f ? 1.0f / kbase->x : 1000.0f;
+    kNormalizer.y = math::absf(kbase->y) > 0.001f ? 1.0f / kbase->y : 1000.0f;
+    kNormalizer.z = math::absf(kbase->z) > 0.001f ? 1.0f / kbase->z : 1000.0f;
 }
 
 /*
@@ -280,7 +280,7 @@ void Octree::rayToBorder(const float a, const float b, const float c)
 {
     // Distance between the current ray position and
     // the next potential octant limit position
-    const float d = math::absf((b - a) * c);
+    const float d = (b - a) * c;
     if(d < this->raystep) {
         this->raystep = d;
     }

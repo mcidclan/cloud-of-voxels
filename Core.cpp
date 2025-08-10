@@ -1,8 +1,8 @@
 /*
  * Cloud of Voxels (CoV) project
- * Author: mcidclan, m [.D'O'T.] cid [.D'O'T.] clan [.A'T.] gmail [.D'O'T.] com
+ * Author: m-c/d, mcidclan
  * Creation Date: 2011
- * Modification Date: 2020
+ * Modification Date: 2025
  */
 
 #include "./headers/Core.h"
@@ -21,6 +21,7 @@ Core::Core()
     this->xsens = 2.0f;
     this->xtrans = -xlimit;
     this->yangle = 0.01745f * 180.0f;
+    this->xangle = 0.0f;
 }
 
 
@@ -30,7 +31,7 @@ Core::Core()
 Core::~Core()
 {
     delete this->octree;
-	delete this->camera;
+    delete this->camera;
 }
 
 
@@ -38,7 +39,7 @@ Core::~Core()
  * init
  */
 void Core::init()
-{    
+{
     SUI level = 0;
     bool warning[2] = {
         !math::isPowerOfTwo(Options::OCTREE_SIZE, &level),
@@ -55,11 +56,11 @@ void Core::init()
         printf("!!!Warning!!! Texture rendering size is not a power of 2\n");
     }
     
-    this->octree = new Octree();   
-	this->camera = new Camera();
+    this->octree = new Octree();
+    this->camera = new Camera();
     printf("Adding voxels, please wait...\n");
     this->octree->initRoot(Options::OCTREE_SIZE, level, Options::MAX_RAY_LENGTH);
-	this->octree->addVoxels(monkey, MESH_SIZE);
+    this->octree->addVoxels(monkey, MESH_SIZE);
     
     if(Options::ACCELERATED)
     {
@@ -70,22 +71,28 @@ void Core::init()
 
 void Core::transform()
 {
-	this->camera->resetTransformation();
-	this->camera->rotate({0.0f, 1.0f, 0.0f}, this->yangle);
-	this->camera->translate({
+    this->camera->resetTransformation();
+    this->camera->rotate({0.0f, 1.0f, 0.0f}, this->yangle);
+    this->camera->rotate({1.0f, 0.0f, 0.0f}, this->xangle);
+    
+    this->camera->translate({
         Options::nomotion ? 0.0f : this->xtrans,
         Options::nomotion ? 0.0f : this->ytrans,
         ztrans
     });
-	
+
     if(!Options::nomotion)
     {
         if(this->xtrans > this->xlimit) this->xsens = -2.0f;
         if(this->xtrans < -this->xlimit) this->xsens = 2.0f;
         this->xtrans += this->xsens;
         this->ytrans += this->xsens;
-	}
-    this->yangle += Options::CAM_Y_ROTATION * this->xsens;
+        this->yangle += Options::CAM_Y_ROTATION * this->xsens;
+    }
+    else {
+      this->yangle += Options::CAM_Y_ROTATION;
+      this->xangle += Options::CAM_X_ROTATION;
+    }
 }
 
 
@@ -94,14 +101,14 @@ void Core::transform()
  */
 bool Core::nextPixel(Vec2<SI>* const curpix)
 {
-	if((curpix->x += Options::PIXEL_STEP) >= Options::SCR_HALF_WIDTH)
-	{
-		curpix->x = -Options::SCR_HALF_WIDTH;
+    if((curpix->x += Options::PIXEL_STEP) >= Options::SCR_HALF_WIDTH)
+    {
+        curpix->x = -Options::SCR_HALF_WIDTH;
         if((curpix->y += Options::PIXEL_STEP) >= Options::SCR_HALF_HEIGHT)
         {
             return false;
         }
-	}
+    }
     return true;
 }
 
@@ -109,7 +116,7 @@ bool Core::nextPixel(Vec2<SI>* const curpix)
 void Core::setPixel(Vec2<SI>* const curpix, DynamicVoxel* const voxel)
 {
     const UC step = Options::PIXEL_STEP;
-    const Color color = this->octree->getColorDepth(voxel);                
+    const Color color = this->octree->getColorDepth(voxel);
     glColor4ub(color.r, color.g, color.b, color.a);
     glBegin(GL_QUADS);
     glVertex2i(curpix->x - step, curpix->y - step);
@@ -135,9 +142,10 @@ void Core::process(UC* const pixels)
         (SI)-Options::SCR_HALF_HEIGHT
     };
     
-	this->camera->getBasis(&basis);
-	this->octree->initBasis(&basis);
-	
+    this->camera->getBasis(&basis);
+    this->octree->initBasis(&basis);
+    
+    vector<DynamicVoxel> voxels;
     do
     {
         // Generates ray coordinates from current the pixel
@@ -147,13 +155,13 @@ void Core::process(UC* const pixels)
         this->camera->reajust(&ray);
         this->octree->setRay(&ray);
         // Display a pixel if the ray hits a voxel.
-        vector<DynamicVoxel> voxels;
         
         if (Options::PERSPECTIVE_FACTOR > 0.0f) {
-          this->octree->setPerspectiveRay(Options::ZOOM_FACTOR * (float)curpix.x,
+            this->octree->setPerspectiveRay(Options::ZOOM_FACTOR * (float)curpix.x,
             Options::ZOOM_FACTOR * (float)curpix.y, Options::PERSPECTIVE_FACTOR);
         }
         
+        voxels.clear();
         if(this->octree->rayTrace(&voxels))
         {
             UC i = voxels.size(), end = 0;

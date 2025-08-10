@@ -21,6 +21,7 @@
         float xsens;
         float xtrans;
         float yangle;
+        float xangle;
 
         Octree *octree;
         Camera *camera;
